@@ -676,3 +676,46 @@ expression,reading,meaning,tags,meaning_th
 夕食,ゆうしょく,"dinner, evening meal",JLPT_N4 Jiten Anime Manga Drama Novel YouTube Movie,"อาหารเย็น, มื้อค่ำ"
 教師,きょうし,"teacher, instructor (classroom)",JLPT_N4 Jiten Anime Manga Drama Novel YouTube Movie,"ครู, อาจารย์ผู้สอน (คำเรียกอาชีพอย่างเป็นทางการ)"
 人々,ひとびと,"people, men and women, everybody",JLPT_N4 Jiten Anime Manga Drama Novel YouTube Movie,"ผู้คนทั้งหลาย, ประชาชนทั่วไป"
+回る,まわる,"to turn, to rotate, to go around","JMdict,Jiten","หมุน (หมุนเอง), โคจร, เดินวนรอบ"
+間違う,まちがう,"to make a mistake, to be mistaken, to be wrong","JMdict,Jiten","ผิดพลาด, ทำผิด, เข้าใจผิด"
+自信,じしん,"self-confidence, confidence in oneself","JMdict,Jiten","ความมั่นใจในตนเอง, ความเชื่อมั่นในตัวเอง"
+一部,いちぶ,"one part, one portion, one copy","JMdict,Jiten","ส่วนหนึ่ง, บางส่วน, หนึ่งชุด (หนังสือ/เอกสาร)"
+回す,まわす,"to turn, to rotate, to pass around","JMdict,Jiten","หมุน (ทำให้หมุน), ส่งต่อเวียนกัน"
+一歩,いっぽ,"one step, a step, stage","JMdict,Jiten","หนึ่งก้าว, ก้าวเดียว, ขั้นหนึ่ง"
+気持ちいい,きもちいい,"pleasant, comfortable, feeling good","JMdict,Jiten","รู้สึกดี, สบาย, สดชื่น"
+両手,りょうて,"both hands, both arms","JMdict,Jiten","มือทั้งสองข้าง, สองมือ"
+気持ち悪い,きもちわるい,"unpleasant, disgusting, feeling sick","JMdict,Jiten","น่าขยะแขยง, ขนลุก, รู้สึกไม่สบายตัว (คลื่นไส้)"
+人数,にんずう,number of people,"JMdict,Jiten",จำนวนคน
+親子,おやこ,parent and child,"JMdict,Jiten","พ่อแม่และลูก, แม่ลูก, พ่อลูก"
+世界中,せかいじゅう,"around the world, throughout the world","JMdict,Jiten","ทั่วโลก, ไปทั่วทั้งโลก"
+男女,だんじょ,"men and women, both sexes","JMdict,Jiten","ชายและหญิง, เพศชายและเพศหญิง"
+内側,うちがわ,"inside, interior, inner side","JMdict,Jiten","ด้านใน, ข้างใน, ภายใน"
+大声,おおごえ,loud voice,"JMdict,Jiten","เสียงดัง, การตะโกนเสียงดัง"
+使い方,つかいかた,"way of using, how to use, usage","JMdict,Jiten","วิธีใช้, การใช้งาน"
+考え方,かんがえかた,"way of thinking, point of view, attitude","JMdict,Jiten","วิธีคิด, แนวคิด, มุมมอง"
+年上,としうえ,"older, senior in age","JMdict,Jiten","อายุมากกว่า, รุ่นพี่ (คนที่แก่กว่า)"
+治す,なおす,"to cure, to heal, to treat","JMdict,Jiten","รักษาให้หาย (โรค/อาการบาดเจ็บ), เยียวยา"
+自己紹介,じこしょうかい,self-introduction,"JMdict,Jiten",การแนะนำตัวเอง
+生き方,いきかた,"way of life, how to live","JMdict,Jiten","วิถีชีวิต, การดำเนินชีวิต"
+喧嘩,けんか,"quarrel, fight, argument","JMdict,Jiten","การทะเลาะวิวาท, การมีปากเสียงกัน"
+放課後,ほうかご,after school,"JMdict,Jiten",หลังเลิกเรียน
+休日,きゅうじつ,"holiday, day off","JMdict,Jiten",วันหยุด
+中学生,ちゅうがくせい,"junior high school student, middle school student","JMdict,Jiten",นักเรียนชั้นมัธยมศึกษาตอนต้น
+年下,としした,"younger, junior in age","JMdict,Jiten","อายุน้อยกว่า, รุ่นน้อง (คนที่เด็กกว่า)"
+大嫌い,だいきらい,"hating, strongly disliking, detesting","JMdict,Jiten","เกลียดมาก, ไม่ชอบอย่างยิ่ง"
+結婚式,けっこんしき,"wedding ceremony, marriage ceremony","JMdict,Jiten","พิธีแต่งงาน, งานแต่งงาน"
+駅前,えきまえ,"in front of the station, area around the station","JMdict,Jiten","หน้าสถานีรถไฟ, บริเวณหน้าสถานี"
+救急車,きゅうきゅうしゃ,ambulance,"JMdict,Jiten",รถพยาบาลฉุกเฉิน
+金持ち,かねもち,"rich person, wealthy person","JMdict,Jiten","คนรวย, เศรษฐี"
+一日中,いちにちじゅう,"all day long, throughout the day","JMdict,Jiten","ตลอดทั้งวัน, ทั้งวัน"
+外側,そとがわ,"outside, exterior, outer side","JMdict,Jiten","ด้านนอก, ฝั่งข้างนอก"
+午前中,ごぜんちゅう,"in the morning, throughout the morning, before noon","JMdict,Jiten","ช่วงเช้า, ตลอดช่วงเช้า (ก่อนเที่ยง)"
+週末,しゅうまつ,weekend,"JMdict,Jiten","สุดสัปดาห์, วันเสาร์อาทิตย์"
+社員,しゃいん,"company employee, staff member","JMdict,Jiten",พนักงานบริษัท
+授業中,じゅぎょうちゅう,"during class, while in class","JMdict,Jiten","ระหว่างเรียน, ในคาบเรียน"
+携帯電話,けいたいでんわ,"mobile phone, cell phone","JMdict,Jiten",โทรศัพท์มือถือ
+右側,みぎがわ,"right side, right-hand side","JMdict,Jiten","ด้านขวา, ฝั่งขวามือ"
+緑色,みどりいろ,green color,"JMdict,Jiten",สีเขียว
+混む,こむ,"to be crowded, to be congested, to be packed","JMdict,Jiten","แออัด, คับคั่ง, คนแน่น, รถติด"
+野球,やきゅう,baseball,"JMdict,Jiten",กีฬาเบสบอล
+見方,みかた,"viewpoint, point of view, way of looking at","JMdict,Jiten","มุมมอง, ทัศนคติ, วิธีดู (เช่น แผนที่หรือตาราง)"
