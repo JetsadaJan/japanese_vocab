@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Check,
   Minus,
   MoveHorizontal,
   Plus,
@@ -24,6 +23,81 @@ interface LevelDistributionPanelProps {
   onChangeWeights: (weights: LevelWeights, isSmartMix: boolean) => void;
 }
 
+// Convert weights to 5 cut positions on the bar (0 to 100)
+// cuts = [0, c1, c2, c3, c4, 100]
+const getCutsFromWeights = (w: LevelWeights): number[] => {
+  const c0 = 0;
+  const c1 = Math.max(0, w.N5 || 0);
+  const c2 = c1 + Math.max(0, w.N4 || 0);
+  const c3 = c2 + Math.max(0, w.N3 || 0);
+  const c4 = c3 + Math.max(0, w.N2 || 0);
+  return [c0, c1, c2, c3, c4, 100];
+};
+
+// Adjust one level's weight and balance the difference with others, always maintaining 100%
+function adjustLevelWeight(
+  currentWeights: LevelWeights,
+  targetLevel: JLPTLevel,
+  targetValue: number,
+  orderedLevels: JLPTLevel[]
+): LevelWeights {
+  const targetVal = Math.max(0, Math.min(100, Math.round(targetValue)));
+  const currentVal = currentWeights[targetLevel] ?? 0;
+  const diff = targetVal - currentVal;
+  if (diff === 0) return currentWeights;
+
+  const result: LevelWeights = { ...currentWeights, [targetLevel]: targetVal };
+  const otherLevels = orderedLevels.filter((lvl) => lvl !== targetLevel);
+
+  if (diff > 0) {
+    let remainingToDeduct = diff;
+    const candidates = [...otherLevels]
+      .filter((lvl) => (result[lvl] || 0) > 0)
+      .sort((a, b) => (result[b] || 0) - (result[a] || 0));
+
+    for (const lvl of candidates) {
+      if (remainingToDeduct <= 0) break;
+      const canDeduct = Math.min(result[lvl] || 0, remainingToDeduct);
+      result[lvl] -= canDeduct;
+      remainingToDeduct -= canDeduct;
+    }
+    if (remainingToDeduct > 0) {
+      result[targetLevel] -= remainingToDeduct;
+    }
+  } else {
+    let remainingToAdd = Math.abs(diff);
+    const activeOthers = otherLevels.filter((lvl) => (result[lvl] || 0) > 0);
+    const targetAddLevels = activeOthers.length > 0 ? activeOthers : otherLevels;
+
+    for (let i = 0; remainingToAdd > 0 && i < targetAddLevels.length; i++) {
+      const lvl = targetAddLevels[i];
+      const add = Math.min(
+        100 - (result[lvl] || 0),
+        Math.ceil(remainingToAdd / (targetAddLevels.length - i))
+      );
+      result[lvl] = (result[lvl] || 0) + add;
+      remainingToAdd -= add;
+    }
+  }
+
+  // Ensure exact 100% total
+  const sum = orderedLevels.reduce((acc, lvl) => acc + (result[lvl] || 0), 0);
+  if (sum !== 100) {
+    const error = 100 - sum;
+    if (result[targetLevel] + error >= 0 && result[targetLevel] + error <= 100) {
+      result[targetLevel] += error;
+    } else {
+      let maxLvl = orderedLevels[0];
+      for (const lvl of orderedLevels) {
+        if ((result[lvl] || 0) > (result[maxLvl] || 0)) maxLvl = lvl;
+      }
+      result[maxLvl] = Math.max(0, result[maxLvl] + error);
+    }
+  }
+
+  return result;
+}
+
 export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
   selectedLevel,
   weights,
@@ -34,48 +108,26 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
   const barRef = useRef<HTMLDivElement>(null);
   const [draggingHandle, setDraggingHandle] = useState<number | null>(null);
 
+  // Drag state ref for ultra-smooth 60fps tracking without lag or stale closures
+  const dragStateRef = useRef<{
+    handleIdx: number;
+    barRect: DOMRect;
+    initialCuts: number[];
+  } | null>(null);
+
   // Order consistently from N5 (beginner) to N1 (advanced)
-  const orderedLevels = useMemo<JLPTLevel[]>(() => ['N5', 'N4', 'N3', 'N2', 'N1'], []);
+  const orderedLevels = useMemo<JLPTLevel[]>(
+    () => ['N5', 'N4', 'N3', 'N2', 'N1'],
+    []
+  );
+
+  // Cut points on the bar (0 to 100)
+  const cuts = useMemo(() => getCutsFromWeights(weights), [weights]);
 
   const totalWeight = useMemo(
     () => JLPT_LEVELS.reduce((sum, lvl) => sum + (weights[lvl] || 0), 0),
     [weights]
   );
-
-  const getNormalizedPercent = useCallback(
-    (lvl: JLPTLevel): number => {
-      if (totalWeight <= 0) return lvl === selectedLevel ? 100 : 0;
-      return Math.round(((weights[lvl] || 0) / totalWeight) * 100);
-    },
-    [selectedLevel, totalWeight, weights]
-  );
-
-  // Normalizes percentages to sum to exactly 100 for the visual bar segments
-  const normalizedPercents = useMemo(() => {
-    const raw = orderedLevels.map((lvl) => getNormalizedPercent(lvl));
-    const rawSum = raw.reduce((a, b) => a + b, 0);
-    if (rawSum !== 100 && rawSum > 0) {
-      const diff = 100 - rawSum;
-      let maxIdx = 0;
-      for (let i = 1; i < raw.length; i++) {
-        if (raw[i] > raw[maxIdx]) maxIdx = i;
-      }
-      raw[maxIdx] += diff;
-    }
-    return raw;
-  }, [orderedLevels, getNormalizedPercent]);
-
-  // Cumulative positions (cuts) from 0 to 100
-  const cuts = useMemo(() => {
-    const res = [0];
-    let sum = 0;
-    for (let i = 0; i < normalizedPercents.length; i++) {
-      sum += normalizedPercents[i];
-      res.push(sum);
-    }
-    res[res.length - 1] = 100;
-    return res;
-  }, [normalizedPercents]);
 
   const isStrictMode =
     !useSmartMix &&
@@ -93,96 +145,94 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
     onChangeWeights({ ...STRICT_LEVEL_WEIGHTS[selectedLevel] }, false);
   };
 
-  // Direct percentage input by user
+  // Direct percentage input: auto-balances with other levels to maintain 100%
   const handleDirectNumberInput = (lvl: JLPTLevel, val: number) => {
-    const clamped = Math.max(0, Math.min(100, isNaN(val) ? 0 : val));
-    const next = { ...weights, [lvl]: clamped };
+    const next = adjustLevelWeight(weights, lvl, val, orderedLevels);
     setIsCustomizing(true);
     onChangeWeights(next, false);
   };
 
-  // Step button (+5% / -5%)
+  // Step button (+5% / -5%): auto-balances with other levels to maintain 100%
   const handleStepWeight = (lvl: JLPTLevel, delta: number) => {
     const current = weights[lvl] ?? 0;
-    const nextVal = Math.max(0, Math.min(100, current + delta));
-    const next = { ...weights, [lvl]: nextVal };
+    const nextVal = current + delta;
+    const next = adjustLevelWeight(weights, lvl, nextVal, orderedLevels);
     setIsCustomizing(true);
     onChangeWeights(next, false);
   };
 
-  // Auto-balance weights so they total 100%
-  const handleAutoBalance = () => {
-    if (totalWeight <= 0) {
-      onChangeWeights({ ...DEFAULT_LEVEL_WEIGHTS[selectedLevel] }, true);
-      return;
-    }
-    const balanced: LevelWeights = { N1: 0, N2: 0, N3: 0, N4: 0, N5: 0 };
-    let sum = 0;
-    orderedLevels.forEach((lvl) => {
-      const pct = Math.round(((weights[lvl] || 0) / totalWeight) * 100);
-      balanced[lvl] = pct;
-      sum += pct;
-    });
-    if (sum !== 100 && sum > 0) {
-      const diff = 100 - sum;
-      balanced[selectedLevel] = Math.max(0, balanced[selectedLevel] + diff);
-    }
-    setIsCustomizing(true);
-    onChangeWeights(balanced, false);
-  };
-
-  // Draggable divider handle handlers on the visual bar
-  const handleDragStart = (handleIdx: number, e: React.MouseEvent | React.TouchEvent) => {
+  // Draggable divider handle on pointer down (works for both mouse & touch)
+  const handleDragStart = (handleIdx: number, e: React.PointerEvent) => {
     e.preventDefault();
+    e.stopPropagation();
+    if (!barRef.current) return;
+    const rect = barRef.current.getBoundingClientRect();
+    dragStateRef.current = {
+      handleIdx,
+      barRect: rect,
+      initialCuts: getCutsFromWeights(weights),
+    };
     setDraggingHandle(handleIdx);
     setIsCustomizing(true);
   };
 
+  // Drag tracking: moves the divider directly and updates percentage numbers live
   useEffect(() => {
     if (draggingHandle === null) return;
 
-    const handleMove = (clientX: number) => {
-      if (!barRef.current) return;
-      const rect = barRef.current.getBoundingClientRect();
-      if (rect.width <= 0) return;
+    const handlePointerMove = (e: PointerEvent) => {
+      const state = dragStateRef.current;
+      if (!state || !barRef.current) return;
+      const { handleIdx, barRect, initialCuts } = state;
+      if (barRect.width <= 0) return;
 
-      const rawPct = ((clientX - rect.left) / rect.width) * 100;
-      const minPct = cuts[draggingHandle];
-      const maxPct = cuts[draggingHandle + 2];
-      const clamped = Math.round(Math.max(minPct, Math.min(maxPct, rawPct)));
+      const rawPct = ((e.clientX - barRect.left) / barRect.width) * 100;
+      const clampedPct = Math.round(Math.max(0, Math.min(100, rawPct)));
 
-      const leftLevel = orderedLevels[draggingHandle];
-      const rightLevel = orderedLevels[draggingHandle + 1];
+      const cutIdx = handleIdx + 1;
+      const nextCuts = [...initialCuts];
+      nextCuts[cutIdx] = clampedPct;
 
-      const newLeftWeight = clamped - minPct;
-      const newRightWeight = maxPct - clamped;
+      // Push left cuts if they exceed clampedPct
+      for (let i = 1; i < cutIdx; i++) {
+        if (nextCuts[i] > clampedPct) {
+          nextCuts[i] = clampedPct;
+        }
+      }
 
-      const nextWeights = { ...weights };
-      nextWeights[leftLevel] = newLeftWeight;
-      nextWeights[rightLevel] = newRightWeight;
+      // Push right cuts if they are below clampedPct
+      for (let i = cutIdx + 1; i <= 4; i++) {
+        if (nextCuts[i] < clampedPct) {
+          nextCuts[i] = clampedPct;
+        }
+      }
+
+      const nextWeights: LevelWeights = {
+        N5: nextCuts[1] - nextCuts[0],
+        N4: nextCuts[2] - nextCuts[1],
+        N3: nextCuts[3] - nextCuts[2],
+        N2: nextCuts[4] - nextCuts[3],
+        N1: nextCuts[5] - nextCuts[4],
+      };
 
       onChangeWeights(nextWeights, false);
     };
 
-    const onMouseMove = (e: MouseEvent) => handleMove(e.clientX);
-    const onTouchMove = (e: TouchEvent) => {
-      if (e.touches.length > 0) handleMove(e.touches[0].clientX);
+    const handlePointerUp = () => {
+      dragStateRef.current = null;
+      setDraggingHandle(null);
     };
 
-    const onEnd = () => setDraggingHandle(null);
-
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('mouseup', onEnd);
-    window.addEventListener('touchmove', onTouchMove);
-    window.addEventListener('touchend', onEnd);
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+    window.addEventListener('pointercancel', handlePointerUp);
 
     return () => {
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('mouseup', onEnd);
-      window.removeEventListener('touchmove', onTouchMove);
-      window.removeEventListener('touchend', onEnd);
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener('pointercancel', handlePointerUp);
     };
-  }, [draggingHandle, cuts, orderedLevels, weights, onChangeWeights]);
+  }, [draggingHandle, onChangeWeights]);
 
   return (
     <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 sm:p-5 backdrop-blur-sm space-y-3.5">
@@ -240,25 +290,11 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
 
       {/* Interactive Multi-segment Bar with Draggable Dividers */}
       <div className="space-y-1.5">
-        <div className="flex items-center justify-between text-xs px-1">
-          <span className="flex items-center gap-1 text-slate-400 font-medium">
+        <div className="flex items-center text-xs px-1">
+          <span className="flex items-center gap-1.5 text-slate-400 font-medium">
             <MoveHorizontal className="w-3.5 h-3.5 text-rose-400" />
-            ลากเส้นแบ่งบนแถบ หรือพิมพ์เปอร์เซ็นต์ในช่องด้านล่าง
+            ลากเส้นแบ่งบนแถบ หรือปรับเปอร์เซ็นต์ในช่องด้านล่าง
           </span>
-
-          {totalWeight === 100 ? (
-            <span className="inline-flex items-center gap-1 text-emerald-400 text-xs font-bold">
-              <Check className="w-3.5 h-3.5" /> รวม 100% ครบถ้วน
-            </span>
-          ) : (
-            <button
-              type="button"
-              onClick={handleAutoBalance}
-              className="text-xs text-amber-400 hover:text-amber-300 font-bold underline cursor-pointer"
-            >
-              รวม {totalWeight}% (กดเพื่อปรับให้ครบ 100%)
-            </button>
-          )}
         </div>
 
         {/* The Bar */}
@@ -266,19 +302,21 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
           ref={barRef}
           className="relative h-9 w-full rounded-2xl bg-slate-950 border border-slate-800 p-0.5 flex overflow-hidden select-none touch-none shadow-inner"
         >
-          {orderedLevels.map((lvl, idx) => {
-            const pct = normalizedPercents[idx];
+          {orderedLevels.map((lvl) => {
+            const pct = weights[lvl] ?? 0;
             if (pct <= 0) return null;
             const meta = LEVEL_METADATA[lvl];
             return (
               <div
                 key={lvl}
                 style={{ width: `${pct}%` }}
-                className={`${meta.barColor} h-full transition-all duration-75 flex items-center justify-center overflow-hidden relative`}
+                className={`${meta.barColor} h-full flex items-center justify-center overflow-hidden relative select-none ${
+                  draggingHandle !== null ? '' : 'transition-[width] duration-150'
+                }`}
                 title={`${lvl}: ${pct}%`}
               >
                 {pct >= 8 && (
-                  <span className="text-xs font-black text-slate-950 drop-shadow-xs whitespace-nowrap px-1">
+                  <span className="text-xs font-black text-slate-950 drop-shadow-xs whitespace-nowrap px-1 select-none pointer-events-none">
                     {lvl} {pct}%
                   </span>
                 )}
@@ -289,22 +327,23 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
           {/* Draggable Divider Handles (between N5|N4, N4|N3, N3|N2, N2|N1) */}
           {[0, 1, 2, 3].map((handleIdx) => {
             const pos = cuts[handleIdx + 1];
-            if (pos <= 0 || pos >= 100) return null;
             const isDragging = draggingHandle === handleIdx;
+            // Prioritize handles at extremes so stacked handles can be pulled apart
+            const baseZ = pos <= 50 ? 25 - handleIdx : 21 + handleIdx;
+            const zIndex = isDragging ? 35 : baseZ;
 
             return (
               <div
                 key={handleIdx}
-                style={{ left: `${pos}%` }}
-                onMouseDown={(e) => handleDragStart(handleIdx, e)}
-                onTouchStart={(e) => handleDragStart(handleIdx, e)}
-                className="absolute top-0 bottom-0 -ml-2.5 w-5 flex items-center justify-center cursor-ew-resize z-20 group"
+                style={{ left: `${pos}%`, zIndex }}
+                onPointerDown={(e) => handleDragStart(handleIdx, e)}
+                className="absolute top-0 bottom-0 -ml-3 w-6 flex items-center justify-center cursor-ew-resize group touch-none select-none"
                 title={`ลากปรับสัดส่วนระหว่าง ${orderedLevels[handleIdx]} และ ${orderedLevels[handleIdx + 1]}`}
               >
                 <div
-                  className={`w-1.5 h-6 rounded-full transition-all ${
+                  className={`w-1.5 h-6 rounded-full transition-transform ${
                     isDragging
-                      ? 'bg-white ring-2 ring-rose-500 scale-125 shadow-lg'
+                      ? 'bg-white ring-2 ring-rose-500 scale-125 shadow-lg shadow-rose-500/50'
                       : 'bg-white/90 group-hover:bg-white group-hover:scale-110 shadow-md border border-slate-900'
                   }`}
                 />
@@ -316,9 +355,8 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
 
       {/* 5 Level Cards with Direct Number Input & Steppers */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
-        {orderedLevels.map((lvl, idx) => {
-          const pct = normalizedPercents[idx];
-          const rawVal = weights[lvl] ?? 0;
+        {orderedLevels.map((lvl) => {
+          const val = weights[lvl] ?? 0;
           const meta = LEVEL_METADATA[lvl];
           const isSelected = selectedLevel === lvl;
 
@@ -326,7 +364,7 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
             <div
               key={lvl}
               className={`rounded-2xl p-2.5 sm:p-3 border transition-all flex flex-col justify-between gap-2 ${
-                rawVal > 0
+                val > 0
                   ? `${meta.badgeClass} ring-1 ring-white/10`
                   : 'bg-slate-950/60 border-slate-800 text-slate-500'
               }`}
@@ -340,8 +378,8 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
                     </span>
                   )}
                 </div>
-                <span className="text-[11px] font-medium opacity-80 font-mono">
-                  คำนวณ {pct}%
+                <span className="text-[11px] font-semibold opacity-75">
+                  {meta.subtitle}
                 </span>
               </div>
 
@@ -350,7 +388,7 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
                 <button
                   type="button"
                   onClick={() => handleStepWeight(lvl, -5)}
-                  disabled={rawVal <= 0}
+                  disabled={val <= 0}
                   className="w-6 h-6 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-center transition-all disabled:opacity-20 cursor-pointer"
                   title="ลด 5%"
                 >
@@ -363,8 +401,10 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
                     min={0}
                     max={100}
                     step={1}
-                    value={rawVal}
-                    onChange={(e) => handleDirectNumberInput(lvl, Number(e.target.value))}
+                    value={val}
+                    onChange={(e) =>
+                      handleDirectNumberInput(lvl, Number(e.target.value))
+                    }
                     className="w-full text-center font-mono font-extrabold text-sm sm:text-base text-white bg-transparent outline-none p-0 focus:text-rose-400"
                   />
                   <span className="text-xs font-bold text-slate-400 select-none">%</span>
@@ -373,7 +413,7 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
                 <button
                   type="button"
                   onClick={() => handleStepWeight(lvl, 5)}
-                  disabled={rawVal >= 100}
+                  disabled={val >= 100}
                   className="w-6 h-6 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-center transition-all disabled:opacity-20 cursor-pointer"
                   title="เพิ่ม 5%"
                 >
