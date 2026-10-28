@@ -230,10 +230,25 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
         </div>
       </div>
 
-      {/* 1. Select JLPT Level */}
+      {/* Start Quiz CTA Button (Quick Access at Top) */}
+      <div>
+        <button
+          type="button"
+          onClick={onStartQuiz}
+          disabled={activeQuizWordsCount === 0}
+          className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 hover:from-rose-400 hover:via-pink-400 hover:to-amber-400 text-slate-950 font-black text-base sm:text-lg shadow-xl shadow-rose-500/25 hover:shadow-rose-500/40 transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed group active:scale-[0.99]"
+        >
+          <Play className="w-5 h-5 fill-slate-950 group-hover:scale-110 transition-transform" />
+          <span>
+            เริ่มทายคำศัพท์ ({activeQuizWordsCount.toLocaleString()} คำ)
+          </span>
+        </button>
+      </div>
+
+      {/* Select JLPT Level */}
       <section className="space-y-3">
         <h2 className="text-sm sm:text-base font-bold text-white px-1">
-          1. เลือกระดับ JLPT
+          เลือกระดับ JLPT
         </h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
@@ -292,13 +307,13 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
         />
       </section>
 
-      {/* 2. Language & Reading Aids (Side-by-side compact cards) */}
+      {/* Language & Reading Aids (Side-by-side compact cards) */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
         {/* Meaning Language */}
         <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 space-y-3">
           <div className="flex items-center gap-2 text-sm font-bold text-white">
             <Globe className="w-4 h-4 text-sky-400" />
-            <span>2. ภาษาคำแปล</span>
+            <span>ภาษาคำแปล</span>
           </div>
 
           <div className="grid grid-cols-3 gap-2">
@@ -326,7 +341,7 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
         <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 flex items-center justify-between gap-3">
           <div className="space-y-2.5 flex-1">
             <div className="text-sm font-bold text-white">
-              3. ตัวช่วยอ่าน (Hiragana / Romaji)
+              ตัวช่วยอ่าน (Hiragana / Romaji)
             </div>
 
             <div className="grid grid-cols-2 gap-2">
@@ -383,10 +398,10 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
         </div>
       </section>
 
-      {/* 4. Select Quiz Mode */}
+      {/* Select Quiz Mode */}
       <section className="space-y-2.5">
         <h2 className="text-sm sm:text-base font-bold text-white px-1">
-          4. โหมดคำถาม
+          โหมดคำถาม
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -550,21 +565,6 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
           </div>
         )}
       </section>
-
-      {/* Start CTA Button */}
-      <div className="pt-1">
-        <button
-          type="button"
-          onClick={onStartQuiz}
-          disabled={activeQuizWordsCount === 0}
-          className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 hover:from-rose-400 hover:via-pink-400 hover:to-amber-400 text-slate-950 font-extrabold text-base sm:text-lg shadow-xl shadow-rose-500/20 hover:shadow-rose-500/35 transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <Play className="w-5 h-5 fill-slate-950" />
-          <span>
-            เริ่มทายคำศัพท์ ({activeQuizWordsCount.toLocaleString()} คำ)
-          </span>
-        </button>
-      </div>
     </div>
   );
 };
