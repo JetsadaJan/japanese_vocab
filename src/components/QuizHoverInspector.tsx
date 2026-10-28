@@ -97,28 +97,28 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
     <div
       onClick={onClose}
       onWheel={(e) => e.stopPropagation()}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/45 backdrop-blur-sm overscroll-contain animate-fadeIn"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0E0F12]/80 backdrop-blur-sm overscroll-contain animate-fadeIn"
     >
       {/* Floating Hover Card — keeps quiz visible through translucent backdrop */}
       <div
         onClick={(e) => e.stopPropagation()}
         onWheel={(e) => e.stopPropagation()}
-        className="relative w-full max-w-2xl max-h-[84vh] flex flex-col rounded-3xl border border-slate-700/90 bg-slate-900/95 shadow-2xl shadow-black/70 overflow-hidden overscroll-contain"
+        className="relative w-full max-w-2xl max-h-[84vh] flex flex-col rounded-3xl border border-[#2A2D36] bg-[#16181D] shadow-2xl shadow-black/80 overflow-hidden overscroll-contain"
       >
         {/* Top Header Bar — Close button ALWAYS pinned at Top-Right */}
-        <div className="sticky top-0 z-20 flex items-center justify-between gap-2 px-5 py-3.5 border-b border-slate-800 bg-slate-900/95 backdrop-blur-md">
+        <div className="sticky top-0 z-20 flex items-center justify-between gap-2 px-5 py-3.5 border-b border-[#2A2D36] bg-[#16181D]/95 backdrop-blur-md">
           <div className="flex items-center gap-2 min-w-0">
             {history.length > 1 && (
               <button
                 type="button"
                 onClick={onBack}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-colors cursor-pointer shrink-0"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-[#1F2229] hover:bg-[#2A2D36] text-[#F3F4F6] text-xs font-medium transition-colors cursor-pointer shrink-0"
               >
                 <ArrowLeft className="w-3.5 h-3.5" />
                 ย้อนกลับ
               </button>
             )}
-            <span className="text-xs font-bold text-slate-200 truncate">
+            <span className="text-xs font-bold text-[#F3F4F6] truncate">
               {headerTitle}
             </span>
           </div>
@@ -128,7 +128,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
             type="button"
             onClick={onClose}
             aria-label="ปิดหน้าต่าง"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500 text-rose-200 hover:text-white border border-rose-500/40 text-xs font-extrabold transition-all cursor-pointer shrink-0"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1F2229] hover:bg-[#2A2D36] text-[#F3F4F6] hover:text-[#D4AF37] border border-[#2A2D36] text-xs font-bold transition-all cursor-pointer shrink-0"
           >
             <span>ปิด</span>
             <X className="w-4 h-4" />
@@ -148,31 +148,31 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
               return (
                 <>
                   {/* Kanji Header */}
-                  <div className="flex items-start justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-950/70 p-4">
+                  <div className="flex items-start justify-between gap-4 rounded-2xl border border-[#2A2D36] bg-[#0E0F12] p-4">
                     <div className="flex items-center gap-4">
-                      <div className="w-20 h-20 rounded-2xl bg-slate-900 border-2 border-rose-500/50 flex items-center justify-center text-5xl font-extrabold text-white font-jp shrink-0">
+                      <div className="w-20 h-20 rounded-2xl bg-[#16181D] border border-[#2A2D36] flex items-center justify-center text-5xl font-medium text-[#F3F4F6] font-jp shrink-0">
                         {kNode.character}
                       </div>
 
                       <div className="space-y-1.5">
                         <div className="flex flex-wrap items-center gap-1.5">
                           <span
-                            className={`text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border ${kMeta.badgeClass}`}
+                            className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${kMeta.badgeClass}`}
                           >
                             คันจิ {kNode.level}
                           </span>
                           {kNode.strokes > 0 && (
-                            <span className="text-[11px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded-full">
+                            <span className="text-[11px] text-[#9CA3AF] bg-[#1F2229] px-2 py-0.5 rounded-full border border-[#2A2D36]">
                               {kNode.strokes} ขีด
                             </span>
                           )}
                         </div>
 
                         <div className="space-y-0.5">
-                          <div className="text-sm sm:text-base font-extrabold text-white">
+                          <div className="text-sm sm:text-base font-bold text-[#F3F4F6]">
                             🇹🇭 {kNode.meaningTh || kNode.meaningEn}
                           </div>
-                          <div className="text-xs sm:text-sm text-sky-300 font-medium">
+                          <div className="text-xs sm:text-sm text-[#9CA3AF] font-medium">
                             🇬🇧 {kNode.meaningEn}
                           </div>
                         </div>
@@ -182,7 +182,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                     <button
                       type="button"
                       onClick={() => speakJapanese(kNode.character)}
-                      className="p-2.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 transition-colors cursor-pointer shrink-0"
+                      className="p-2.5 rounded-xl bg-[#1F2229] hover:bg-[#2A2D36] border border-[#2A2D36] text-[#D4AF37] transition-colors cursor-pointer shrink-0"
                       title="ฟังเสียงอ่าน"
                     >
                       <Volume2 className="w-4 h-4" />
@@ -191,8 +191,8 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
 
                   {/* On'yomi & Kun'yomi */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-3 space-y-1">
-                      <div className="text-[11px] font-bold text-amber-400">
+                    <div className="rounded-xl border border-[#2A2D36] bg-[#0E0F12] p-3 space-y-1">
+                      <div className="text-[11px] font-bold text-[#FBBF24]">
                         เสียงอน (On'yomi)
                       </div>
                       {kNode.onyomi.length > 0 ? (
@@ -202,11 +202,11 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                               key={i}
                               type="button"
                               onClick={() => speakJapanese(r.replace(/[.\-]/g, ''))}
-                              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-xs font-bold text-amber-200 cursor-pointer"
+                              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-[#2E1F05] hover:bg-[#3D2907] border border-[#D97706]/40 text-xs font-medium text-[#FBBF24] cursor-pointer"
                             >
                               <span className="font-jp">{r}</span>
                               {showRomaji && kNode.onyomiRomaji[i] && (
-                                <span className="text-[11px] font-mono text-amber-300/80">
+                                <span className="text-[11px] font-mono text-[#FBBF24]/80">
                                   [{kNode.onyomiRomaji[i]}]
                                 </span>
                               )}
@@ -215,12 +215,12 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                           ))}
                         </div>
                       ) : (
-                        <div className="text-xs text-slate-500">-</div>
+                        <div className="text-xs text-[#6B7280]">-</div>
                       )}
                     </div>
 
-                    <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-3 space-y-1">
-                      <div className="text-[11px] font-bold text-emerald-400">
+                    <div className="rounded-xl border border-[#2A2D36] bg-[#0E0F12] p-3 space-y-1">
+                      <div className="text-[11px] font-bold text-[#34D399]">
                         เสียงคุน (Kun'yomi)
                       </div>
                       {kNode.kunyomi.length > 0 ? (
@@ -230,11 +230,11 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                               key={i}
                               type="button"
                               onClick={() => speakJapanese(r.replace(/[.\-]/g, ''))}
-                              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-xs font-bold text-emerald-200 cursor-pointer"
+                              className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-[#062E22] hover:bg-[#0A3D2E] border border-[#059669]/40 text-xs font-medium text-[#34D399] cursor-pointer"
                             >
                               <span className="font-jp">{r}</span>
                               {showRomaji && kNode.kunyomiRomaji[i] && (
-                                <span className="text-[11px] font-mono text-emerald-300/80">
+                                <span className="text-[11px] font-mono text-[#34D399]/80">
                                   [{kNode.kunyomiRomaji[i]}]
                                 </span>
                               )}
@@ -243,15 +243,15 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                           ))}
                         </div>
                       ) : (
-                        <div className="text-xs text-slate-500">-</div>
+                        <div className="text-xs text-[#6B7280]">-</div>
                       )}
                     </div>
                   </div>
 
                   {/* Related Words using this Kanji */}
                   <div className="space-y-2">
-                    <div className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                      <Link2 className="w-3.5 h-3.5 text-rose-400" />
+                    <div className="text-xs font-bold text-[#9CA3AF] flex items-center gap-1.5">
+                      <Link2 className="w-3.5 h-3.5 text-[#D4AF37]" />
                       คำศัพท์ที่ใช้คันจิ 「{kNode.character}」 ({relatedWords.length} คำ)
                     </div>
 
@@ -263,10 +263,10 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                             key={w.id}
                             type="button"
                             onClick={() => onNavigateWord(w.id)}
-                            className="text-left rounded-xl border border-slate-800 hover:border-rose-500/50 bg-slate-950/70 hover:bg-slate-900 p-2.5 transition-all cursor-pointer"
+                            className="text-left rounded-xl border border-[#2A2D36] hover:border-[#D4AF37]/50 bg-[#0E0F12] hover:bg-[#1F2229] p-2.5 transition-all cursor-pointer"
                           >
                             <div className="flex items-center justify-between gap-1">
-                              <span className="text-base font-extrabold text-white font-jp">
+                              <span className="text-base font-medium text-[#F3F4F6] font-jp">
                                 {w.expression}
                               </span>
                               <span
@@ -275,11 +275,13 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                                 {w.level}
                               </span>
                             </div>
-                            <div className="text-[11px] text-rose-300 font-jp">
+                            <div className="text-[11px] text-[#9CA3AF] font-jp">
                               {w.reading}
-                              {showRomaji && w.romaji ? ` [${w.romaji}]` : ''}
+                              {showRomaji && w.romaji ? (
+                                <span className="text-[#FBBF24] font-mono ml-1">[{w.romaji}]</span>
+                              ) : null}
                             </div>
-                            <div className="text-xs text-slate-300 mt-0.5 truncate">
+                            <div className="text-xs text-[#9CA3AF] mt-0.5 truncate">
                               {formatWordMeaning(w, meaningLanguage)}
                             </div>
                           </button>
@@ -311,11 +313,11 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
               return (
                 <>
                   {/* Word Summary Card */}
-                  <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4 flex items-start justify-between gap-4">
+                  <div className="rounded-2xl border border-[#2A2D36] bg-[#0E0F12] p-4 flex items-start justify-between gap-4">
                     <div className="space-y-1.5">
                       <div className="flex items-center gap-1.5 flex-wrap">
                         <span
-                          className={`text-[11px] font-extrabold px-2 py-0.5 rounded-md border ${wMeta.badgeClass}`}
+                          className={`text-[11px] font-bold px-2 py-0.5 rounded-md border ${wMeta.badgeClass}`}
                         >
                           {word.level}
                         </span>
@@ -324,23 +326,23 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                         >
                           {catMeta.labelTh}
                         </span>
-                        <span className="text-xs text-rose-300 font-jp font-semibold">
+                        <span className="text-xs text-[#9CA3AF] font-jp font-medium">
                           【{word.reading}】
                         </span>
-                        <span className="text-xs text-amber-300 font-mono font-semibold">
+                        <span className="text-xs text-[#FBBF24] font-mono font-semibold">
                           [{word.romaji}]
                         </span>
                       </div>
 
-                      <div className="text-3xl font-extrabold text-white font-jp">
+                      <div className="text-3xl font-medium text-[#F3F4F6] font-jp">
                         {word.expression}
                       </div>
 
                       <div className="space-y-0.5 pt-1">
-                        <div className="text-sm font-bold text-white">
+                        <div className="text-sm font-bold text-[#F3F4F6]">
                           🇹🇭 {word.meaningTh || word.meaning}
                         </div>
-                        <div className="text-xs text-sky-300">
+                        <div className="text-xs text-[#9CA3AF]">
                           🇬🇧 {word.meaning}
                         </div>
                       </div>
@@ -349,7 +351,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                     <button
                       type="button"
                       onClick={() => speakJapanese(word.reading || word.expression)}
-                      className="p-2.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 transition-colors cursor-pointer shrink-0"
+                      className="p-2.5 rounded-xl bg-[#1F2229] hover:bg-[#2A2D36] border border-[#2A2D36] text-[#D4AF37] transition-colors cursor-pointer shrink-0"
                       title="ฟังเสียงอ่าน"
                     >
                       <Volume2 className="w-4 h-4" />
@@ -358,9 +360,9 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
 
                   {/* 1. Red Confusable / Homophone Warning Section First */}
                   {soundConfusables.length > 0 && (
-                    <div className="rounded-2xl border border-rose-500/40 bg-rose-950/25 p-3.5 space-y-2">
-                      <div className="text-xs font-extrabold text-rose-400 flex items-center gap-1.5">
-                        <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+                    <div className="rounded-2xl border border-[#F43F5E]/40 bg-[#330D17]/40 p-3.5 space-y-2">
+                      <div className="text-xs font-bold text-[#FB7185] flex items-center gap-1.5">
+                        <AlertTriangle className="w-4 h-4 text-[#FB7185] shrink-0" />
                         <span>
                           พ้องเสียง / เสียงคล้าย ({soundConfusables.length})
                         </span>
@@ -372,30 +374,30 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                             key={c.word.id}
                             type="button"
                             onClick={() => onNavigateWord(c.word.id)}
-                            className="w-full text-left rounded-xl border border-rose-500/30 hover:border-rose-400 bg-slate-950/80 hover:bg-slate-900 p-2.5 flex items-center justify-between gap-2 transition-all cursor-pointer"
+                            className="w-full text-left rounded-xl border border-[#F43F5E]/30 hover:border-[#F43F5E] bg-[#16181D] hover:bg-[#1F2229] p-2.5 flex items-center justify-between gap-2 transition-all cursor-pointer"
                           >
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-rose-500/25 text-rose-300 border border-rose-500/40">
+                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#330D17] text-[#FB7185] border border-[#F43F5E]/40">
                                   {c.labelTh}
                                 </span>
-                                <span className="text-sm font-extrabold text-white font-jp">
+                                <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                   {c.word.expression}
                                 </span>
-                                <span className="text-xs text-rose-300 font-jp">
+                                <span className="text-xs text-[#9CA3AF] font-jp">
                                   ({c.word.reading})
                                 </span>
                                 {showRomaji && c.word.romaji && (
-                                  <span className="text-[11px] text-amber-300 font-mono">
+                                  <span className="text-[11px] text-[#FBBF24] font-mono">
                                     [{c.word.romaji}]
                                   </span>
                                 )}
                               </div>
-                              <div className="text-xs font-semibold text-white mt-1">
+                              <div className="text-xs font-normal text-[#9CA3AF] mt-1">
                                 {formatWordMeaning(c.word, meaningLanguage)}
                               </div>
                             </div>
-                            <span className="text-xs font-bold text-rose-400 shrink-0">
+                            <span className="text-xs font-bold text-[#FB7185] shrink-0">
                               ดู ➔
                             </span>
                           </button>
@@ -406,10 +408,10 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
 
                   {/* 2. Similar Meaning Words & Group Comparison Link */}
                   {(meaningSimilars.length > 0 || groupId) && (
-                    <div className="rounded-2xl border border-amber-500/40 bg-amber-950/20 p-3.5 space-y-2.5">
+                    <div className="rounded-2xl border border-[#D4AF37]/40 bg-[#2E1F05]/40 p-3.5 space-y-2.5">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <div className="text-xs font-extrabold text-amber-300 flex items-center gap-1.5">
-                          <Link2 className="w-4 h-4 text-amber-400 shrink-0" />
+                        <div className="text-xs font-bold text-[#FBBF24] flex items-center gap-1.5">
+                          <Link2 className="w-4 h-4 text-[#D4AF37] shrink-0" />
                           <span>ความหมายใกล้เคียง ({meaningSimilars.length})</span>
                         </div>
 
@@ -417,7 +419,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                           <button
                             type="button"
                             onClick={() => onNavigateGroup(groupId)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-extrabold shadow-sm transition-all cursor-pointer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#D4AF37] hover:bg-[#F3DA78] text-[#0E0F12] text-xs font-bold shadow-sm transition-all cursor-pointer"
                           >
                             <BookOpen className="w-3.5 h-3.5" />
                             <span>Group เปรียบเทียบ ➔</span>
@@ -431,30 +433,30 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                             key={c.word.id}
                             type="button"
                             onClick={() => onNavigateWord(c.word.id)}
-                            className="w-full text-left rounded-xl border border-amber-500/30 hover:border-amber-400 bg-slate-950/80 hover:bg-slate-900 p-2.5 flex items-center justify-between gap-2 transition-all cursor-pointer"
+                            className="w-full text-left rounded-xl border border-[#D4AF37]/30 hover:border-[#D4AF37] bg-[#16181D] hover:bg-[#1F2229] p-2.5 flex items-center justify-between gap-2 transition-all cursor-pointer"
                           >
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-[#2E1F05] text-[#FBBF24] border border-[#D97706]/40">
                                   {c.labelTh}
                                 </span>
-                                <span className="text-sm font-extrabold text-white font-jp">
+                                <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                   {c.word.expression}
                                 </span>
-                                <span className="text-xs text-amber-200 font-jp">
+                                <span className="text-xs text-[#9CA3AF] font-jp">
                                   ({c.word.reading})
                                 </span>
                                 {showRomaji && c.word.romaji && (
-                                  <span className="text-[11px] text-amber-300 font-mono">
+                                  <span className="text-[11px] text-[#FBBF24] font-mono">
                                     [{c.word.romaji}]
                                   </span>
                                 )}
                               </div>
-                              <div className="text-xs font-semibold text-white mt-1">
+                              <div className="text-xs font-normal text-[#9CA3AF] mt-1">
                                 {formatWordMeaning(c.word, meaningLanguage)}
                               </div>
                             </div>
-                            <span className="text-xs font-bold text-amber-300 shrink-0">
+                            <span className="text-xs font-bold text-[#D4AF37] shrink-0">
                               ดู ➔
                             </span>
                           </button>
@@ -466,7 +468,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                   {/* 3. Kanji Links formatted as "{Kanji} ➔ {Meaning}" */}
                   {word.kanjiChars.length > 0 && (
                     <div className="space-y-2">
-                      <div className="text-xs font-bold text-slate-300">
+                      <div className="text-xs font-bold text-[#9CA3AF]">
                         คันจิ:
                       </div>
                       <div className="flex flex-wrap gap-2">
@@ -475,7 +477,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                             key={ch}
                             type="button"
                             onClick={() => onNavigateKanji(ch)}
-                            className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-rose-500/20 border border-slate-700 hover:border-rose-500/40 text-xs font-bold text-amber-300 hover:text-rose-200 transition-all cursor-pointer text-left"
+                            className="px-3 py-1.5 rounded-xl bg-[#1F2229] hover:bg-[#2A2D36] border border-[#2A2D36] hover:border-[#D4AF37]/50 text-xs font-medium text-[#F3F4F6] hover:text-[#D4AF37] transition-all cursor-pointer text-left"
                           >
                             {formatKanjiLinkLabel(ch, kanjiDb, meaningLanguage)}
                           </button>
@@ -500,34 +502,34 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
               return (
                 <div className="space-y-4">
                   {/* Group Hero Header */}
-                  <div className="rounded-2xl border border-amber-500/40 bg-gradient-to-br from-slate-950 via-slate-900 to-amber-950/30 p-4 space-y-2.5">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[11px] font-extrabold">
+                  <div className="rounded-2xl border border-[#D4AF37]/40 bg-[#16181D] p-4 space-y-2.5">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#2E1F05] border border-[#D97706]/40 text-[#D4AF37] text-[11px] font-bold">
                       <Sparkles className="w-3.5 h-3.5" />
                       <span>Group เปรียบเทียบ</span>
                     </div>
 
-                    <h3 className="text-base sm:text-lg font-extrabold text-white">
+                    <h3 className="text-base sm:text-lg font-bold text-[#F3F4F6]">
                       {group.titleTh}
                     </h3>
-                    <p className="text-xs text-slate-300 leading-relaxed">
+                    <p className="text-xs text-[#9CA3AF] leading-relaxed">
                       {group.summaryTh}
                     </p>
 
-                    <div className="rounded-xl bg-slate-950/80 border border-amber-500/30 p-3 space-y-1.5">
-                      <div className="text-xs font-extrabold text-amber-300">
+                    <div className="rounded-xl bg-[#0E0F12] border border-[#2A2D36] p-3 space-y-1.5">
+                      <div className="text-xs font-bold text-[#D4AF37]">
                         📌 จุดต่างหลัก:
                       </div>
-                      <div className="text-xs text-slate-100 leading-relaxed">
+                      <div className="text-xs text-[#F3F4F6] leading-relaxed">
                         {group.coreDifferenceTh}
                       </div>
                     </div>
 
-                    <div className="rounded-xl bg-emerald-950/30 border border-emerald-500/30 p-3 space-y-1">
-                      <div className="text-xs font-extrabold text-emerald-300 flex items-center gap-1.5">
+                    <div className="rounded-xl bg-[#062E22] border border-[#059669]/40 p-3 space-y-1">
+                      <div className="text-xs font-bold text-[#34D399] flex items-center gap-1.5">
                         <Lightbulb className="w-3.5 h-3.5" />
                         <span>เคล็ดลับเลือกใช้:</span>
                       </div>
-                      <div className="text-xs text-emerald-100 leading-relaxed">
+                      <div className="text-xs text-[#34D399]/90 leading-relaxed">
                         {group.quickTipTh}
                       </div>
                     </div>
@@ -535,8 +537,8 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
 
                   {/* Word-by-Word Nuance Breakdown (Meaning, Feeling, Usage, Example) */}
                   <div className="space-y-2.5">
-                    <div className="text-xs font-extrabold text-white flex items-center gap-1.5">
-                      <MessageCircle className="w-4 h-4 text-amber-400" />
+                    <div className="text-xs font-bold text-[#F3F4F6] flex items-center gap-1.5">
+                      <MessageCircle className="w-4 h-4 text-[#D4AF37]" />
                       <span>เปรียบเทียบแต่ละคำ:</span>
                     </div>
 
@@ -549,15 +551,15 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                         return (
                           <div
                             key={`${note.key}-${idx}`}
-                            className="rounded-2xl border border-slate-800 bg-slate-950/80 p-3.5 space-y-2"
+                            className="rounded-2xl border border-[#2A2D36] bg-[#0E0F12] p-3.5 space-y-2"
                           >
-                            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800/80 pb-2">
+                            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#2A2D36] pb-2">
                               <div className="flex items-center gap-2 flex-wrap">
-                                <span className="text-lg font-extrabold text-amber-300 font-jp">
+                                <span className="text-lg font-medium text-[#F3F4F6] font-jp">
                                   {note.key}
                                 </span>
                                 {note.readingLabel && (
-                                  <span className="text-xs text-slate-300 font-jp">
+                                  <span className="text-xs text-[#9CA3AF] font-jp">
                                     {note.readingLabel}
                                   </span>
                                 )}
@@ -580,7 +582,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                                       linkedWord?.reading || note.key
                                     )
                                   }
-                                  className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-rose-300 transition-colors cursor-pointer"
+                                  className="p-1.5 rounded-lg bg-[#1F2229] hover:bg-[#2A2D36] text-[#9CA3AF] hover:text-[#D4AF37] transition-colors cursor-pointer"
                                   title="ฟังเสียงอ่าน"
                                 >
                                   <Volume2 className="w-3.5 h-3.5" />
@@ -589,7 +591,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                                   <button
                                     type="button"
                                     onClick={() => onNavigateWord(linkedWord.id)}
-                                    className="px-2.5 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 text-[11px] font-bold transition-colors cursor-pointer"
+                                    className="px-2.5 py-1 rounded-lg bg-[#2E1F05] hover:bg-[#3D2907] border border-[#D97706]/40 text-[#FBBF24] text-[11px] font-bold transition-colors cursor-pointer"
                                   >
                                     ดู ➔
                                   </button>
@@ -599,38 +601,38 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
 
                             <div className="space-y-1.5 text-xs">
                               <div>
-                                <span className="font-extrabold text-rose-300">
+                                <span className="font-bold text-[#D4AF37]">
                                   • ความหมาย:{' '}
                                 </span>
-                                <span className="text-white font-semibold">
+                                <span className="text-[#F3F4F6] font-medium">
                                   {note.meaningDiff}
                                 </span>
                               </div>
                               <div>
-                                <span className="font-extrabold text-amber-300">
+                                <span className="font-bold text-[#FBBF24]">
                                   • Feeling:{' '}
                                 </span>
-                                <span className="text-slate-200">
+                                <span className="text-[#9CA3AF]">
                                   {note.feelingNuance}
                                 </span>
                               </div>
                               <div>
-                                <span className="font-extrabold text-sky-300">
+                                <span className="font-bold text-[#9CA3AF]">
                                   • การใช้:{' '}
                                 </span>
-                                <span className="text-slate-200">
+                                <span className="text-[#9CA3AF]">
                                   {note.usageContext}
                                 </span>
                               </div>
 
                               {note.exampleJa && (
-                                <div className="mt-1.5 pt-1.5 border-t border-slate-800/60 bg-slate-900/70 rounded-lg px-2.5 py-1.5 flex items-center justify-between gap-2">
+                                <div className="mt-1.5 pt-1.5 border-t border-[#2A2D36] bg-[#16181D] rounded-lg px-2.5 py-1.5 flex items-center justify-between gap-2">
                                   <div>
-                                    <div className="font-jp font-bold text-emerald-300">
+                                    <div className="font-jp font-medium text-[#34D399]">
                                       ตัวอย่าง: {note.exampleJa}
                                     </div>
                                     {note.exampleTh && (
-                                      <div className="text-[11px] text-slate-300">
+                                      <div className="text-[11px] text-[#9CA3AF]">
                                         ({note.exampleTh})
                                       </div>
                                     )}
@@ -640,7 +642,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                                     onClick={() =>
                                       speakJapanese(note.exampleJa!)
                                     }
-                                    className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-300 cursor-pointer shrink-0"
+                                    className="p-1.5 rounded-lg bg-[#1F2229] hover:bg-[#2A2D36] text-[#34D399] cursor-pointer shrink-0"
                                     title="ฟังประโยคตัวอย่าง"
                                   >
                                     <Volume2 className="w-3.5 h-3.5" />
@@ -656,8 +658,8 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
 
                   {/* Direct Links to All Words in this Group */}
                   {matchedWords.length > 0 && (
-                    <div className="space-y-2 pt-2 border-t border-slate-800">
-                      <div className="text-xs font-bold text-slate-300">
+                    <div className="space-y-2 pt-2 border-t border-[#2A2D36]">
+                      <div className="text-xs font-bold text-[#9CA3AF]">
                         คำศัพท์ในคลังที่อยู่ในกลุ่มนี้ ({matchedWords.length} คำ):
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -666,22 +668,22 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                             key={mw.id}
                             type="button"
                             onClick={() => onNavigateWord(mw.id)}
-                            className="text-left rounded-xl border border-slate-800 hover:border-amber-500/50 bg-slate-950/70 hover:bg-slate-900 p-2.5 flex items-center justify-between gap-2 transition-all cursor-pointer"
+                            className="text-left rounded-xl border border-[#2A2D36] hover:border-[#D4AF37]/50 bg-[#0E0F12] hover:bg-[#1F2229] p-2.5 flex items-center justify-between gap-2 transition-all cursor-pointer"
                           >
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center gap-1.5">
-                                <span className="text-sm font-extrabold text-white font-jp">
+                                <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                   {mw.expression}
                                 </span>
-                                <span className="text-xs text-rose-300 font-jp">
+                                <span className="text-xs text-[#9CA3AF] font-jp">
                                   ({mw.reading})
                                 </span>
                               </div>
-                              <div className="text-[11px] text-slate-300 truncate">
+                              <div className="text-[11px] text-[#9CA3AF] truncate">
                                 {formatWordMeaning(mw, meaningLanguage)}
                               </div>
                             </div>
-                            <span className="text-[11px] font-bold text-amber-300 shrink-0">
+                            <span className="text-[11px] font-bold text-[#D4AF37] shrink-0">
                               ดูคำนี้ ➔
                             </span>
                           </button>

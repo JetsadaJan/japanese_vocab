@@ -234,12 +234,12 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
   }, [draggingHandle, onChangeWeights]);
 
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 sm:p-5 backdrop-blur-sm space-y-3.5">
+    <div className="rounded-2xl border border-[#2A2D36] bg-[#16181D] p-4 sm:p-5 space-y-3.5">
       {/* Header & Presets */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
         <div className="flex items-center gap-2">
-          <Sliders className="w-4 h-4 text-rose-400" />
-          <h3 className="text-xs sm:text-sm font-bold text-slate-100">
+          <Sliders className="w-4 h-4 text-[#D4AF37]" />
+          <h3 className="text-xs sm:text-sm font-bold text-[#F3F4F6]">
             สัดส่วนการสุ่ม ({selectedLevel})
           </h3>
         </div>
@@ -251,8 +251,8 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
             onClick={handleSelectSmartMix}
             className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               useSmartMix && !isCustomizing
-                ? 'bg-rose-500 text-white shadow-sm'
-                : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                ? 'bg-[#D4AF37] text-[#0E0F12] font-bold shadow-sm'
+                : 'bg-[#0E0F12] text-[#9CA3AF] hover:bg-[#1F2229] border border-[#2A2D36]'
             }`}
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -265,8 +265,8 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
               onClick={handleSelectStrict}
               className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
                 isStrictMode
-                  ? 'bg-indigo-500 text-white shadow-sm'
-                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                  ? 'bg-[#D4AF37] text-[#0E0F12] font-bold shadow-sm'
+                  : 'bg-[#0E0F12] text-[#9CA3AF] hover:bg-[#1F2229] border border-[#2A2D36]'
               }`}
             >
               <Target className="w-3.5 h-3.5" />
@@ -278,7 +278,7 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
             <button
               type="button"
               onClick={handleSelectSmartMix}
-              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-all cursor-pointer"
+              className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-[#0E0F12] hover:bg-[#1F2229] text-[#9CA3AF] text-xs font-semibold border border-[#2A2D36] transition-all cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               รีเซ็ต
@@ -292,7 +292,7 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
         {/* The Bar */}
         <div
           ref={barRef}
-          className="relative h-9 w-full rounded-2xl bg-slate-950 border border-slate-800 p-0.5 flex overflow-hidden select-none touch-none shadow-inner"
+          className="relative h-9 w-full rounded-2xl bg-[#0E0F12] border border-[#2A2D36] p-0.5 flex overflow-hidden select-none touch-none shadow-inner"
         >
           {orderedLevels.map((lvl) => {
             const pct = weights[lvl] ?? 0;
@@ -335,8 +335,8 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
                 <div
                   className={`w-1.5 h-6 rounded-full transition-transform ${
                     isDragging
-                      ? 'bg-white ring-2 ring-rose-500 scale-125 shadow-lg shadow-rose-500/50'
-                      : 'bg-white/90 group-hover:bg-white group-hover:scale-110 shadow-md border border-slate-900'
+                      ? 'bg-[#FDE047] ring-2 ring-[#D4AF37] scale-125 shadow-lg shadow-[#D4AF37]/50'
+                      : 'bg-white/90 group-hover:bg-[#FDE047] group-hover:scale-110 shadow-md border border-[#0E0F12]'
                   }`}
                 />
               </div>
@@ -358,7 +358,7 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
               className={`rounded-2xl p-2.5 sm:p-3 border transition-all flex flex-col justify-between gap-2 ${
                 val > 0
                   ? `${meta.badgeClass} ring-1 ring-white/10`
-                  : 'bg-slate-950/60 border-slate-800 text-slate-500'
+                  : 'bg-[#0E0F12] border-[#2A2D36] text-[#6B7280]'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -376,12 +376,12 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
               </div>
 
               {/* Direct Number Input + Steppers */}
-              <div className="flex items-center justify-between gap-1 bg-slate-950/90 rounded-xl p-1 border border-slate-800/80">
+              <div className="flex items-center justify-between gap-1 bg-[#0E0F12] rounded-xl p-1 border border-[#2A2D36]">
                 <button
                   type="button"
                   onClick={() => handleStepWeight(lvl, -5)}
                   disabled={val <= 0}
-                  className="w-6 h-6 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-center transition-all disabled:opacity-20 cursor-pointer"
+                  className="w-6 h-6 rounded-lg bg-[#1F2229] hover:bg-[#2A2D36] text-[#F3F4F6] flex items-center justify-center transition-all disabled:opacity-20 cursor-pointer"
                   title="ลด 5%"
                 >
                   <Minus className="w-3 h-3" />
@@ -397,16 +397,16 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
                     onChange={(e) =>
                       handleDirectNumberInput(lvl, Number(e.target.value))
                     }
-                    className="w-full text-center font-mono font-extrabold text-sm sm:text-base text-white bg-transparent outline-none p-0 focus:text-rose-400"
+                    className="w-full text-center font-mono font-extrabold text-sm sm:text-base text-[#F3F4F6] bg-transparent outline-none p-0 focus:text-[#D4AF37]"
                   />
-                  <span className="text-xs font-bold text-slate-400 select-none">%</span>
+                  <span className="text-xs font-bold text-[#6B7280] select-none">%</span>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => handleStepWeight(lvl, 5)}
                   disabled={val >= 100}
-                  className="w-6 h-6 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center justify-center transition-all disabled:opacity-20 cursor-pointer"
+                  className="w-6 h-6 rounded-lg bg-[#1F2229] hover:bg-[#2A2D36] text-[#F3F4F6] flex items-center justify-center transition-all disabled:opacity-20 cursor-pointer"
                   title="เพิ่ม 5%"
                 >
                   <Plus className="w-3 h-3" />

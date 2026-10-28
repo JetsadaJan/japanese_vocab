@@ -242,30 +242,30 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
   return (
     <div className="max-w-4xl mx-auto px-4 py-5 sm:py-8 space-y-4">
       {/* Top Control & Status Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-800 bg-slate-900/80 px-4 py-3 backdrop-blur-md">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#2A2D36] bg-[#16181D]/90 px-4 py-3 backdrop-blur-md">
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={history.length > 0 ? onFinishSession : onBackToSetup}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#1F2229] hover:bg-[#2A2D36] border border-[#2A2D36] text-[#F3F4F6] text-xs font-semibold transition-colors cursor-pointer"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             {history.length > 0 ? 'สรุปผล' : 'ตั้งค่า'}
           </button>
 
-          <span className="text-xs font-bold text-white px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700">
+          <span className="text-xs font-bold text-[#FBBF24] px-2.5 py-1 rounded-lg bg-[#2E1F05] border border-[#D97706]/50 tag-luxury">
             {settings.selectedLevel}
           </span>
         </div>
 
         {/* Center Stats: Streak & Score */}
         <div className="flex items-center gap-2 text-xs sm:text-sm">
-          <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold">
-            <Flame className="w-4 h-4 text-amber-400" />
+          <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-[#2E1F05] border border-[#D97706]/50 text-[#FBBF24] font-bold tag-luxury">
+            <Flame className="w-4 h-4 text-[#D4AF37]" />
             <span>{currentStreak}</span>
           </div>
 
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 font-bold">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#062E22] border border-[#059669]/50 text-[#34D399] font-bold tag-luxury">
             <span>
               {correctCount}/{history.length} ({accuracy}%)
             </span>
@@ -276,10 +276,10 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
         <div className="flex flex-wrap items-center gap-1.5">
           {/* Language Segmented Control */}
           <div
-            className="inline-flex items-center rounded-xl bg-slate-950 p-0.5 border border-slate-800"
+            className="inline-flex items-center rounded-xl bg-[#0E0F12] p-0.5 border border-[#2A2D36]"
             title="สลับภาษา (ปุ่มลัด L)"
           >
-            <Globe className="w-3.5 h-3.5 text-sky-400 ml-2 mr-1 hidden sm:block" />
+            <Globe className="w-3.5 h-3.5 text-[#D4AF37] ml-2 mr-1 hidden sm:block" />
             {(['TH', 'EN', 'BOTH'] as MeaningLanguage[]).map((lang) => {
               const active = settings.meaningLanguage === lang;
               return (
@@ -289,8 +289,8 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                   onClick={() => onChangeLanguage(lang)}
                   className={`px-2 py-1 rounded-lg text-[11px] font-extrabold transition-all cursor-pointer ${
                     active
-                      ? 'bg-sky-500 text-slate-950 shadow-xs'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-[#D4AF37] text-[#0E0F12] shadow-xs'
+                      : 'text-[#9CA3AF] hover:text-[#F3F4F6]'
                   }`}
                 >
                   {lang === 'TH' ? '🇹🇭 ไทย' : lang === 'EN' ? '🇬🇧 EN' : 'ไทย+EN'}
@@ -305,14 +305,14 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
             title="Hiragana (H)"
             className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
               settings.showHiragana
-                ? 'bg-emerald-500/20 border-emerald-500/40 text-emerald-300'
-                : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                ? 'bg-[#062E22] border-[#059669] text-[#34D399]'
+                : 'bg-[#0E0F12] border-[#2A2D36] text-[#6B7280] hover:bg-[#1F2229]'
             }`}
           >
             {settings.showHiragana ? (
-              <Eye className="w-3.5 h-3.5 text-emerald-400" />
+              <Eye className="w-3.5 h-3.5 text-[#34D399]" />
             ) : (
-              <EyeOff className="w-3.5 h-3.5 text-slate-400" />
+              <EyeOff className="w-3.5 h-3.5 text-[#6B7280]" />
             )}
             <span>Hiragana</span>
           </button>
@@ -323,39 +323,52 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
             title="Romaji (R)"
             className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
               settings.showRomaji
-                ? 'bg-amber-500/20 border-amber-500/40 text-amber-300'
-                : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                ? 'bg-[#2E1F05] border-[#D97706] text-[#FBBF24]'
+                : 'bg-[#0E0F12] border-[#2A2D36] text-[#6B7280] hover:bg-[#1F2229]'
             }`}
           >
             {settings.showRomaji ? (
-              <Eye className="w-3.5 h-3.5 text-amber-400" />
+              <Eye className="w-3.5 h-3.5 text-[#FBBF24]" />
             ) : (
-              <EyeOff className="w-3.5 h-3.5 text-slate-400" />
+              <EyeOff className="w-3.5 h-3.5 text-[#6B7280]" />
             )}
             <span>Romaji</span>
           </button>
         </div>
       </div>
 
-      {/* Question Header Info */}
-      <div className="flex items-center justify-between text-xs text-slate-400 px-1">
-        <span className="font-semibold text-slate-200">
-          ข้อที่ {questionNumber}
-        </span>
-        <span>
-          {currentQuestion.direction === 'EN_TO_JA'
-            ? `${langDisplayLabel} ➔ ญี่ปุ่น`
-            : `ญี่ปุ่น ➔ ${langDisplayLabel}`}
-        </span>
+      {/* Question Header Info & Progress Bar */}
+      <div className="space-y-1.5 px-1">
+        <div className="flex items-center justify-between text-xs text-[#9CA3AF]">
+          <span className="font-semibold text-[#F3F4F6]">
+            ข้อที่ {questionNumber}
+            {settings.sessionLength > 0 && ` / ${settings.sessionLength}`}
+          </span>
+          <span>
+            {currentQuestion.direction === 'EN_TO_JA'
+              ? `${langDisplayLabel} ➔ ญี่ปุ่น`
+              : `ญี่ปุ่น ➔ ${langDisplayLabel}`}
+          </span>
+        </div>
+        {settings.sessionLength > 0 && (
+          <div className="w-full bg-[#1F2229] h-1.5 rounded-full overflow-hidden border border-[#2A2D36]/40">
+            <div
+              className="bg-gradient-to-r from-[#D4AF37] to-[#F3DA78] h-full transition-all duration-300"
+              style={{
+                width: `${Math.min(100, (questionNumber / settings.sessionLength) * 100)}%`,
+              }}
+            />
+          </div>
+        )}
       </div>
 
       {/* Main Question Card */}
-      <div className="relative overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-b from-slate-900 via-slate-900/95 to-slate-950 p-6 sm:p-8 shadow-2xl text-center">
+      <div className="relative overflow-hidden rounded-3xl border border-[#2A2D36] bg-[#16181D] p-6 sm:p-8 shadow-2xl text-center">
         {/* Card Top Metadata Badges */}
         <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div className="inline-flex flex-wrap items-center gap-2">
             <span
-              className={`text-xs font-extrabold px-3 py-1 rounded-full border ${wordLevelMeta.badgeClass}`}
+              className={`text-xs font-bold px-3 py-1 rounded-full border ${wordLevelMeta.badgeClass}`}
             >
               {currentQuestion.targetWord.level}
             </span>
@@ -372,7 +385,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                 type="button"
                 onClick={() => setPeekReadingThisQuestion(true)}
                 disabled={peekReadingThisQuestion}
-                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-800/90 hover:bg-slate-800 border border-slate-700 text-xs text-amber-300 font-semibold transition-all cursor-pointer disabled:opacity-50"
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-[#1F2229] hover:bg-[#2A2D36] border border-[#2A2D36] text-xs text-[#D4AF37] font-medium transition-all cursor-pointer disabled:opacity-50"
               >
                 <HelpCircle className="w-3.5 h-3.5" />
                 {peekReadingThisQuestion ? 'แสดงคำอ่านแล้ว' : 'ดูคำอ่าน'}
@@ -389,7 +402,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                   )
                 }
                 title="ฟังเสียง (S)"
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs font-semibold transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#1F2229] hover:bg-[#2A2D36] border border-[#2A2D36] text-[#D4AF37] text-xs font-medium transition-colors cursor-pointer"
               >
                 <Volume2 className="w-4 h-4" />
                 <span>ฟังเสียง</span>
@@ -401,28 +414,28 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
         {/* Prompt Content */}
         {currentQuestion.direction === 'EN_TO_JA' ? (
           <div className="py-3 sm:py-5 space-y-2">
-            <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-400">
+            <div className="inline-flex items-center gap-1.5 text-xs font-medium text-[#D4AF37]">
               <Sparkles className="w-3.5 h-3.5" />
               <span>ความหมาย ({langDisplayLabel})</span>
             </div>
             {settings.meaningLanguage === 'BOTH' ? (
               <div className="space-y-1.5 max-w-2xl mx-auto">
-                <h2 className="text-2xl sm:text-4xl font-extrabold text-white leading-snug break-words">
+                <h2 className="text-2xl sm:text-4xl font-medium text-[#F3F4F6] leading-snug break-words">
                   “{currentQuestion.targetWord.meaningTh || currentQuestion.targetWord.meaning}”
                 </h2>
-                <div className="text-base sm:text-xl font-semibold text-sky-300 break-words">
+                <div className="text-base sm:text-xl font-normal text-[#9CA3AF] break-words">
                   ({currentQuestion.targetWord.meaning})
                 </div>
               </div>
             ) : (
-              <h2 className="text-2xl sm:text-4xl font-extrabold text-white leading-snug max-w-2xl mx-auto break-words">
+              <h2 className="text-2xl sm:text-4xl font-medium text-[#F3F4F6] leading-snug max-w-2xl mx-auto break-words">
                 “{formatWordMeaning(currentQuestion.targetWord, settings.meaningLanguage)}”
               </h2>
             )}
           </div>
         ) : (
           <div className="py-3 sm:py-5 space-y-2">
-            <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-sky-400">
+            <div className="inline-flex items-center gap-1.5 text-xs font-medium text-[#D4AF37]">
               <Sparkles className="w-3.5 h-3.5" />
               <span>คำศัพท์ญี่ปุ่น</span>
             </div>
@@ -462,21 +475,21 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
           const isOptExpanded = expandedOptionIds.has(opt.id);
 
           let cardStyle =
-            'bg-slate-900/80 border-slate-800 hover:border-rose-500/50 hover:bg-slate-900 text-slate-100';
-          let badgeStyle = 'bg-slate-800 text-slate-300 border-slate-700';
+            'bg-[#16181D] border-[#2A2D36] hover:border-[#D4AF37]/50 hover:bg-[#1F2229] text-[#F3F4F6]';
+          let badgeStyle = 'bg-[#0E0F12] text-[#9CA3AF] border-[#2A2D36]';
 
           if (isAnswered) {
             if (isThisOptionCorrect) {
               cardStyle =
-                'bg-emerald-950/60 border-emerald-500 ring-2 ring-emerald-500/40 text-emerald-100';
-              badgeStyle = 'bg-emerald-500 text-slate-950 border-emerald-400';
+                'bg-[#062E22] border-[#10B981] ring-2 ring-[#10B981]/40 text-[#34D399]';
+              badgeStyle = 'bg-[#10B981] text-[#0E0F12] border-[#059669]';
             } else if (isThisOptionSelected && !isThisOptionCorrect) {
               cardStyle =
-                'bg-rose-950/60 border-rose-500 ring-2 ring-rose-500/40 text-rose-100';
-              badgeStyle = 'bg-rose-500 text-white border-rose-400';
+                'bg-[#330D17] border-[#F43F5E] ring-2 ring-[#F43F5E]/40 text-[#FB7185]';
+              badgeStyle = 'bg-[#F43F5E] text-[#0E0F12] border-[#E11D48]';
             } else {
               cardStyle =
-                'bg-slate-900/55 border-slate-800/80 text-slate-300';
+                'bg-[#16181D]/50 border-[#2A2D36]/60 text-[#6B7280]';
             }
           }
 
@@ -518,14 +531,14 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                           className="items-start"
                         />
                         {isAnswered && (
-                          <div className="text-xs text-slate-300/90 pt-1.5 border-t border-slate-800/70 mt-1.5 space-y-0.5">
+                          <div className="text-xs text-[#9CA3AF] pt-1.5 border-t border-[#2A2D36] mt-1.5 space-y-0.5">
                             <div>
                               🇹🇭{' '}
-                              <span className="font-semibold text-white">
+                              <span className="font-semibold text-[#F3F4F6]">
                                 {opt.meaningTh}
                               </span>
                             </div>
-                            <div className="text-slate-400">
+                            <div className="text-[#6B7280]">
                               🇬🇧 <span>{opt.meaning}</span>
                             </div>
                             <div className="flex flex-wrap items-center gap-1 pt-1">
@@ -543,39 +556,39 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                       <div className="space-y-1">
                         {settings.meaningLanguage === 'BOTH' ? (
                           <div className="space-y-1">
-                            <div className="text-base sm:text-lg font-bold leading-snug break-words text-white">
+                            <div className="text-base sm:text-lg font-medium leading-snug break-words text-[#F3F4F6]">
                               {opt.meaningTh || opt.meaning}
                             </div>
-                            <div className="text-xs sm:text-sm font-medium text-sky-300/90 break-words">
+                            <div className="text-xs sm:text-sm font-normal text-[#9CA3AF] break-words">
                               {opt.meaning}
                             </div>
                           </div>
                         ) : (
-                          <div className="text-base sm:text-lg font-bold leading-snug break-words">
+                          <div className="text-base sm:text-lg font-medium leading-snug break-words text-[#F3F4F6]">
                             {formatWordMeaning(opt, settings.meaningLanguage)}
                           </div>
                         )}
                         {isAnswered && (
-                          <div className="text-xs text-slate-300/90 pt-1.5 border-t border-slate-800/70 mt-1.5 space-y-0.5">
+                          <div className="text-xs text-[#9CA3AF] pt-1.5 border-t border-[#2A2D36] mt-1.5 space-y-0.5">
                             <div className="font-jp">
                               คำศัพท์:{' '}
-                              <span className="font-bold text-rose-300">
+                              <span className="font-bold text-[#F3F4F6]">
                                 {opt.expression}
                               </span>
                               {opt.reading !== opt.expression && (
-                                <span className="text-slate-300"> ({opt.reading})</span>
+                                <span className="text-[#9CA3AF]"> ({opt.reading})</span>
                               )}
                               {opt.romaji && (
-                                <span className="text-amber-300 font-mono ml-1">
+                                <span className="text-[#FBBF24] font-mono ml-1">
                                   [{opt.romaji}]
                                 </span>
                               )}
                             </div>
                             {settings.meaningLanguage === 'TH' && (
-                              <div className="text-slate-400">🇬🇧 {opt.meaning}</div>
+                              <div className="text-[#6B7280]">🇬🇧 {opt.meaning}</div>
                             )}
                             {settings.meaningLanguage === 'EN' && (
-                              <div className="text-slate-300">🇹🇭 {opt.meaningTh}</div>
+                              <div className="text-[#9CA3AF]">🇹🇭 {opt.meaningTh}</div>
                             )}
                             <div className="flex flex-wrap items-center gap-1 pt-1">
                               <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${LEVEL_METADATA[opt.level].badgeClass}`}>
@@ -602,24 +615,24 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                         speakJapanese(opt.reading || opt.expression);
                       }}
                       title="ฟังเสียงอ่านคำนี้"
-                      className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-rose-300 transition-colors cursor-pointer"
+                      className="p-1.5 rounded-lg bg-[#1F2229] hover:bg-[#2A2D36] text-[#9CA3AF] hover:text-[#D4AF37] transition-colors cursor-pointer"
                     >
                       <Volume2 className="w-4 h-4" />
                     </button>
                   )}
 
                   {isAnswered && isThisOptionCorrect && (
-                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-[#10B981] shrink-0" />
                   )}
                   {isAnswered && isThisOptionSelected && !isThisOptionCorrect && (
-                    <XCircle className="w-5 h-5 text-rose-400 shrink-0" />
+                    <XCircle className="w-5 h-5 text-[#F43F5E] shrink-0" />
                   )}
                 </div>
               </div>
 
               {/* After Answering: Bottom-Right "แสดงเพิ่มเติม" Button on every option card (clean, no links until clicked) */}
               {isAnswered && (
-                <div className="pt-2 border-t border-slate-800/60 flex items-center justify-end gap-2">
+                <div className="pt-2 border-t border-[#2A2D36] flex items-center justify-end gap-2">
                   {/* Bottom-Right Expand Button */}
                   <button
                     type="button"
@@ -630,10 +643,10 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                     }}
                     className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-bold border transition-all shrink-0 ${
                       !canExpand
-                        ? 'bg-slate-900/50 border-slate-800/70 text-slate-600 cursor-not-allowed select-none'
+                        ? 'bg-[#16181D]/50 border-[#2A2D36]/60 text-[#6B7280] cursor-not-allowed select-none'
                         : isOptExpanded
-                        ? 'bg-rose-500 text-white border-rose-400 shadow-sm cursor-pointer'
-                        : 'bg-slate-800/90 hover:bg-slate-700 text-rose-300 border-slate-700 cursor-pointer'
+                        ? 'bg-[#D4AF37] text-[#0E0F12] border-[#D4AF37] shadow-sm cursor-pointer'
+                        : 'bg-[#1F2229] hover:bg-[#2A2D36] text-[#F3F4F6] border-[#2A2D36] cursor-pointer'
                     }`}
                   >
                     <span>{isOptExpanded ? 'ซ่อนเพิ่มเติม' : 'แสดงเพิ่มเติม'}</span>
@@ -651,13 +664,13 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
               {isAnswered && isOptExpanded && canExpand && (
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className="pt-2.5 border-t border-slate-700/80 space-y-2.5 bg-slate-950/85 -mx-1 p-3 rounded-xl"
+                  className="pt-2.5 border-t border-[#2A2D36] space-y-2.5 bg-[#0E0F12] -mx-1 p-3 rounded-xl"
                 >
                   {/* 1. Red Confusable / Homophone Section FIRST */}
                   {soundConfusables.length > 0 && (
-                    <div className="rounded-xl border border-rose-500/40 bg-rose-950/30 p-2.5 space-y-1.5">
-                      <div className="text-xs font-extrabold text-rose-400 flex items-center gap-1.5">
-                        <AlertTriangle className="w-3.5 h-3.5 text-rose-400 shrink-0" />
+                    <div className="rounded-xl border border-[#F43F5E]/40 bg-[#330D17]/40 p-2.5 space-y-1.5">
+                      <div className="text-xs font-bold text-[#FB7185] flex items-center gap-1.5">
+                        <AlertTriangle className="w-3.5 h-3.5 text-[#FB7185] shrink-0" />
                         <span>พ้องเสียง / เสียงคล้าย</span>
                       </div>
 
@@ -667,30 +680,30 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                             key={c.word.id}
                             type="button"
                             onClick={() => openHoverWord(c.word.id)}
-                            className="w-full text-left rounded-lg border border-rose-500/30 hover:border-rose-400 bg-slate-950/85 hover:bg-slate-900 px-2.5 py-2 flex items-center justify-between gap-2 transition-all cursor-pointer"
+                            className="w-full text-left rounded-lg border border-[#F43F5E]/30 hover:border-[#F43F5E] bg-[#16181D] hover:bg-[#1F2229] px-2.5 py-2 flex items-center justify-between gap-2 transition-all cursor-pointer"
                           >
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-rose-500/25 text-rose-300 border border-rose-500/40">
+                                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-[#330D17] text-[#FB7185] border border-[#F43F5E]/40">
                                   {c.labelTh}
                                 </span>
-                                <span className="text-sm font-extrabold text-rose-200 font-jp">
+                                <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                   {c.word.expression}
                                 </span>
-                                <span className="text-xs text-rose-300/90 font-jp">
+                                <span className="text-xs text-[#9CA3AF] font-jp">
                                   ({c.word.reading})
                                 </span>
                                 {effectiveShowRomaji && c.word.romaji && (
-                                  <span className="text-[11px] text-amber-300 font-mono">
+                                  <span className="text-[11px] text-[#FBBF24] font-mono">
                                     [{c.word.romaji}]
                                   </span>
                                 )}
                               </div>
-                              <div className="text-xs font-semibold text-white mt-0.5 break-words">
+                              <div className="text-xs font-normal text-[#9CA3AF] mt-0.5 break-words">
                                 {formatWordMeaning(c.word, settings.meaningLanguage)}
                               </div>
                             </div>
-                            <span className="text-[11px] font-bold text-rose-400 shrink-0">
+                            <span className="text-[11px] font-bold text-[#FB7185] shrink-0">
                               ดู ➔
                             </span>
                           </button>
@@ -701,9 +714,9 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
 
                   {/* 2. Similar Meaning Words ("ความหมายใกล้เคียง" e.g. ageru/morau/kureru, inochi/jinsei) */}
                   {(meaningSimilars.length > 0 || optGroupId) && (
-                    <div className="rounded-xl border border-amber-500/40 bg-amber-950/20 p-2.5 space-y-2">
+                    <div className="rounded-xl border border-[#D4AF37]/40 bg-[#2E1F05]/40 p-2.5 space-y-2">
                       <div className="flex flex-wrap items-center justify-between gap-2">
-                        <div className="text-xs font-extrabold text-amber-300 flex items-center gap-1.5">
+                        <div className="text-xs font-bold text-[#FBBF24] flex items-center gap-1.5">
                           <span>ความหมายใกล้เคียง</span>
                         </div>
 
@@ -711,7 +724,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                           <button
                             type="button"
                             onClick={() => openHoverGroup(optGroupId)}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-[11px] font-extrabold shadow-xs transition-all cursor-pointer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#D4AF37] hover:bg-[#F3DA78] text-[#0E0F12] text-[11px] font-bold shadow-xs transition-all cursor-pointer"
                           >
                             <BookOpen className="w-3 h-3" />
                             <span>Group เปรียบเทียบ ➔</span>
@@ -725,30 +738,30 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                             key={c.word.id}
                             type="button"
                             onClick={() => openHoverWord(c.word.id)}
-                            className="w-full text-left rounded-lg border border-amber-500/30 hover:border-amber-400 bg-slate-950/85 hover:bg-slate-900 px-2.5 py-2 flex items-center justify-between gap-2 transition-all cursor-pointer"
+                            className="w-full text-left rounded-lg border border-[#D4AF37]/30 hover:border-[#D4AF37] bg-[#16181D] hover:bg-[#1F2229] px-2.5 py-2 flex items-center justify-between gap-2 transition-all cursor-pointer"
                           >
                             <div className="min-w-0 flex-1">
                               <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="text-[10px] font-extrabold px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-[#2E1F05] text-[#FBBF24] border border-[#D97706]/40">
                                   {c.labelTh}
                                 </span>
-                                <span className="text-sm font-extrabold text-white font-jp">
+                                <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                   {c.word.expression}
                                 </span>
-                                <span className="text-xs text-amber-200/90 font-jp">
+                                <span className="text-xs text-[#9CA3AF] font-jp">
                                   ({c.word.reading})
                                 </span>
                                 {effectiveShowRomaji && c.word.romaji && (
-                                  <span className="text-[11px] text-amber-300 font-mono">
+                                  <span className="text-[11px] text-[#FBBF24] font-mono">
                                     [{c.word.romaji}]
                                   </span>
                                 )}
                               </div>
-                              <div className="text-xs font-semibold text-white mt-0.5 break-words">
+                              <div className="text-xs font-normal text-[#9CA3AF] mt-0.5 break-words">
                                 {formatWordMeaning(c.word, settings.meaningLanguage)}
                               </div>
                             </div>
-                            <span className="text-[11px] font-bold text-amber-300 shrink-0">
+                            <span className="text-[11px] font-bold text-[#D4AF37] shrink-0">
                               ดู ➔
                             </span>
                           </button>
@@ -760,7 +773,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                   {/* 3. Kanji Links formatted as "{Kanji} ➔ {Meaning in selected language}" */}
                   {opt.kanjiChars.length > 0 && (
                     <div className="space-y-1.5">
-                      <div className="text-[11px] font-bold text-slate-400">
+                      <div className="text-[11px] font-bold text-[#9CA3AF]">
                         คันจิ:
                       </div>
                       <div className="flex flex-wrap gap-1.5">
@@ -769,7 +782,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                             key={ch}
                             type="button"
                             onClick={() => openHoverKanji(ch)}
-                            className="px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-rose-500/20 border border-slate-700 hover:border-rose-500/40 text-xs font-bold text-amber-300 hover:text-rose-200 transition-all cursor-pointer text-left"
+                            className="px-2.5 py-1.5 rounded-xl bg-[#16181D] hover:bg-[#1F2229] border border-[#2A2D36] hover:border-[#D4AF37]/50 text-xs font-medium text-[#F3F4F6] hover:text-[#D4AF37] transition-all cursor-pointer text-left"
                           >
                             {formatKanjiLinkLabel(ch, kanjiDb, settings.meaningLanguage)}
                           </button>
@@ -789,42 +802,42 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
         <div
           className={`rounded-2xl border p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
             isCorrect
-              ? 'bg-emerald-950/40 border-emerald-500/40'
-              : 'bg-rose-950/40 border-rose-500/40'
+              ? 'bg-[#062E22] border-[#10B981]/50'
+              : 'bg-[#330D17] border-[#F43F5E]/50'
           }`}
         >
           <div className="flex items-start sm:items-center gap-3">
             {isCorrect ? (
-              <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0 mt-0.5 sm:mt-0" />
+              <CheckCircle2 className="w-6 h-6 text-[#10B981] shrink-0 mt-0.5 sm:mt-0" />
             ) : (
-              <XCircle className="w-6 h-6 text-rose-400 shrink-0 mt-0.5 sm:mt-0" />
+              <XCircle className="w-6 h-6 text-[#F43F5E] shrink-0 mt-0.5 sm:mt-0" />
             )}
 
             <div className="space-y-1">
-              <div className="text-sm sm:text-base font-extrabold text-white">
+              <div className="text-sm sm:text-base font-bold text-[#F3F4F6]">
                 {isCorrect ? 'ถูกต้อง! 🎉' : 'เฉลยคำที่ถูก:'}
               </div>
-              <div className="text-xs sm:text-sm text-slate-200 font-jp">
-                <span className="font-bold text-rose-300">
+              <div className="text-xs sm:text-sm text-[#F3F4F6] font-jp">
+                <span className="font-bold text-[#F3F4F6]">
                   {currentQuestion.targetWord.expression}
                 </span>
                 {currentQuestion.targetWord.reading !==
                   currentQuestion.targetWord.expression && (
-                  <span className="text-emerald-300 font-semibold">
+                  <span className="text-[#9CA3AF] font-medium">
                     {' '}
                     【{currentQuestion.targetWord.reading}】
                   </span>
                 )}
                 {currentQuestion.targetWord.romaji && (
-                  <span className="text-amber-300 font-mono font-semibold ml-1">
+                  <span className="text-[#FBBF24] font-mono font-semibold ml-1">
                     [{currentQuestion.targetWord.romaji}]
                   </span>
                 )}{' '}
                 —{' '}
-                <span className="font-sans font-semibold text-white">
+                <span className="font-sans font-medium text-[#F3F4F6]">
                   {currentQuestion.targetWord.meaningTh}
                 </span>{' '}
-                <span className="font-sans text-slate-400">
+                <span className="font-sans text-[#9CA3AF]">
                   ({currentQuestion.targetWord.meaning})
                 </span>
               </div>
@@ -836,7 +849,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
               <button
                 type="button"
                 onClick={onFinishSession}
-                className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs sm:text-sm font-bold transition-colors cursor-pointer inline-flex items-center gap-1.5"
+                className="px-4 py-2.5 rounded-xl bg-[#1F2229] hover:bg-[#2A2D36] border border-[#2A2D36] text-[#F3F4F6] text-xs sm:text-sm font-semibold transition-colors cursor-pointer inline-flex items-center gap-1.5"
               >
                 <Flag className="w-4 h-4" />
                 จบ / ดูสรุป
@@ -846,7 +859,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
             <button
               type="button"
               onClick={onNextQuestion}
-              className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-400 hover:to-amber-400 text-slate-950 font-extrabold text-sm shadow-lg shadow-rose-500/20 transition-all inline-flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#F3DA78] to-[#C59B27] hover:brightness-110 text-slate-950 font-bold text-sm shadow-lg shadow-[#D4AF37]/15 transition-all inline-flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>{isLastQuestion ? 'ดูสรุป' : 'ข้อต่อไป (Enter)'}</span>
               <ArrowRight className="w-4 h-4" />
@@ -856,7 +869,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
       )}
 
       {/* Live Level Mix Tracker Footer */}
-      <div className="rounded-2xl border border-slate-800/80 bg-slate-900/50 px-4 py-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
+      <div className="rounded-2xl border border-[#2A2D36] bg-[#16181D] px-4 py-3 flex flex-wrap items-center justify-between gap-2 text-xs text-[#9CA3AF]">
         <span>ระดับคำที่ออก ({totalSeenSoFar} ข้อ):</span>
         <div className="flex flex-wrap items-center gap-2">
           {(['N5', 'N4', 'N3', 'N2', 'N1'] as JLPTLevel[]).map((lvl) => {

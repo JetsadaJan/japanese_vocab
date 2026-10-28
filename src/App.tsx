@@ -198,14 +198,14 @@ export function App() {
 
   if (error || !db) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-slate-950 text-slate-100">
-        <div className="max-w-md rounded-3xl border border-rose-500/40 bg-slate-900 p-6 space-y-4">
-          <h2 className="text-lg font-bold text-rose-400">ไม่สามารถโหลดข้อมูลได้</h2>
-          <p className="text-sm text-slate-300">{error}</p>
+      <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-[#0E0F12] text-[#F3F4F6]">
+        <div className="max-w-md rounded-3xl border border-[#F43F5E]/40 bg-[#16181D] p-6 space-y-4">
+          <h2 className="text-lg font-bold text-[#FB7185]">ไม่สามารถโหลดข้อมูลได้</h2>
+          <p className="text-sm text-[#9CA3AF]">{error}</p>
           <button
             type="button"
             onClick={fetchDatabase}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-400 text-white text-sm font-bold cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#D4AF37] hover:bg-[#F3DA78] text-[#0E0F12] text-sm font-bold cursor-pointer transition-colors"
           >
             <RefreshCw className="w-4 h-4" />
             ลองใหม่อีกครั้ง
@@ -216,12 +216,12 @@ export function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 relative overflow-x-hidden">
-      {/* Subtle decorative background glow */}
+    <div className="min-h-screen bg-[#0E0F12] text-[#F3F4F6] relative overflow-x-hidden selection:bg-[#D4AF37]/30 selection:text-[#FDE047]">
+      {/* Subtle decorative Kuro-urushi background glow */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden -z-10">
-        <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-rose-500/10 blur-3xl" />
-        <div className="absolute top-1/3 -right-40 w-96 h-96 rounded-full bg-amber-500/10 blur-3xl" />
-        <div className="absolute -bottom-40 left-1/3 w-96 h-96 rounded-full bg-sky-500/10 blur-3xl" />
+        <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-[#D4AF37]/5 blur-3xl" />
+        <div className="absolute top-1/3 -right-40 w-96 h-96 rounded-full bg-[#D4AF37]/4 blur-3xl" />
+        <div className="absolute -bottom-40 left-1/3 w-96 h-96 rounded-full bg-[#D4AF37]/3 blur-3xl" />
       </div>
 
       {screen === 'SETUP' && (

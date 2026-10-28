@@ -195,15 +195,15 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
   return (
     <div className="max-w-5xl mx-auto px-4 py-6 sm:py-8 space-y-5">
       {/* Compact Hero Header */}
-      <div className="rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-rose-950/40 p-5 sm:p-6 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="space-y-1">
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-semibold">
-            <Flame className="w-3.5 h-3.5 text-rose-400" />
+      <div className="rounded-3xl border border-[#2A2D36] bg-[#16181D] p-5 sm:p-6 shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="space-y-1.5">
+          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-[#2E1F05] border border-[#D97706]/60 text-[#FBBF24] text-xs font-semibold tag-luxury">
+            <Flame className="w-3.5 h-3.5 text-[#D4AF37]" />
             <span>JLPT N5 – N1</span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#F3F4F6]">
             ทายคำศัพท์ภาษาญี่ปุ่น{' '}
-            <span className="bg-gradient-to-r from-rose-400 via-amber-300 to-sky-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#D4AF37] via-[#FDE047] to-[#E5C158] bg-clip-text text-transparent">
               JLPT N5 – N1
             </span>
           </h1>
@@ -213,18 +213,18 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
           <button
             type="button"
             onClick={() => onOpenExplorer('VOCAB')}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl border border-slate-700 bg-slate-800/90 hover:bg-slate-800 text-slate-200 text-xs sm:text-sm font-bold transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl border border-[#2A2D36] bg-[#1F2229] hover:bg-[#2A2D36] text-[#F3F4F6] text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-sm"
           >
-            <BookOpen className="w-4 h-4 text-rose-400" />
+            <BookOpen className="w-4 h-4 text-[#D4AF37]" />
             คลังคำศัพท์ ({totalWordsCount.toLocaleString()})
           </button>
 
           <button
             type="button"
             onClick={() => onOpenExplorer('KANJI')}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl border border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20 text-amber-200 text-xs sm:text-sm font-bold transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl border border-[#D97706]/40 bg-[#2E1F05]/70 hover:bg-[#2E1F05] text-[#FBBF24] text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-sm"
           >
-            <Layers className="w-4 h-4 text-amber-400" />
+            <Layers className="w-4 h-4 text-[#D4AF37]" />
             คลังคันจิ ({totalKanjiCount.toLocaleString()})
           </button>
         </div>
@@ -236,9 +236,9 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
           type="button"
           onClick={onStartQuiz}
           disabled={activeQuizWordsCount === 0}
-          className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 hover:from-rose-400 hover:via-pink-400 hover:to-amber-400 text-slate-950 font-black text-base sm:text-lg shadow-xl shadow-rose-500/25 hover:shadow-rose-500/40 transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed group active:scale-[0.99]"
+          className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#D4AF37] via-[#F3DA78] to-[#C59B27] hover:from-[#E5C158] hover:via-[#FDE047] hover:to-[#D4AF37] text-[#0E0F12] font-black text-base sm:text-lg shadow-xl shadow-[#D4AF37]/20 hover:shadow-[#D4AF37]/35 transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed group active:scale-[0.99]"
         >
-          <Play className="w-5 h-5 fill-slate-950 group-hover:scale-110 transition-transform" />
+          <Play className="w-5 h-5 fill-[#0E0F12] group-hover:scale-110 transition-transform" />
           <span>
             เริ่มทายคำศัพท์ ({activeQuizWordsCount.toLocaleString()} คำ)
           </span>
@@ -247,7 +247,7 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
 
       {/* Select JLPT Level */}
       <section className="space-y-3">
-        <h2 className="text-sm sm:text-base font-bold text-white px-1">
+        <h2 className="text-sm sm:text-base font-bold text-[#F3F4F6] px-1">
           เลือกระดับ JLPT
         </h2>
 
@@ -264,8 +264,8 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
                 onClick={() => handleSelectLevel(lvl)}
                 className={`text-left rounded-2xl p-3.5 border transition-all cursor-pointer flex flex-col justify-between ${
                   isSelected
-                    ? `bg-gradient-to-b ${meta.bgClass} ${meta.borderClass} ring-2 ring-rose-500/50 shadow-lg`
-                    : 'bg-slate-900/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900'
+                    ? `bg-gradient-to-b ${meta.bgClass} ${meta.borderClass} ring-2 ring-[#D4AF37]/50 shadow-lg`
+                    : 'bg-[#16181D] border-[#2A2D36] hover:border-[#D4AF37]/40 hover:bg-[#1F2229]'
                 }`}
               >
                 <div className="flex items-start justify-between gap-2">
@@ -277,7 +277,7 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
                     >
                       {lvl}
                     </span>
-                    <div className="text-[11px] text-slate-400">
+                    <div className="text-[11px] text-[#9CA3AF]">
                       {meta.subtitle}
                     </div>
                   </div>
@@ -288,9 +288,9 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
                   </span>
                 </div>
 
-                <div className="mt-3 pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                  <span className="text-slate-400">{count.toLocaleString()} คำ</span>
-                  <span className="text-[11px] font-semibold text-rose-300/90">
+                <div className="mt-3 pt-2 border-t border-[#2A2D36] flex items-center justify-between text-xs">
+                  <span className="text-[#9CA3AF]">{count.toLocaleString()} คำ</span>
+                  <span className="text-[11px] font-semibold text-[#D4AF37]">
                     {meta.mixSummary.split('•')[0]}
                   </span>
                 </div>
@@ -310,9 +310,9 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
       {/* Language & Reading Aids (Side-by-side compact cards) */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
         {/* Meaning Language */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 space-y-3">
-          <div className="flex items-center gap-2 text-sm font-bold text-white">
-            <Globe className="w-4 h-4 text-sky-400" />
+        <div className="rounded-2xl border border-[#2A2D36] bg-[#16181D] p-4 space-y-3">
+          <div className="flex items-center gap-2 text-sm font-bold text-[#F3F4F6]">
+            <Globe className="w-4 h-4 text-[#D4AF37]" />
             <span>ภาษาคำแปล</span>
           </div>
 
@@ -326,8 +326,8 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
                   onClick={() => onUpdateSettings({ meaningLanguage: opt.value })}
                   className={`rounded-xl py-2.5 px-3 text-xs sm:text-sm font-extrabold border transition-all cursor-pointer flex items-center justify-center gap-1.5 ${
                     active
-                      ? 'bg-sky-500/20 border-sky-500 text-white shadow-sm'
-                      : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700'
+                      ? 'bg-[#1F2229] border-[#D4AF37] text-[#F3F4F6] shadow-sm ring-1 ring-[#D4AF37]/40'
+                      : 'bg-[#0E0F12] border-[#2A2D36] text-[#9CA3AF] hover:border-[#D4AF37]/40 hover:bg-[#1F2229]'
                   }`}
                 >
                   <span>{opt.label}</span>
@@ -338,9 +338,9 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
         </div>
 
         {/* Reading Aids (Hiragana & Romaji) */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 flex items-center justify-between gap-3">
+        <div className="rounded-2xl border border-[#2A2D36] bg-[#16181D] p-4 flex items-center justify-between gap-3">
           <div className="space-y-2.5 flex-1">
-            <div className="text-sm font-bold text-white">
+            <div className="text-sm font-bold text-[#F3F4F6]">
               ตัวช่วยอ่าน (Hiragana / Romaji)
             </div>
 
@@ -352,14 +352,14 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
                 }
                 className={`inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                   settings.showHiragana
-                    ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300'
-                    : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700'
+                    ? 'bg-[#062E22] border-[#059669] text-[#34D399]'
+                    : 'bg-[#0E0F12] border-[#2A2D36] text-[#6B7280] hover:bg-[#1F2229]'
                 }`}
               >
                 {settings.showHiragana ? (
-                  <Eye className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  <Eye className="w-3.5 h-3.5 text-[#34D399] shrink-0" />
                 ) : (
-                  <EyeOff className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  <EyeOff className="w-3.5 h-3.5 text-[#6B7280] shrink-0" />
                 )}
                 <span>Hiragana</span>
               </button>
@@ -371,21 +371,21 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
                 }
                 className={`inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                   settings.showRomaji
-                    ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'
-                    : 'bg-slate-800 border-slate-700 text-slate-400 hover:bg-slate-700'
+                    ? 'bg-[#2E1F05] border-[#D97706] text-[#FBBF24]'
+                    : 'bg-[#0E0F12] border-[#2A2D36] text-[#6B7280] hover:bg-[#1F2229]'
                 }`}
               >
                 {settings.showRomaji ? (
-                  <Eye className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                  <Eye className="w-3.5 h-3.5 text-[#FBBF24] shrink-0" />
                 ) : (
-                  <EyeOff className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                  <EyeOff className="w-3.5 h-3.5 text-[#6B7280] shrink-0" />
                 )}
                 <span>Romaji</span>
               </button>
             </div>
           </div>
 
-          <div className="px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 shrink-0">
+          <div className="px-3.5 py-2 rounded-xl bg-[#0E0F12] border border-[#2A2D36] shrink-0">
             <JapaneseText
               expression="図書館"
               reading="としょかん"
@@ -400,7 +400,7 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
 
       {/* Select Quiz Mode */}
       <section className="space-y-2.5">
-        <h2 className="text-sm sm:text-base font-bold text-white px-1">
+        <h2 className="text-sm sm:text-base font-bold text-[#F3F4F6] px-1">
           โหมดคำถาม
         </h2>
 
@@ -414,34 +414,34 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
                 onClick={() => onUpdateSettings({ quizMode: item.mode })}
                 className={`text-left rounded-2xl p-4 border transition-all cursor-pointer flex flex-col justify-between gap-3 ${
                   isSelected
-                    ? 'bg-gradient-to-br from-rose-500/15 via-slate-900 to-slate-900 border-rose-500/60 ring-2 ring-rose-500/40 shadow-lg'
-                    : 'bg-slate-900/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900'
+                    ? 'bg-[#1F2229] border-[#D4AF37]/70 ring-2 ring-[#D4AF37]/30 shadow-lg'
+                    : 'bg-[#16181D] border-[#2A2D36] hover:border-[#D4AF37]/40 hover:bg-[#1F2229]'
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <div className="p-1.5 rounded-lg bg-slate-800 border border-slate-700">
+                    <div className="p-1.5 rounded-lg bg-[#0E0F12] border border-[#2A2D36]">
                       {item.icon}
                     </div>
-                    <h3 className="text-sm sm:text-base font-bold text-white">
+                    <h3 className="text-sm sm:text-base font-bold text-[#F3F4F6]">
                       {item.title}
                     </h3>
                   </div>
                   {isSelected && (
-                    <CheckCircle2 className="w-4 h-4 text-rose-400 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-[#D4AF37] shrink-0" />
                   )}
                 </div>
 
-                <div className="text-xs space-y-1 bg-slate-950/60 px-3 py-2 rounded-xl border border-slate-800/80">
+                <div className="text-xs space-y-1 bg-[#0E0F12]/80 px-3 py-2 rounded-xl border border-[#2A2D36]">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-slate-500">โจทย์:</span>
-                    <span className="font-semibold text-slate-200 font-jp truncate">
+                    <span className="text-[#6B7280]">โจทย์:</span>
+                    <span className="font-semibold text-[#F3F4F6] font-jp truncate">
                       {item.examplePrompt}
                     </span>
                   </div>
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-slate-500">ตอบ:</span>
-                    <span className="font-semibold text-rose-300 font-jp truncate">
+                    <span className="text-[#6B7280]">ตอบ:</span>
+                    <span className="font-semibold text-[#D4AF37] font-jp truncate">
                       {item.exampleAnswer}
                     </span>
                   </div>
@@ -452,43 +452,43 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
         </div>
       </section>
 
-      {/* 5. Advanced Settings (ตั้งค่าขั้นสูง: กรองเฉพาะประเภทคำ) */}
-      <section className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden transition-all">
+      {/* Advanced Settings (ตั้งค่าขั้นสูง: กรองเฉพาะประเภทคำ) */}
+      <section className="rounded-2xl border border-[#2A2D36] bg-[#16181D] overflow-hidden transition-all">
         <button
           type="button"
           onClick={() => setIsAdvancedOpen(!isAdvancedOpen)}
-          className="w-full p-4 flex items-center justify-between gap-3 text-left hover:bg-slate-800/40 transition-colors cursor-pointer"
+          className="w-full p-4 flex items-center justify-between gap-3 text-left hover:bg-[#1F2229] transition-colors cursor-pointer"
         >
           <div className="flex flex-wrap items-center gap-2">
-            <Sliders className="w-4 h-4 text-rose-400" />
-            <span className="text-sm sm:text-base font-bold text-white">
+            <Sliders className="w-4 h-4 text-[#D4AF37]" />
+            <span className="text-sm sm:text-base font-bold text-[#F3F4F6]">
               ตั้งค่าขั้นสูง
             </span>
             {hasCategoryFilter ? (
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold">
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#2E1F05] text-[#FBBF24] border border-[#D97706]/60 font-bold tag-luxury">
                 กรอง {settings.selectedCategories!.length} ประเภทคำ
               </span>
             ) : (
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 font-medium">
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#0E0F12] text-[#6B7280] font-medium">
                 ทุกประเภทคำ
               </span>
             )}
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium shrink-0">
+          <div className="flex items-center gap-1.5 text-xs text-[#9CA3AF] font-medium shrink-0">
             <span>{isAdvancedOpen ? 'ซ่อน' : 'แสดง'}</span>
             {isAdvancedOpen ? (
-              <ChevronUp className="w-4 h-4 text-slate-400" />
+              <ChevronUp className="w-4 h-4 text-[#9CA3AF]" />
             ) : (
-              <ChevronDown className="w-4 h-4 text-slate-400" />
+              <ChevronDown className="w-4 h-4 text-[#9CA3AF]" />
             )}
           </div>
         </button>
 
         {isAdvancedOpen && (
-          <div className="p-4 pt-2 border-t border-slate-800/80 space-y-3">
+          <div className="p-4 pt-2 border-t border-[#2A2D36] space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h4 className="text-xs sm:text-sm font-bold text-slate-200">
+              <h4 className="text-xs sm:text-sm font-bold text-[#F3F4F6]">
                 เลือกประเภทคำศัพท์ (Part of Speech)
               </h4>
 
@@ -497,8 +497,8 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
                 onClick={() => onUpdateSettings({ selectedCategories: [] })}
                 className={`text-xs px-3 py-1 rounded-xl font-bold transition-all cursor-pointer ${
                   !hasCategoryFilter
-                    ? 'bg-rose-500 text-slate-950 shadow-sm'
-                    : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                    ? 'bg-[#D4AF37] text-[#0E0F12] shadow-sm'
+                    : 'bg-[#0E0F12] hover:bg-[#1F2229] text-[#9CA3AF] border border-[#2A2D36]'
                 }`}
               >
                 เลือกทุกประเภท
@@ -527,24 +527,24 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
                     onClick={() => handleToggleCategory(cat)}
                     className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-2 ${
                       isSelected
-                        ? 'bg-slate-800/90 border-rose-500/60 ring-1 ring-rose-500/40 text-white shadow-md'
-                        : 'bg-slate-950/60 border-slate-800/80 text-slate-500 hover:border-slate-700'
+                        ? 'bg-[#1F2229] border-[#D4AF37]/60 ring-1 ring-[#D4AF37]/30 text-[#F3F4F6] shadow-md'
+                        : 'bg-[#0E0F12] border-[#2A2D36] text-[#6B7280] hover:border-[#D4AF37]/30'
                     }`}
                   >
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5 flex-wrap">
                         <span
                           className={`text-xs sm:text-sm font-bold ${
-                            isSelected ? 'text-white' : 'text-slate-400'
+                            isSelected ? 'text-[#F3F4F6]' : 'text-[#6B7280]'
                           }`}
                         >
                           {meta.labelTh}
                         </span>
-                        <span className="text-[10px] text-slate-500">
+                        <span className="text-[10px] text-[#6B7280]">
                           ({meta.labelEn})
                         </span>
                       </div>
-                      <div className="text-[11px] text-slate-400 font-mono mt-0.5">
+                      <div className="text-[11px] text-[#9CA3AF] font-mono mt-0.5">
                         {countInActiveLevels.toLocaleString()} คำ
                       </div>
                     </div>
@@ -552,8 +552,8 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
                     <div
                       className={`w-5 h-5 rounded-lg flex items-center justify-center border transition-all shrink-0 ${
                         isSelected
-                          ? 'bg-rose-500 border-rose-400 text-slate-950'
-                          : 'border-slate-700 bg-slate-900 text-transparent'
+                          ? 'bg-[#D4AF37] border-[#FDE047] text-[#0E0F12]'
+                          : 'border-[#2A2D36] bg-[#0E0F12] text-transparent'
                       }`}
                     >
                       <Check className="w-3.5 h-3.5 stroke-[3]" />

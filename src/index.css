@@ -2,12 +2,29 @@
 
 @layer base {
   body {
-    font-family: 'Plus Jakarta Sans', 'Noto Sans Thai', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #0E0F12;
+    color: #F3F4F6;
+    font-family: 'Plus Jakarta Sans', 'Anuphan', 'Zen Kaku Gothic New', sans-serif;
+    letter-spacing: -0.01em;
   }
 
   .font-jp {
-    font-family: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+    font-family: 'Zen Kaku Gothic New', 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
   }
+
+  .font-th {
+    font-family: 'Anuphan', 'IBM Plex Sans Thai', sans-serif;
+  }
+}
+
+/* Tag typography with 0.04em letter-spacing */
+.tag-luxury {
+  letter-spacing: 0.04em;
+}
+
+/* Thai meaning and explanation line-height */
+.reading-thai {
+  line-height: 1.6;
 }
 
 @keyframes floatSlow {

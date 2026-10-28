@@ -25,24 +25,24 @@ export const JapaneseText: React.FC<JapaneseTextProps> = ({
 
   const sizeStyles = {
     sm: {
-      reading: 'text-xs text-rose-300/90 font-medium mb-0.5',
-      expression: 'text-base font-bold',
-      romaji: 'text-[11px] text-amber-300/90 font-mono font-semibold mt-0.5',
+      reading: 'text-xs text-[#9CA3AF] font-normal mb-0.5',
+      expression: 'text-base font-medium text-[#F3F4F6]',
+      romaji: 'text-[11px] text-[#FBBF24] font-mono font-semibold mt-0.5',
     },
     md: {
-      reading: 'text-xs sm:text-sm text-rose-300 font-medium mb-1',
-      expression: 'text-xl sm:text-2xl font-bold',
-      romaji: 'text-xs sm:text-sm text-amber-300 font-mono font-semibold mt-1',
+      reading: 'text-xs sm:text-sm text-[#9CA3AF] font-normal mb-1',
+      expression: 'text-xl sm:text-2xl font-medium text-[#F3F4F6]',
+      romaji: 'text-xs sm:text-sm text-[#FBBF24] font-mono font-semibold mt-1',
     },
     lg: {
-      reading: 'text-sm sm:text-base text-rose-300 font-medium mb-1',
-      expression: 'text-2xl sm:text-3xl font-extrabold',
-      romaji: 'text-xs sm:text-sm text-amber-300 font-mono font-semibold mt-1',
+      reading: 'text-sm sm:text-base text-[#9CA3AF] font-normal mb-1',
+      expression: 'text-2xl sm:text-3xl font-medium text-[#F3F4F6]',
+      romaji: 'text-xs sm:text-sm text-[#FBBF24] font-mono font-semibold mt-1',
     },
     xl: {
-      reading: 'text-base sm:text-xl text-rose-300 font-semibold mb-2 tracking-wide',
-      expression: 'text-4xl sm:text-6xl font-extrabold tracking-tight',
-      romaji: 'text-sm sm:text-lg text-amber-300 font-mono font-semibold mt-2 tracking-wide',
+      reading: 'text-base sm:text-lg text-[#9CA3AF] font-normal mb-2 tracking-wide',
+      expression: 'text-4xl sm:text-6xl font-medium tracking-wide text-[#F3F4F6]',
+      romaji: 'text-sm sm:text-base text-[#FBBF24] font-mono font-semibold mt-2 tracking-wide',
     },
   }[size];
 
