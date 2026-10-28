@@ -859,7 +859,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
       <div className="rounded-2xl border border-slate-800/80 bg-slate-900/50 px-4 py-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
         <span>ระดับคำที่ออก ({totalSeenSoFar} ข้อ):</span>
         <div className="flex flex-wrap items-center gap-2">
-          {(['N1', 'N2', 'N3', 'N4', 'N5'] as JLPTLevel[]).map((lvl) => {
+          {(['N5', 'N4', 'N3', 'N2', 'N1'] as JLPTLevel[]).map((lvl) => {
             const count = levelAppearanceCounts[lvl];
             const configuredWeight = settings.customWeights[lvl] || 0;
             if (count === 0 && configuredWeight === 0) return null;

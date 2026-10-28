@@ -59,8 +59,8 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
     onChangeWeights(next, false);
   };
 
-  // Order from N1 down to N5 for clear hierarchy display
-  const orderedLevels: JLPTLevel[] = ['N1', 'N2', 'N3', 'N4', 'N5'];
+  // Order from N5 to N1 for consistent progressive level display
+  const orderedLevels: JLPTLevel[] = ['N5', 'N4', 'N3', 'N2', 'N1'];
 
   return (
     <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 backdrop-blur-sm">

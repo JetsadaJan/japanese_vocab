@@ -180,7 +180,7 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({
           สถิติแยกตามระดับคำศัพท์ที่สุ่มออกมาในรอบนี้
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
-          {(['N1', 'N2', 'N3', 'N4', 'N5'] as JLPTLevel[]).map((lvl) => {
+          {(['N5', 'N4', 'N3', 'N2', 'N1'] as JLPTLevel[]).map((lvl) => {
             const st = levelStats[lvl];
             const meta = LEVEL_METADATA[lvl];
             const sharePct = total > 0 ? Math.round((st.total / total) * 100) : 0;
