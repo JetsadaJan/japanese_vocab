@@ -293,7 +293,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                       : 'text-[#9CA3AF] hover:text-[#F3F4F6]'
                   }`}
                 >
-                  {lang === 'TH' ? '🇹🇭 ไทย' : lang === 'EN' ? '🇬🇧 EN' : 'ไทย+EN'}
+                  {lang === 'TH' ? 'ไทย' : lang === 'EN' ? 'EN' : 'ไทย+EN'}
                 </button>
               );
             })}
@@ -523,13 +523,12 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                         {isAnswered && (
                           <div className="text-xs text-[#9CA3AF] pt-1.5 border-t border-[#2A2D36] mt-1.5 space-y-0.5">
                             <div>
-                              🇹🇭{' '}
                               <span className="font-semibold text-[#F3F4F6]">
                                 {opt.meaningTh}
                               </span>
                             </div>
-                            <div className="text-[#6B7280]">
-                              🇬🇧 <span>{opt.meaning}</span>
+                            <div className="text-[#FDE047]">
+                              <span>{opt.meaning}</span>
                             </div>
                             <div className="flex flex-wrap items-center gap-1 pt-1">
                               <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${LEVEL_METADATA[opt.level].badgeClass}`}>
@@ -566,7 +565,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                                 {opt.expression}
                               </span>
                               {opt.reading !== opt.expression && (
-                                <span className="text-[#FB923C]"> ({opt.reading})</span>
+                                <span className="text-[#FB6542]"> ({opt.reading})</span>
                               )}
                               {opt.romaji && (
                                 <span className="text-[#FBBF24] font-mono ml-1">
@@ -575,10 +574,10 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                               )}
                             </div>
                             {settings.meaningLanguage === 'TH' && (
-                              <div className="text-[#6B7280]">🇬🇧 {opt.meaning}</div>
+                              <div className="text-[#FDE047]">{opt.meaning}</div>
                             )}
                             {settings.meaningLanguage === 'EN' && (
-                              <div className="text-[#9CA3AF]">🇹🇭 {opt.meaningTh}</div>
+                              <div className="text-[#9CA3AF]">{opt.meaningTh}</div>
                             )}
                             <div className="flex flex-wrap items-center gap-1 pt-1">
                               <span className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${LEVEL_METADATA[opt.level].badgeClass}`}>
@@ -680,7 +679,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                                 <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                   {c.word.expression}
                                 </span>
-                                <span className="text-xs text-[#FB923C] font-jp font-medium">
+                                <span className="text-xs text-[#FB6542] font-jp font-medium">
                                   ({c.word.reading})
                                 </span>
                                 {effectiveShowRomaji && c.word.romaji && (
@@ -738,7 +737,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                                 <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                   {c.word.expression}
                                 </span>
-                                <span className="text-xs text-[#FB923C] font-jp font-medium">
+                                <span className="text-xs text-[#FB6542] font-jp font-medium">
                                   ({c.word.reading})
                                 </span>
                                 {effectiveShowRomaji && c.word.romaji && (
@@ -805,7 +804,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
 
             <div className="space-y-1">
               <div className="text-sm sm:text-base font-bold text-[#F3F4F6]">
-                {isCorrect ? 'ถูกต้อง! 🎉' : 'เฉลยคำที่ถูก:'}
+                {isCorrect ? 'ถูกต้อง!' : 'เฉลยคำที่ถูก:'}
               </div>
               <div className="text-xs sm:text-sm text-[#F3F4F6] font-jp">
                 <span className="font-bold text-[#F3F4F6]">
@@ -813,7 +812,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                 </span>
                 {currentQuestion.targetWord.reading !==
                   currentQuestion.targetWord.expression && (
-                  <span className="text-[#FB923C] font-medium">
+                  <span className="text-[#FB6542] font-medium">
                     {' '}
                     【{currentQuestion.targetWord.reading}】
                   </span>

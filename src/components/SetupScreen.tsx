@@ -50,9 +50,9 @@ const LANGUAGE_OPTIONS: {
   value: MeaningLanguage;
   label: string;
 }[] = [
-  { value: 'TH', label: '🇹🇭 ไทย' },
-  { value: 'EN', label: '🇬🇧 English' },
-  { value: 'BOTH', label: '🇹🇭+🇬🇧 ไทย + EN' },
+  { value: 'TH', label: 'ไทย' },
+  { value: 'EN', label: 'English' },
+  { value: 'BOTH', label: 'ไทย + EN' },
 ];
 
 export const SetupScreen: React.FC<SetupScreenProps> = ({
@@ -290,21 +290,11 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
 
                 <div className="mt-3 pt-2 border-t border-[#2A2D36] flex items-center justify-between text-xs">
                   <span className="text-[#9CA3AF]">{count.toLocaleString()} คำ</span>
-                  <span className="text-[11px] font-semibold text-[#D4AF37]">
-                    {meta.mixSummary.split('•')[0]}
-                  </span>
                 </div>
               </button>
             );
           })}
         </div>
-
-        <LevelDistributionPanel
-          selectedLevel={settings.selectedLevel}
-          weights={settings.customWeights}
-          useSmartMix={settings.useSmartMix}
-          onChangeWeights={handleChangeWeights}
-        />
       </section>
 
       {/* Language & Reading Aids (Side-by-side compact cards) */}
@@ -561,6 +551,16 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
                   </button>
                 );
               })}
+            </div>
+
+            {/* Custom Random Level Distribution */}
+            <div className="pt-3 border-t border-[#2A2D36]">
+              <LevelDistributionPanel
+                selectedLevel={settings.selectedLevel}
+                weights={settings.customWeights}
+                useSmartMix={settings.useSmartMix}
+                onChangeWeights={handleChangeWeights}
+              />
             </div>
           </div>
         )}

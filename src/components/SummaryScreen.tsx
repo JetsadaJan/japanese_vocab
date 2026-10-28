@@ -243,7 +243,7 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({
                         : 'text-[#9CA3AF] hover:text-[#F3F4F6]'
                     }`}
                   >
-                    {lang === 'TH' ? '🇹🇭 ไทย' : lang === 'EN' ? '🇬🇧 EN' : 'ไทย+EN'}
+                    {lang === 'TH' ? 'ไทย' : lang === 'EN' ? 'EN' : 'ไทย+EN'}
                   </button>
                 );
               })}
@@ -325,7 +325,7 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({
                         {word.expression}
                       </span>
                       {word.reading !== word.expression && (
-                        <span className="text-sm text-[#FB923C] font-jp font-medium">
+                        <span className="text-sm text-[#FB6542] font-jp font-medium">
                           【{word.reading}】
                         </span>
                       )}
@@ -339,10 +339,10 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({
                     {settings.meaningLanguage === 'BOTH' ? (
                       <div className="text-xs sm:text-sm space-y-0.5 pt-0.5">
                         <div className="text-[#F3F4F6] font-medium">
-                          🇹🇭 {word.meaningTh || word.meaning}
+                          {word.meaningTh || word.meaning}
                         </div>
                         <div className="text-[#FDE047]">
-                          🇬🇧 {word.meaning}
+                          {word.meaning}
                         </div>
                       </div>
                     ) : (

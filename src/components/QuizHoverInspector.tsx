@@ -170,10 +170,10 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
 
                         <div className="space-y-0.5">
                           <div className="text-sm sm:text-base font-bold text-[#F3F4F6]">
-                            🇹🇭 {kNode.meaningTh || kNode.meaningEn}
+                            {kNode.meaningTh || kNode.meaningEn}
                           </div>
                           <div className="text-xs sm:text-sm text-[#FDE047] font-medium">
-                            🇬🇧 {kNode.meaningEn}
+                            {kNode.meaningEn}
                           </div>
                         </div>
                       </div>
@@ -275,7 +275,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                                 {w.level}
                               </span>
                             </div>
-                            <div className="text-[11px] text-[#FB923C] font-jp font-medium">
+                            <div className="text-[11px] text-[#FB6542] font-jp font-medium">
                               {w.reading}
                               {showRomaji && w.romaji ? (
                                 <span className="text-[#FBBF24] font-mono ml-1">[{w.romaji}]</span>
@@ -326,7 +326,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                         >
                           {catMeta.labelTh}
                         </span>
-                        <span className="text-xs text-[#FB923C] font-jp font-medium">
+                        <span className="text-xs text-[#FB6542] font-jp font-medium">
                           【{word.reading}】
                         </span>
                         <span className="text-xs text-[#FBBF24] font-mono font-semibold">
@@ -340,10 +340,10 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
 
                       <div className="space-y-0.5 pt-1">
                         <div className="text-sm font-bold text-[#F3F4F6]">
-                          🇹🇭 {word.meaningTh || word.meaning}
+                          {word.meaningTh || word.meaning}
                         </div>
                         <div className="text-xs text-[#FDE047]">
-                          🇬🇧 {word.meaning}
+                          {word.meaning}
                         </div>
                       </div>
                     </div>
@@ -384,7 +384,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                                 <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                   {c.word.expression}
                                 </span>
-                                <span className="text-xs text-[#FB923C] font-jp font-medium">
+                                <span className="text-xs text-[#FB6542] font-jp font-medium">
                                   ({c.word.reading})
                                 </span>
                                 {showRomaji && c.word.romaji && (
@@ -443,7 +443,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                                 <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                   {c.word.expression}
                                 </span>
-                                <span className="text-xs text-[#FB923C] font-jp font-medium">
+                                <span className="text-xs text-[#FB6542] font-jp font-medium">
                                   ({c.word.reading})
                                 </span>
                                 {showRomaji && c.word.romaji && (
@@ -517,7 +517,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
 
                     <div className="rounded-xl bg-[#0E0F12] border border-[#2A2D36] p-3 space-y-1.5">
                       <div className="text-xs font-bold text-[#D4AF37]">
-                        📌 จุดต่างหลัก:
+                        จุดต่างหลัก:
                       </div>
                       <div className="text-xs text-[#F3F4F6] leading-relaxed">
                         {group.coreDifferenceTh}
@@ -559,7 +559,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                                   {note.key}
                                 </span>
                                 {note.readingLabel && (
-                                  <span className="text-xs text-[#FB923C] font-jp font-medium">
+                                  <span className="text-xs text-[#FB6542] font-jp font-medium">
                                     {note.readingLabel}
                                   </span>
                                 )}
@@ -675,7 +675,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                                 <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                   {mw.expression}
                                 </span>
-                                <span className="text-xs text-[#FB923C] font-jp font-medium">
+                                <span className="text-xs text-[#FB6542] font-jp font-medium">
                                   ({mw.reading})
                                 </span>
                               </div>
