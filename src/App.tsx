@@ -281,6 +281,31 @@ export function App() {
         />
       )}
 
+      {/* Data source attribution (required by the EDRDG licence and CC BY-SA 4.0) */}
+      <footer className="w-full max-w-4xl mx-auto px-6 pt-4 pb-8 text-center text-[11px] leading-relaxed text-[#6B7280]">
+        <p>
+          This site uses the{' '}
+          <a href="https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project" target="_blank" rel="noreferrer" className="underline hover:text-[#D4AF37]">JMdict</a>{' '}
+          and{' '}
+          <a href="https://www.edrdg.org/wiki/index.php/KANJIDIC_Project" target="_blank" rel="noreferrer" className="underline hover:text-[#D4AF37]">KANJIDIC</a>{' '}
+          dictionary files. These files are the property of the{' '}
+          <a href="https://www.edrdg.org/" target="_blank" rel="noreferrer" className="underline hover:text-[#D4AF37]">Electronic Dictionary Research and Development Group</a>, and are used in conformance with the Group's{' '}
+          <a href="https://www.edrdg.org/edrdg/licence.html" target="_blank" rel="noreferrer" className="underline hover:text-[#D4AF37]">licence</a>.
+        </p>
+        <p className="mt-1">
+          Frequency data from{' '}
+          <a href="https://jiten.moe/frequency-dictionaries" target="_blank" rel="noreferrer" className="underline hover:text-[#D4AF37]">Jiten</a>
+          . JLPT word lists from{' '}
+          <a href="https://github.com/elzup/jlpt-word-list" target="_blank" rel="noreferrer" className="underline hover:text-[#D4AF37]">elzup/jlpt-word-list</a>
+          {' '}(based on{' '}
+          <a href="http://www.tanos.co.uk/jlpt/" target="_blank" rel="noreferrer" className="underline hover:text-[#D4AF37]">tanos.co.uk</a>
+          ). Vocabulary data licensed under{' '}
+          <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer" className="underline hover:text-[#D4AF37]">CC BY-SA 4.0</a>
+          .{' '}
+          <a href="https://github.com/JetsadaJan/japanese_vocab/blob/main/THIRD_PARTY_NOTICES.md" target="_blank" rel="noreferrer" className="underline hover:text-[#D4AF37]">Full credits</a>
+        </p>
+      </footer>
+
       <WordExplorerModal
         isOpen={isExplorerOpen}
         onClose={() => setIsExplorerOpen(false)}

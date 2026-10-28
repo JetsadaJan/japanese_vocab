@@ -8,11 +8,14 @@ Live application: [japanesevocab.vercel.app](https://japanesevocab.vercel.app/)
 
 The vocabulary and kanji datasets in this project are derived from the following sources:
 
-- **JLPT Word List**: Vocabulary data from [elzup/jlpt-word-list](https://github.com/elzup/jlpt-word-list).
-- **JMdict Simplified**: Common Japanese vocabulary and dictionary entries from [scriptin/jmdict-simplified](https://github.com/scriptin/jmdict-simplified) (derived from JMdict/EDRDG).
-- **Jiten**: Frequency rankings and dictionary reference data from [Jiten](https://jiten.moe/frequency-dictionaries).
+- **JLPT Word List**: Base N5-N1 vocabulary from [elzup/jlpt-word-list](https://github.com/elzup/jlpt-word-list) (MIT), originally based on the JLPT lists by Jonathan Waller at [tanos.co.uk](http://www.tanos.co.uk/jlpt/).
+- **JMdict**: Additional vocabulary from the [JMdict](https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project) dictionary files via [scriptin/jmdict-simplified](https://github.com/scriptin/jmdict-simplified) (CC BY-SA 4.0).
+- **KANJIDIC**: Kanji readings and meanings from the [KANJIDIC](https://www.edrdg.org/wiki/index.php/KANJIDIC_Project) files via [davidluzgouveia/kanji-data](https://github.com/davidluzgouveia/kanji-data) (CC BY-SA 4.0).
+- **Jiten**: Word and kanji frequency rankings from [Jiten](https://jiten.moe/frequency-dictionaries) (CC BY-SA 4.0).
 
-Thai translations and contextual usage distinctions were supplemented and curated for learners.
+This project uses the JMdict and KANJIDIC dictionary files. These files are the property of the [Electronic Dictionary Research and Development Group](https://www.edrdg.org/), and are used in conformance with the Group's [licence](https://www.edrdg.org/edrdg/licence.html).
+
+Thai translations, kanji notes, and usage distinctions were added by this project.
 
 ## Local Setup
 
@@ -73,4 +76,7 @@ npm run preview
 
 ## License
 
-This project is released under the MIT License. Underlying datasets from [elzup/jlpt-word-list](https://github.com/elzup/jlpt-word-list), [scriptin/jmdict-simplified](https://github.com/scriptin/jmdict-simplified) (JMdict/EDRDG), and [Jiten](https://jiten.moe/frequency-dictionaries) belong to their respective creators and are used under their applicable terms.
+- **Source code** (`src/`, `scripts/`, configuration files): [MIT License](LICENSE).
+- **Data** (`public/data/`): [Creative Commons Attribution-ShareAlike 4.0 International](public/data/LICENSE). This data adapts material from JMdict, KANJIDIC, and Jiten, which are licensed under CC BY-SA 4.0, so any redistribution or modification of these files must keep the same license and attribution.
+
+Full attribution and the license texts of all upstream sources are listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

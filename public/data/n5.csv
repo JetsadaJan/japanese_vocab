@@ -717,12 +717,12 @@ expression,reading,meaning,tags,meaning_th
 渡す,わたす,to hand (something) over (v.t.); to get across,Intermediate_Japanese Intermediate_Japanese_Ln.6 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ส่งมอบให้, ยื่นให้"
 渡る,わたる,"to cross over, to go across",JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,ข้าม (ถนน/สะพาน)
 悪い,わるい,"bad, sinful; inferior",Genki Genki_Ln.12 Intermediate_Japanese Intermediate_Japanese_Ln.3 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ไม่ดี, เลว, แย่, ผิด"
-半年,はんとし,"half a year, six months","JMdict,Jiten","ครึ่งปี, หกเดือน"
-右手,みぎて,"right hand, right-hand side","JMdict,Jiten","มือขวา, ทางด้านขวามือ"
-真ん中,まんなか,"middle, center, midpoint","JMdict,Jiten","ตรงกลาง, จุดกึ่งกลาง, ใจกลาง"
-風呂,ふろ,"bath, bathtub, bathhouse","JMdict,Jiten","อ่างอาบน้ำ, การอาบน้ำแช่อ่าง, ห้องอาบน้ำ"
-左手,ひだりて,"left hand, left-hand side","JMdict,Jiten","มือซ้าย, ทางด้านซ้ายมือ"
-一週間,いっしゅうかん,one week,"JMdict,Jiten",หนึ่งสัปดาห์
-一時間,いちじかん,one hour,"JMdict,Jiten",หนึ่งชั่วโมง
-昨晩,さくばん,"last night, yesterday evening","JMdict,Jiten",เมื่อคืนนี้
-電話番号,でんわばんごう,"telephone number, phone number","JMdict,Jiten","หมายเลขโทรศัพท์, เบอร์โทรศัพท์"
+半年,はんとし,"half a year, six months",JLPT_N5 JMdict Jiten,"ครึ่งปี, หกเดือน"
+右手,みぎて,"right hand, right-hand side",JLPT_N5 JMdict Jiten,"มือขวา, ทางด้านขวามือ"
+真ん中,まんなか,"middle, center, midpoint",JLPT_N5 JMdict Jiten,"ตรงกลาง, จุดกึ่งกลาง, ใจกลาง"
+風呂,ふろ,"bath, bathtub, bathhouse",JLPT_N5 JMdict Jiten,"อ่างอาบน้ำ, การอาบน้ำแช่อ่าง, ห้องอาบน้ำ"
+左手,ひだりて,"left hand, left-hand side",JLPT_N5 JMdict Jiten,"มือซ้าย, ทางด้านซ้ายมือ"
+一週間,いっしゅうかん,one week,JLPT_N5 JMdict Jiten,หนึ่งสัปดาห์
+一時間,いちじかん,one hour,JLPT_N5 JMdict Jiten,หนึ่งชั่วโมง
+昨晩,さくばん,"last night, yesterday evening",JLPT_N5 JMdict Jiten,เมื่อคืนนี้
+電話番号,でんわばんごう,"telephone number, phone number",JLPT_N5 JMdict Jiten,"หมายเลขโทรศัพท์, เบอร์โทรศัพท์"
