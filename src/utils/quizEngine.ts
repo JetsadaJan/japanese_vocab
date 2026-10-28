@@ -252,31 +252,48 @@ export function generateQuizQuestion(
     return true;
   };
 
-  // Weighted probability for confusable/similar distractors (0 to 2 choices):
-  // - 25% chance: 0 confusable distractors (all 3 distractors are random)
-  // - 50% chance: 1 confusable distractor (1 confusable + 2 random)
-  // - 25% chance: 2 confusable distractors (2 confusables + 1 random)
+  // Weighted probability for sound-confusable distractors (0 to 1 choice):
+  // - 75% chance: 0 confusable distractors (all 3 distractors are random)
+  // - 25% chance: 1 sound-confusable distractor (1 sound-confusable + 2 random)
+  // Note: Similar-meaning words are excluded so choices cannot be trivially eliminated,
+  // and any confusable distractor must match the target word's category and allowed JLPT level(s).
   if (confusableIndex) {
-    const roll = Math.random();
-    const targetConfusableCount = roll < 0.25 ? 0 : roll < 0.75 ? 1 : 2;
+    const targetConfusableCount = Math.random() < 0.75 ? 0 : 1;
 
     if (targetConfusableCount > 0) {
-      const allConfusables = getConfusableWords(targetWord, confusableIndex, 6, 6);
-      const soundMatches = shuffleArray(
-        allConfusables.filter((m) => m.type !== 'SIMILAR_MEANING')
-      ).slice(0, 3);
-      const meaningMatches = shuffleArray(
-        allConfusables.filter((m) => m.type === 'SIMILAR_MEANING')
-      ).slice(0, 3);
+      const totalWeight = Object.values(weights).reduce((acc, v) => acc + v, 0);
+      const isLevelAllowed = (level: JLPTLevel): boolean => {
+        if (totalWeight > 0) {
+          return (weights[level] || 0) > 0;
+        }
+        return level === targetWord.level || level === selectedLevel;
+      };
 
-      const confusableCandidates = shuffleArray([
-        ...soundMatches.map((m) => m.word),
-        ...meaningMatches.map((m) => m.word),
-      ]);
+      const soundConfusables = getConfusableWords(targetWord, confusableIndex, 50, 0).filter(
+        (m) =>
+          m.type !== 'SIMILAR_MEANING' &&
+          m.word.category === targetWord.category &&
+          (!activeCategories || activeCategories.includes(m.word.category)) &&
+          isLevelAllowed(m.word.level)
+      );
+
+      // Prioritize exact same level as targetWord first, then other active weighted levels
+      const sameLevelMatches = shuffleArray(
+        soundConfusables.filter((m) => m.word.level === targetWord.level).map((m) => m.word)
+      );
+      const otherAllowedLevelMatches = shuffleArray(
+        soundConfusables.filter((m) => m.word.level !== targetWord.level).map((m) => m.word)
+      );
+
+      const confusableCandidates = [...sameLevelMatches, ...otherAllowedLevelMatches];
 
       for (const candidate of confusableCandidates) {
         if (selectedOptions.length >= 1 + targetConfusableCount) break;
-        if (selectedOptions.every((existing) => isDistinctOption(existing, candidate))) {
+        const isValid = selectedOptions.every(
+          (existing) =>
+            isDistinctOption(existing, candidate) && !areWordsTooSimilar(existing, candidate)
+        );
+        if (isValid) {
           selectedOptions.push(candidate);
         }
       }
