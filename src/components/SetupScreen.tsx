@@ -295,6 +295,14 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
             );
           })}
         </div>
+
+        {/* Level Distribution Panel right under JLPT selection */}
+        <LevelDistributionPanel
+          selectedLevel={settings.selectedLevel}
+          weights={settings.customWeights}
+          useSmartMix={settings.useSmartMix}
+          onChangeWeights={handleChangeWeights}
+        />
       </section>
 
       {/* Language & Reading Aids (Side-by-side compact cards) */}
@@ -551,16 +559,6 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
                   </button>
                 );
               })}
-            </div>
-
-            {/* Custom Random Level Distribution */}
-            <div className="pt-3 border-t border-[#2A2D36]">
-              <LevelDistributionPanel
-                selectedLevel={settings.selectedLevel}
-                weights={settings.customWeights}
-                useSmartMix={settings.useSmartMix}
-                onChangeWeights={handleChangeWeights}
-              />
             </div>
           </div>
         )}

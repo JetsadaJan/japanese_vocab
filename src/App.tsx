@@ -186,12 +186,20 @@ export function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-slate-950 text-slate-100">
-        <Loader2 className="w-10 h-10 text-rose-500 animate-spin mb-4" />
-        <h2 className="text-xl font-bold">กำลังโหลดคลังคำศัพท์และคลังคันจิ JLPT N5 – N1...</h2>
-        <p className="text-sm text-slate-400 mt-1">
-          กำลังเตรียมข้อมูลคำศัพท์กว่า 7,900 คำ และคันจิเชื่อมโยง 1,967 ตัว (ภาษาไทย & อังกฤษ)
-        </p>
+      <div className="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-[#0E0F12] text-[#F3F4F6]">
+        <div className="max-w-md w-full p-8 rounded-3xl border border-[#2A2D36] bg-[#16181D] shadow-2xl shadow-black/80 flex flex-col items-center space-y-4">
+          <div className="w-16 h-16 rounded-2xl bg-[#0E0F12] border border-[#2A2D36] flex items-center justify-center shadow-inner">
+            <Loader2 className="w-8 h-8 text-[#D4AF37] animate-spin" />
+          </div>
+          <div className="space-y-1.5">
+            <h2 className="text-lg sm:text-xl font-bold text-[#F3F4F6]">
+              กำลังโหลดคลังคำศัพท์และคลังคันจิ...
+            </h2>
+            <p className="text-xs sm:text-sm text-[#9CA3AF] leading-relaxed">
+              กำลังเตรียมข้อมูลคำศัพท์ JLPT N5 – N1 และคันจิเชื่อมโยง (ภาษาไทย & English)
+            </p>
+          </div>
+        </div>
       </div>
     );
   }
