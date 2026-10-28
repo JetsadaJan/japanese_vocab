@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Minus,
-  MoveHorizontal,
   Plus,
   RotateCcw,
   Sliders,
@@ -289,14 +288,7 @@ export const LevelDistributionPanel: React.FC<LevelDistributionPanelProps> = ({
       </div>
 
       {/* Interactive Multi-segment Bar with Draggable Dividers */}
-      <div className="space-y-1.5">
-        <div className="flex items-center text-xs px-1">
-          <span className="flex items-center gap-1.5 text-slate-400 font-medium">
-            <MoveHorizontal className="w-3.5 h-3.5 text-rose-400" />
-            ลากเส้นแบ่งบนแถบ หรือปรับเปอร์เซ็นต์ในช่องด้านล่าง
-          </span>
-        </div>
-
+      <div>
         {/* The Bar */}
         <div
           ref={barRef}

@@ -473,14 +473,9 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
         {isAdvancedOpen && (
           <div className="p-4 pt-2 border-t border-slate-800/80 space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <div>
-                <h4 className="text-xs sm:text-sm font-bold text-slate-200">
-                  เลือกประเภทคำศัพท์ (Part of Speech)
-                </h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">
-                  จิ้มเลือกประเภทคำที่ต้องการให้ออกในแบบฝึกหัด (เลือกได้มากกว่า 1 ประเภท):
-                </p>
-              </div>
+              <h4 className="text-xs sm:text-sm font-bold text-slate-200">
+                เลือกประเภทคำศัพท์ (Part of Speech)
+              </h4>
 
               <button
                 type="button"
