@@ -9,7 +9,7 @@ Live application: [japanesevocab.vercel.app](https://japanesevocab.vercel.app/)
 The vocabulary and kanji datasets in this project are derived from the following sources:
 
 - **JLPT Word List**: Vocabulary data from [elzup/jlpt-word-list](https://github.com/elzup/jlpt-word-list).
-- **Jiten**: Kanji dictionary and character reference data from [Jiten](https://jiten.net/).
+- **Jiten**: Dictionary reference data from [Jiten](https://jiten.moe/frequency-dictionaries).
 
 Thai translations and contextual usage distinctions were supplemented and curated for learners.
 
@@ -44,4 +44,4 @@ npm run build
 
 ## License
 
-This project is released under the MIT License. Underlying datasets from [elzup/jlpt-word-list](https://github.com/elzup/jlpt-word-list) and Jiten belong to their respective creators and are used under their applicable terms.
+This project is released under the MIT License. Underlying datasets from [elzup/jlpt-word-list](https://github.com/elzup/jlpt-word-list) and [Jiten](https://jiten.moe/frequency-dictionaries) belong to their respective creators and are used under their applicable terms.
