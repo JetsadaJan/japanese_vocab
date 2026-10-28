@@ -163,6 +163,54 @@ interface RawKanjiEntry {
   th?: string;
   strokes?: number;
   lvl?: JLPTLevel;
+  note?: string;
+}
+
+function buildKanjiPedagogicalNote(
+  ch: string,
+  rawNote: string | undefined,
+  onyomi: string[],
+  kunyomi: string[],
+  relatedWords: VocabWord[]
+): string {
+  const parts: string[] = [];
+  if (rawNote && rawNote.trim()) {
+    parts.push(rawNote.trim());
+  }
+
+  const compoundWords = relatedWords.filter(
+    (w) => w.kanjiChars.length >= 2 && w.expression.length === w.kanjiChars.length
+  );
+  const wagoWords = relatedWords.filter(
+    (w) => w.kanjiChars.length === 1 || w.expression.length > w.kanjiChars.length
+  );
+
+  if (!rawNote) {
+    const usageDetails: string[] = [];
+    if (compoundWords.length > 0 && onyomi.length > 0) {
+      const sampleCompounds = compoundWords
+        .slice(0, 3)
+        .map((w) => `${w.expression} (${w.reading} = ${w.meaningTh.split(',')[0]})`)
+        .join(', ');
+      usageDetails.push(
+        `มักใช้เสียงอน (${onyomi.slice(0, 2).join('・')}) เมื่อประสมกับคันจิตัวอื่น เช่น ${sampleCompounds}`
+      );
+    }
+    if (wagoWords.length > 0 && kunyomi.length > 0) {
+      const sampleWago = wagoWords
+        .slice(0, 3)
+        .map((w) => `${w.expression} (${w.reading} = ${w.meaningTh.split(',')[0]})`)
+        .join(', ');
+      usageDetails.push(
+        `ใช้เสียงคุน (${kunyomi.slice(0, 2).join('・')}) เมื่อเป็นคำเดี่ยวหรือมีฮิรางานะต่อท้าย (Okurigana) เช่น ${sampleWago}`
+      );
+    }
+    if (usageDetails.length > 0) {
+      parts.push(`แนวทางการจำ 「${ch}」: ${usageDetails.join(' | ')}`);
+    }
+  }
+
+  return parts.join(' — ');
 }
 
 /**
@@ -256,6 +304,7 @@ export async function loadAllVocabData(): Promise<{
             strokes: raw.strokes || 0,
             level: raw.lvl || level,
             relatedWordIds: [],
+            extraNote: raw.note,
           };
         }
         if (!kanjiDb[ch].relatedWordIds.includes(word.id)) {
@@ -263,6 +312,20 @@ export async function loadAllVocabData(): Promise<{
         }
       }
     }
+  }
+
+  for (const [ch, kNode] of Object.entries(kanjiDb)) {
+    const raw: RawKanjiEntry = rawKanjiMap[ch] || {};
+    const relatedWords = kNode.relatedWordIds
+      .map((id) => wordMap[id])
+      .filter(Boolean);
+    kNode.extraNote = buildKanjiPedagogicalNote(
+      ch,
+      raw.note,
+      kNode.onyomi,
+      kNode.kunyomi,
+      relatedWords
+    );
   }
 
   const allWordsFlat = JLPT_LEVELS.flatMap((lvl) => db[lvl]);
@@ -280,8 +343,15 @@ export async function loadAllVocabData(): Promise<{
 export function speakJapanese(text: string): void {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
   try {
+    const cleaned =
+      text
+        .split(';')[0]
+        .replace(/\([^)]*\)/g, '')
+        .replace(/（[^）]*）/g, '')
+        .replace(/[〜～]/g, '')
+        .trim() || text;
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
+    const utterance = new SpeechSynthesisUtterance(cleaned);
     utterance.lang = 'ja-JP';
     utterance.rate = 0.92;
     const voices = window.speechSynthesis.getVoices();

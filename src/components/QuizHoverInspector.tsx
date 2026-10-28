@@ -248,6 +248,19 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                     </div>
                   </div>
 
+                  {/* Kanji Pedagogical Explanation Note */}
+                  {kNode.extraNote && (
+                    <div className="rounded-xl border border-[#D4AF37]/30 bg-[#2E1F05]/30 p-3 space-y-1">
+                      <div className="text-[11px] font-bold text-[#D4AF37] flex items-center gap-1.5">
+                        <Lightbulb className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
+                        <span>คำอธิบายและจุดสังเกตคันจิ:</span>
+                      </div>
+                      <div className="text-xs text-[#F3F4F6]/90 leading-relaxed">
+                        {kNode.extraNote}
+                      </div>
+                    </div>
+                  )}
+
                   {/* Related Words using this Kanji */}
                   <div className="space-y-2">
                     <div className="text-xs font-bold text-[#9CA3AF] flex items-center gap-1.5">

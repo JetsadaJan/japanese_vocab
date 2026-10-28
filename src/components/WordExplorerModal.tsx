@@ -706,6 +706,15 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                                 </div>
                               )}
                             </div>
+
+                            {kNode.extraNote && (
+                              <div className="text-[11px] text-[#9CA3AF] leading-relaxed pt-1 border-t border-[#2A2D36]/80">
+                                <span className="text-[#D4AF37] font-semibold">
+                                  จุดสังเกต:{' '}
+                                </span>
+                                {kNode.extraNote}
+                              </div>
+                            )}
                           </div>
                         </div>
 
@@ -1007,6 +1016,19 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                       )}
                     </div>
                   </div>
+
+                  {/* Kanji Pedagogical Explanation Card */}
+                  {kNode.extraNote && (
+                    <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#2E1F05]/30 p-4 space-y-1.5">
+                      <div className="text-xs font-bold text-[#D4AF37] flex items-center gap-1.5">
+                        <Lightbulb className="w-4 h-4 text-[#D4AF37] shrink-0" />
+                        <span>คำอธิบายและจุดสังเกตคันจิ 「{kNode.character}」</span>
+                      </div>
+                      <div className="text-xs sm:text-sm text-[#F3F4F6]/90 leading-relaxed">
+                        {kNode.extraNote}
+                      </div>
+                    </div>
+                  )}
 
                   {/* All Related Vocabulary Words using this Kanji */}
                   <div className="space-y-3">

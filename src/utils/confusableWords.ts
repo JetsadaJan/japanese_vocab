@@ -63,6 +63,8 @@ export function splitIntoMoras(reading: string): string[] {
 export function cleanPrimaryReading(reading: string): string {
   return reading
     .split(';')[0]
+    .replace(/\([^)]*\)/g, '')
+    .replace(/（[^）]*）/g, '')
     .replace(/[〜～\-\s]/g, '')
     .trim();
 }
@@ -186,20 +188,30 @@ export function buildConfusableIndex(
 
   for (const rawGroup of curatedGroups) {
     const groupWordsMap = new Map<string, VocabWord>();
+    const existingNotes = rawGroup.memberNotes || [];
 
-    // 1. Match words by explicit expression in keywords
+    // 1. Match words by explicit expression in keywords (filtering homographs by readingLabel when notes exist)
     for (const token of rawGroup.keywords) {
       const matched = byExpression.get(token) || [];
+      const distinctReadings = new Set(matched.map((m) => m.reading));
       for (const w of matched) {
+        if (
+          distinctReadings.size > 1 &&
+          existingNotes.some((n) => n.key.trim() === token.trim())
+        ) {
+          if (!existingNotes.some((n) => doesNoteMatchWord(n, w))) {
+            continue;
+          }
+        }
         groupWordsMap.set(w.id, w);
       }
     }
 
     // 2. Also match any word that matches one of the curated memberNotes (e.g. okurigana or kana-only variant)
-    const existingNotes = rawGroup.memberNotes || [];
     for (const note of existingNotes) {
       const directMatched = byExpression.get(note.key) || [];
       for (const w of directMatched) {
+        if (!doesNoteMatchWord(note, w)) continue;
         groupWordsMap.set(w.id, w);
       }
     }

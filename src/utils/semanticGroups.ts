@@ -55,12 +55,26 @@ export function doesNoteMatchWord(
 ): boolean {
   const expr = word.expression.trim();
   const key = note.key.trim();
-  if (expr === key) return true;
+  const readings = word.reading
+    .split(';')
+    .map((r) =>
+      r
+        .replace(/\([^)]*\)/g, '')
+        .replace(/（[^）]*）/g, '')
+        .replace(/[〜～\-\s]/g, '')
+        .trim()
+    )
+    .filter(Boolean);
 
-  const reading = word.reading
-    .split(';')[0]
-    .replace(/[〜～\-\s]/g, '')
-    .trim();
+  if (expr === key) {
+    if (note.readingLabel) {
+      const kanaInLabel = note.readingLabel.replace(/\([^)]*\)/g, '');
+      if (/[\u3040-\u309F\u30A0-\u30FF]/.test(kanaInLabel)) {
+        return readings.some((r) => kanaInLabel.includes(r));
+      }
+    }
+    return true;
+  }
 
   // Check if readingLabel explicitly mentions the expression (e.g., "きれい / 綺麗 (kirei)")
   if (note.readingLabel) {
@@ -73,7 +87,10 @@ export function doesNoteMatchWord(
       return true;
     }
     // If the CSV word is written purely in kana (no kanji), match against the note's kana reading
-    if (word.kanjiChars.length === 0 && labelTokens.includes(reading)) {
+    if (
+      word.kanjiChars.length === 0 &&
+      readings.some((r) => labelTokens.includes(r))
+    ) {
       return true;
     }
   }
@@ -87,7 +104,10 @@ export function doesNoteMatchWord(
     keyKanji.length === word.kanjiChars.length &&
     keyKanji.every((k, idx) => k === word.kanjiChars[idx])
   ) {
-    if (!note.readingLabel || note.readingLabel.includes(reading)) {
+    if (
+      !note.readingLabel ||
+      readings.some((r) => note.readingLabel!.includes(r))
+    ) {
       return true;
     }
   }

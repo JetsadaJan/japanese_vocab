@@ -3,7 +3,7 @@ expression,reading,meaning,tags,meaning_th
 原則,げんそく,"principle, general rule",JLPT_1 JLPT Manga Drama Game Novel YouTube Movie,"หลักการ, กฎทั่วไป"
 見地,けんち,point of view,JLPT_1 JLPT,"มุมมอง, ทัศนะ"
 現地,げんち,"actual place, local",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"สถานที่จริง, ท้องถิ่น"
-限定,げんてい,"limit, restriction",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การจำกัด, ขีดจำกัด"
+限定,げんてい,"limit, restriction",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การจำกัดเฉพาะ (เช่น สินค้าลิมิเต็ด, จำกัดจำนวน/กลุ่มเป้าหมาย)"
 原点,げんてん,"origin (coordinates, starting point)",JLPT_1 JLPT Anime Manga Drama Game YouTube Movie,"จุดกำเนิด, จุดเริ่มต้น"
 原典,げんてん,"original, source",JLPT_1 JLPT,"ต้นฉบับ, แหล่งที่มาดั้งเดิม"
 原爆,げんばく,atomic bomb,JLPT_1 JLPT YouTube Movie,ระเบิดปรมาณู
@@ -58,10 +58,10 @@ expression,reading,meaning,tags,meaning_th
 口頭,こうとう,oral,JLPT_1 JLPT,"ด้วยวาจา, ปากเปล่า"
 講読,こうどく,reading,JLPT_1 JLPT,"การอ่านและตีความ, การบรรยายวิเคราะห์บทอ่าน"
 購読,こうどく,subscription,JLPT_1 JLPT,การบอกรับเป็นสมาชิก (สิ่งพิมพ์)
-購入,こうにゅう,"purchase, buy",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การซื้อ, การจัดซื้อ"
+購入,こうにゅう,"purchase, buy",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การซื้อ, การจัดซื้อ (คำทางการของ 買う)"
 公認,こうにん,"official recognition, authorization",JLPT_1 JLPT Anime Manga YouTube,"การรับรองอย่างเป็นทางการ, การอนุมัติอย่างเป็นทางการ"
 光熱費,こうねつひ,cost of fuel and light,JLPT_1 JLPT,ค่าสาธารณูปโภค (ค่าไฟค่าแก๊สและเชื้อเพลิง)
-購買,こうばい,"purchase, buy",JLPT_1 JLPT Manga,"การซื้อ, การจัดซื้อ"
+購買,こうばい,"purchase, buy",JLPT_1 JLPT Manga,"การจัดซื้อ, กำลังซื้อ (ในเชิงเศรษฐศาสตร์/ฝ่ายจัดซื้อ)"
 好評,こうひょう,"popularity, favorable reputation",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube,"ได้รับความนิยม, ได้รับคำชมเชย"
 交付,こうふ,"delivering, furnishing (with copies)",JLPT_1 JLPT,"การออกให้, การส่งมอบ (เอกสาร/เงิน)"
 公募,こうぼ,"public appeal, public contribution",JLPT_1 JLPT YouTube,"การเปิดรับสมัครทั่วไป, การระดมจากสาธารณะ"
@@ -95,10 +95,10 @@ expression,reading,meaning,tags,meaning_th
 試みる,こころみる,"to try, to test",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"พยายามทำ, ทดลองทำ"
 快い,こころよい,"pleasant, agreeable",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"น่ายินดี, รู้สึกสบายใจ, เต็มใจ"
 誤差,ごさ,error,JLPT_1 JLPT Anime Novel YouTube,ความคลาดเคลื่อน
-ございます (かん),ございます (かん),"to be (polite, to exist)",JLPT_1 JLPT,"มี, อยู่, เป็น (รูปสุภาพ)"
+ございます,ございます,"to be (polite, to exist)",JLPT_1 JLPT,"มี, อยู่, เป็น (รูปสุภาพ)"
 孤児,こじ,orphan,JLPT_1 JLPT Anime Manga Game Novel Movie,เด็กกำพร้า
 こじれる,こじれる,"to get complicated, to grow worse",JLPT_1 JLPT Drama Movie,"บานปลาย, ซับซ้อนยุ่งยากขึ้น, เรื้อรัง"
-こす (みずを～),こす (みずを～),"to strain, to filter",JLPT_1 JLPT,กรอง (น้ำ/ของเหลว)
+こす (みずを～),こす,"to strain, to filter",JLPT_1 JLPT,กรอง (น้ำ/ของเหลว)
 梢,こずえ,treetop,JLPT_1 JLPT,"ปลายกิ่งไม้, ยอดไม้"
 個性,こせい,"individuality, personality, idiosyncrasy",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"เอกลักษณ์เฉพาะตัว, บุคลิกลักษณะเฉพาะ"
 戸籍,こせき,"census, family register",JLPT_1 Intermediate_Japanese_Ln.14 JLPT Intermediate_Japanese Manga Drama Movie,"ทะเบียนบ้าน, ทะเบียนครอบครัว"
@@ -106,7 +106,7 @@ expression,reading,meaning,tags,meaning_th
 こたつ,こたつ,"table with heater, (originally) charcoal brazier in a floor well",JLPT_1 JLPT YouTube,โต๊ะอุ่นขา (โคทัตสึ)
 こだわる,こだわる,"to fuss over, to be particular about",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ยึดติด, พิถีพิถัน, ใส่ใจในรายละเอียด"
 誇張,こちょう,exaggeration,JLPT_1 JLPT Novel,"การพูดเกินจริง, การกล่าวเกินจริง"
-こつ (をつかむ),こつ (をつかむ),"secret, trick, hang",JLPT_1 JLPT,"เคล็ดลับ, เทคนิค"
+こつ (をつかむ),こつ,"secret, trick, hang",JLPT_1 JLPT,"เคล็ดลับ, เทคนิค"
 滑稽,こっけい,"funny, humorous, comical",JLPT_1 JLPT Anime Manga Game Novel,"ตลกขบขัน, น่าขัน"
 国交,こっこう,diplomatic relations,JLPT_1 JLPT,ความสัมพันธ์ทางการทูต
 骨董品,こっとうひん,curio,JLPT_1 JLPT Game,"ของเก่า, โบราณวัตถุ"
@@ -129,7 +129,7 @@ expression,reading,meaning,tags,meaning_th
 固有,こゆう,"characteristic, tradition, peculiar",JLPT_1 JLPT Game Novel YouTube,"เฉพาะตัว, ดั้งเดิม, เป็นเอกลักษณ์"
 暦,こよみ,"calendar, almanac",JLPT_1 JLPT Game,ปฏิทิน
 凝らす,こらす,"to concentrate, to devote, to peer into",JLPT_1 JLPT,"เพ่งสมาธิ, ทุ่มเท, ประดิดประดอย"
-ごらんなさい (かん),ごらんなさい (かん),"look, (please) try to do",JLPT_1 JLPT,"กรุณาดู, ลองทำดูสิ"
+ごらんなさい,ごらんなさい,"look, (please) try to do",JLPT_1 JLPT,"กรุณาดู, ลองทำดูสิ"
 孤立,こりつ,"isolation, helplessness",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การโดดเดี่ยว, การถูกทอดทิ้งให้อยู่ลำพัง"
 懲りる,こりる,"to learn by experience, to be disgusted with",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"เข็ดหลาบ, หลาบจำจากประสบการณ์"
 凝る,こる,"to stiffen, to harden",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ปวดเมื่อยตึง (กล้ามเนื้อ), หมกมุ่นทุ่มเท, พิถีพิถัน"
@@ -151,7 +151,7 @@ expression,reading,meaning,tags,meaning_th
 細工,さいく,"work, craftsmanship, trick",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"งานฝีมืออันละเอียดอ่อน, ลูกไม้, การดัดแปลงตกแต่ง"
 採掘,さいくつ,mining,JLPT_1 JLPT Anime Game,การขุดเจาะเหมืองแร่
 サイクル,サイクル,cycle,JLPT_1 JLPT Game YouTube,"วัฏจักร, รอบ"
-採決,さいけつ,"vote, roll call",JLPT_1 JLPT,การลงมติ
+採決,さいけつ,"vote, roll call",JLPT_1 JLPT,การลงมติ (กระบวนการโหวตเห็นชอบหรือไม่เห็นชอบ)
 再建,さいけん,(temple or shrine) rebuilding,JLPT_1 JLPT Anime Drama Game Movie,"การบูรณะสร้างใหม่, การฟื้นฟู (กิจการ/องค์กร)"
 再現,さいげん,"reproduction, return, revival",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การจำลองขึ้นมาใหม่, การทำให้ปรากฏอีกครั้ง"
 財源,ざいげん,"source of funds, resources, finances",JLPT_1 JLPT,"แหล่งเงินทุน, แหล่งรายได้"
@@ -174,7 +174,7 @@ expression,reading,meaning,tags,meaning_th
 差額,さがく,"balance, difference, margin",JLPT_1 JLPT,ส่วนต่าง (ของจำนวนเงิน)
 杯,さかずき,wine cup,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,จอกเหล้าสาเก
 逆立ち,さかだち,"handstand, headstand",JLPT_1 JLPT,"การหกสูง, การยืนด้วยมือ"
-さきに (いぜん),さきに (いぜん),"before, earlier than, previously",JLPT_1 JLPT,"ก่อนหน้านี้, เมื่อครั้งก่อน"
+さきに,さきに,"before, earlier than, previously",JLPT_1 JLPT,"ก่อนหน้านี้, เมื่อครั้งก่อน"
 詐欺,さぎ,"fraud, swindle",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การฉ้อโกง, การต้มตุ๋น"
 削減,さくげん,"cut, reduction",JLPT_1 JLPT Drama YouTube,"การตัดลด, การปรับลด"
 錯誤,さくご,mistake,JLPT_1 JLPT,"ความผิดพลาด, ความคลาดเคลื่อนเข้าใจผิด"
@@ -187,7 +187,7 @@ expression,reading,meaning,tags,meaning_th
 差し支える,さしつかえる,"to interfere, to hinder",JLPT_1 JLPT Novel Movie,"เป็นอุปสรรค, ขัดข้อง, มีปัญหา"
 授ける,さずける,"to grant, to award, to teach",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"มอบให้ (รางวัล/ตำแหน่ง/ความรู้), ประทานให้"
 摩する,さする,"to rub, to stroke",JLPT_1 JLPT,"ลูบไล้, ถูเบาๆ"
-さぞ (さぞや。さぞかし),さぞ (さぞや。さぞかし),"I am sure, certainly, no doubt",JLPT_1 JLPT,คงจะ...อย่างแน่นอน (คาดเดาด้วยความเห็นใจ)
+さぞ,さぞ,"I am sure, certainly, no doubt",JLPT_1 JLPT,คงจะ...อย่างแน่นอน (คาดเดาด้วยความเห็นใจ)
 定まる,さだまる,"to become settled, to be fixed",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube,"ลงตัว, แน่นอน, สงบลง"
 定める,さだめる,"to decide, to determine",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"กำหนด, ตราขึ้น, ตัดสินใจ"
 座談会,ざだんかい,"symposium, round-table discussion",JLPT_1 JLPT,"การเสวนาโต๊ะกลม, การประชุมแลกเปลี่ยนความคิดเห็น"
@@ -208,7 +208,7 @@ expression,reading,meaning,tags,meaning_th
 侍,さむらい,samurai,JLPT_1 JLPT Intermediate_Japanese_Ln.7 Intermediate_Japanese Anime Manga Drama YouTube Movie,"ซามูไร, นักรบญี่ปุ่นโบราณ"
 さも,さも,"with gusto, with satisfaction",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,ราวกับว่า...จริงๆ
 作用,さよう,"operation, effect, function",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การทำงาน, การออกฤทธิ์, ผลกระทบ"
-さらう (こどもを～),さらう (こどもを～),to kidnap,JLPT_1 JLPT,"ลักพาตัว, พัดพาไป, กวาดเอาไปทั้งหมด"
+さらう (こどもを～),さらう,to kidnap,JLPT_1 JLPT,"ลักพาตัว, พัดพาไป, กวาดเอาไปทั้งหมด"
 障る,さわる,"to hinder, to interfere with, to affect",JLPT_1 JLPT Drama,"เป็นอันตรายต่อ, กระทบกระเทือน, กีดขวาง"
 酸,さん,acid,JLPT_1 JLPT Manga,กรด
 山岳,さんがく,mountains,JLPT_1 JLPT,"ภูเขา, เทือกเขาสูง"
@@ -249,7 +249,7 @@ expression,reading,meaning,tags,meaning_th
 式場,しきじょう,"ceremonial hall, place of ceremony (e.g., marriage)",JLPT_1 JLPT Drama Movie,สถานที่จัดพิธี (เช่น พิธีแต่งงาน/พิธีศพ)
 しきたり,しきたり,"custom, conventional practice, tradition",JLPT_1 JLPT Anime Drama Game Movie,"ธรรมเนียมปฏิบัติ, ประเพณีที่สืบทอดมา"
 事業,じぎょう,"project, enterprise, business",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"กิจการ, โครงการธุรกิจ"
-軽蔑,けいべつ,"scorn, disdain",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"การดูถูก, การเหยียดหยาม"
+軽蔑,けいべつ,"scorn, disdain",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,การดูถูกดูแคลน (มองว่าต่ำต้อยในใจ)
 経歴,けいれき,"personal history, career",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,ประวัติส่วนตัว (การศึกษาและการทำงาน)
 経路,けいろ,"course, route, channel",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"เส้นทาง, ช่องทาง"
 けがらわしい,けがらわしい,"filthy, unfair",JLPT_1 JLPT,"สกปรกน่ารังเกียจ, น่าขยะแขยง"
@@ -307,13 +307,13 @@ expression,reading,meaning,tags,meaning_th
 導入,どうにゅう,"introduction, bringing in, leading in",JLPT_1 JLPT Intermediate_Japanese_Ln.12 Intermediate_Japanese Anime Manga Drama Game Novel YouTube Movie,"การนำเข้ามาใช้, การริเริ่มนำเข้า, การเกริ่นนำ"
 当人,とうにん,"the one concerned, the said person",JLPT_1 JLPT Manga Drama Novel Movie,"เจ้าตัว, ผู้ที่เกี่ยวข้องโดยตรง"
 同封,どうふう,"enclosure (e.g., in a letter)",JLPT_1 JLPT,การแนบมาในซองเดียวกัน (จดหมาย)
-逃亡,とうぼう,escape,JLPT_1 JLPT Anime Manga Drama Game Novel Movie,การหลบหนี
+逃亡,とうぼう,escape,JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"การหลบหนีคดี, การหลบหนีไปกบดาน"
 冬眠,とうみん,"hibernation, winter sleep",JLPT_1 JLPT,การจำศีลในฤดูหนาว
 同盟,どうめい,"alliance, union, league",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"พันธมิตร, สหภาพ"
 どうやら,どうやら,"it seems like, somehow or other",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ดูเหมือนว่า..., ในที่สุดก็พอจะ..."
 動力,どうりょく,"power, motive power, dynamic force",JLPT_1 JLPT Anime Game,"พลังงานกล, แรงขับเคลื่อน"
 登録,とうろく,"registration, register, record",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การลงทะเบียน, การขึ้นทะเบียน"
-討論,とうろん,discussion; debate,JLPT_1 JLPT Intermediate_Japanese_Ln.15 Intermediate_Japanese,"การอภิปราย, การโต้วาที"
+討論,とうろん,discussion; debate,JLPT_1 JLPT Intermediate_Japanese_Ln.15 Intermediate_Japanese,"การอภิปรายถกเถียงแลกเปลี่ยนความเห็น, การโต้วาที"
 遠ざかる,とおざかる,to go far off,JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"ห่างออกไป, ไกลออกไป, เหินห่าง"
 遠回り,とおまわり,"detour, roundabout way",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การอ้อม, ทางอ้อม"
 トーン,トーン,tone,JLPT_1 JLPT Anime Manga Drama Novel YouTube,"โทนเสียง, โทนสี, ระดับน้ำเสียง"
@@ -332,7 +332,7 @@ expression,reading,meaning,tags,meaning_th
 得点,とくてん,"score, points made",JLPT_1 JLPT Anime Manga Drama YouTube,"คะแนนที่ได้, การทำคะแนน"
 特派,とくは,"send specially, special envoy",JLPT_1 JLPT,การส่งไปปฏิบัติหน้าที่พิเศษ (เช่น ผู้สื่อข่าวพิเศษ)
 特有,とくゆう,"characteristic (of, peculiar (to))",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube,ลักษณะเฉพาะที่มีแต่ใน...
-とげ (をさす),とげ (をさす),thorn,JLPT_1 JLPT,"หนาม, เสี้ยน"
+とげ (をさす),とげ,thorn,JLPT_1 JLPT,"หนาม, เสี้ยน"
 遂げる,とげる,"to accomplish, to achieve, to carry out",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"บรรลุผลสำเร็จ, ทำจนลุล่วง"
 ～どころか,～どころか,"rather, far from",JLPT_1 JLPT,"ไม่เพียงแต่จะไม่...แต่กลับ..., ห่างไกลจากคำว่า..."
 年頃,としごろ,"age, marriageable age, adolescence",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"วัยที่เหมาะสม (เช่น วัยหนุ่มสาว), อายุราวๆ นั้น"
@@ -390,7 +390,7 @@ expression,reading,meaning,tags,meaning_th
 取り戻す,とりもどす,"to take back, to regain",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"เอาคืนมา, กอบกู้กลับคืนมา"
 取り寄せる,とりよせる,"to order, to send away for",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"สั่งให้ส่งมาให้, เรียกให้เข้ามาใกล้"
 ドリル,ドリル,drill,JLPT_1 JLPT Anime Manga Drama Game YouTube,"สว่าน, การฝึกฝนซ้ำๆ (แบบฝึกหัด)"
-副,とりわけ,"especially, above all",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"โดยเฉพาะอย่างยิ่ง, เหนือสิ่งอื่นใด"
+取り分け,とりわけ,"especially, above all",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"โดยเฉพาะอย่างยิ่ง, เหนือสิ่งอื่นใด"
 とろける,とろける,melt; to be enchanted with,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube,"หลอมละลาย, เคลิบเคลิ้มหลงใหล"
 鈍感,どんかん,"thickheadedness, stolidity",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"ความรู้สึกช้า, ความทึ่มไม่ไวต่อความรู้สึก"
 とんだ,とんだ,"terrible, awful, serious, absolutely not",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"คาดไม่ถึง, ร้ายแรงมาก, ไม่ใช่เรื่องแบบนั้นเลยสักนิด"
@@ -527,7 +527,7 @@ expression,reading,meaning,tags,meaning_th
 配給,はいきゅう,"distribution (e.g., films, rice",JLPT_1 JLPT Game Movie,การปันส่วนแจกจ่าย (อาหาร/ภาพยนตร์)
 ばい菌,ばいきん,"bacteria, germ(s)",JLPT_1 JLPT,"เชื้อโรค, แบคทีเรีย"
 配偶者,はいぐうしゃ,spouse,JLPT_1 JLPT,คู่สมรส
-拝啓,はいけい,-- a formal greeting used at the beginning of a letter --,Intermediate_Japanese_Ln.4 JLPT_1 JLPT Intermediate_Japanese Movie,เรียน... (คำขึ้นต้นจดหมายอย่างเป็นทางการ)
+拝啓,はいけい,Dear Sir/Madam (formal letter opening),Intermediate_Japanese_Ln.4 JLPT_1 JLPT Intermediate_Japanese Movie,เรียน... (คำขึ้นต้นจดหมายอย่างเป็นทางการ)
 背景,はいけい,"background, scenery, setting",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ฉากหลัง, พื้นหลัง, เบื้องหลังที่มา"
 背後,はいご,"back, rear",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ด้านหลัง, เบื้องหลัง"
 廃止,はいし,"abolition, repeal",JLPT_1 JLPT Manga Drama Game YouTube Movie,"การยกเลิก, การล้มเลิก"
@@ -667,7 +667,7 @@ expression,reading,meaning,tags,meaning_th
 黄金,おうごん,gold,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,ทองคำ
 往診,おうしん,"doctor's visit, house call",JLPT_1 JLPT,การที่แพทย์เดินทางไปตรวจคนไข้ที่บ้าน
 応募,おうぼ,"subscription, application",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,การสมัครเข้าร่วม (ชิงรางวัล/สมัครงาน/ประกวด)
-おおい (かん),おおい (かん),hey,JLPT_1 JLPT,"เฮ้, นี่ (คำร้องเรียก)"
+おおい,おおい,hey,JLPT_1 JLPT,"เฮ้, นี่ (คำร้องเรียก)"
 大方,おおかた,"almost all, majority",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"ส่วนใหญ่, แทบทั้งหมด, คงจะ..."
 大柄,おおがら,"large build, large pattern",JLPT_1 JLPT Novel,"รูปร่างสูงใหญ่, ลวดลายขนาดใหญ่"
 おおげさ,おおげさ,"grandiose, exaggerated",JLPT_1 JLPT,"เกินจริง, ตื่นตูมใหญ่โตเกินเหตุ"
@@ -684,7 +684,7 @@ expression,reading,meaning,tags,meaning_th
 遅らす,おくらす,"to retard, to delay",JLPT_1 JLPT,"ทำให้ล่าช้า, เลื่อนออกไป"
 厳か,おごそか,"majestic, dignified",JLPT_1 JLPT Novel,"ขรึมขลัง, สง่างาม, เป็นทางการ"
 行い,おこない,"conduct, behavior, action",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"การกระทำ, ความประพฤติ"
-おごる (ゆうしょくを～),おごる (ゆうしょくを～),to give (someone) a treat,JLPT_1 JLPT,เลี้ยง (อาหาร)
+おごる (ゆうしょくを～),おごる,to give (someone) a treat,JLPT_1 JLPT,เลี้ยง (อาหาร)
 収まる,おさまる,to settle into; to be obtained,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"สงบลง, เข้าที่, จุลงได้"
 納まる,おさまる,to settle into; to be obtained,JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"เข้าที่, ได้รับชำระ, ยุติลงด้วยดี"
 治まる,おさまる,"to be at peace, to calm down",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"สงบลง, ทุเลาลง, ปกครองได้อย่างสงบ"
@@ -796,7 +796,7 @@ expression,reading,meaning,tags,meaning_th
 かかと,かかと,shoe heel,JLPT_1 JLPT,"ส้นเท้า, ส้นรองเท้า"
 書き取る,かきとる,"to write down, to take dictation",JLPT_1 JLPT,"จดบันทึก, เขียนตามคำบอก"
 掻き回す,かきまわす,"to stir up, to churn, to disturb",JLPT_1 JLPT,"คนให้เข้ากัน, กวน, ปั่นป่วน"
-かく (はじを),かく (はじを),to humiliate oneself,JLPT_1 JLPT,"ขายหน้า, ได้รับความอับอาย"
+かく (はじを),かく,to humiliate oneself,JLPT_1 JLPT,"ขายหน้า, ได้รับความอับอาย"
 ～画,～かく,~ strokes,JLPT_1 JLPT,~ขีด (จำนวนเส้นของตัวอักษรคันจิ)
 学芸,がくげい,"arts and sciences, liberal arts",JLPT_1 JLPT,ศิลปวิทยาการ
 格差,かくさ,"difference, disparity",JLPT_1 JLPT YouTube,"ความเหลื่อมล้ำ, ช่องว่างความแตกต่าง"
@@ -860,7 +860,7 @@ expression,reading,meaning,tags,meaning_th
 かなわない,かなわない,"be beyond one's power, be unable",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"สู้ไม่ได้, ทนไม่ไหว"
 加入,かにゅう,"becoming a member, admission",JLPT_1 JLPT Anime Manga Drama Game YouTube,"การเข้าร่วมเป็นสมาชิก, การทำสัญญาประกัน"
 予て,かねて,"previously, already, lately",JLPT_1 JLPT Manga,"ก่อนหน้านี้, ตั้งนานแล้ว"
-庇う,かばう,"to protect someone, to&nbsp;&nbsp;cover up for someone",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"ปกป้อง, ออกรับแทน"
+庇う,かばう,"to protect someone, to cover up for someone",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"ปกป้อง, ออกรับแทน"
 株式,かぶしき,stock,JLPT_1 JLPT Manga Drama,หุ้น
 かぶれる,かぶれる,to react to; to be influenced by,JLPT_1 JLPT,แพ้เป็นผื่นคัน; ได้รับอิทธิพลอย่างหนัก
 花粉,かふん,pollen,JLPT_1 JLPT Manga YouTube,ละอองเกสรดอกไม้
@@ -911,7 +911,7 @@ expression,reading,meaning,tags,meaning_th
 カンニング,カンニング,"cunning, cheat",JLPT_1 JLPT YouTube,"การทุจริตในการสอบ, การลอกข้อสอบ"
 元年,がんねん,first year (of a specific reign),JLPT_1 JLPT YouTube,ปีแรกของรัชศก
 幹部,かんぶ,"management, executive",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ผู้บริหารระดับสูง, แกนนำ"
-完ぺき,かんぺき,"perfection, completeness, flawless",JLPT_1 JLPT Manga Game,"สมบูรณ์แบบ, ไร้ที่ติ"
+完璧,かんぺき,"perfection, completeness, flawless",JLPT_1 JLPT Manga Game,"สมบูรณ์แบบ, ไร้ที่ติ"
 勘弁,かんべん,"pardon, forgiveness, forbearance",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การให้อภัย, การยกโทษให้"
 感無量,かんむりょう,"deep feeling, filled with emotion",JLPT_1 JLPT,ตื้นตันใจอย่างหาที่สุดไม่ได้
 勧誘,かんゆう,"invitation, canvassing, inducement",JLPT_1 Intermediate_Japanese_Ln.5 JLPT Intermediate_Japanese Anime Manga Drama Game Novel YouTube Movie,"การชักชวน, การโน้มน้าวให้เข้าร่วม"
@@ -937,7 +937,7 @@ expression,reading,meaning,tags,meaning_th
 戯曲,ぎきょく,"play, drama",JLPT_1 JLPT,บทละคร
 基金,ききん,"fund, foundation",JLPT_1 JLPT,กองทุน
 喜劇,きげき,"comedy, funny show",JLPT_1 JLPT,"ละครตลก, คอมเมดี้"
-議決,ぎけつ,"resolution, decision, vote",JLPT_1 JLPT,การลงมติ
+議決,ぎけつ,"resolution, decision, vote",JLPT_1 JLPT,"มติที่ประชุม, การมีมติตัดสินในที่ประชุม"
 棄権,きけん,"abstain from voting, renunciation of a right",JLPT_1 JLPT Anime,"การสละสิทธิ์, การงดออกเสียง"
 既婚,きこん,married,JLPT_1 JLPT,สมรสแล้ว
 気障,きざ,"affectation, conceit, snobbery",JLPT_1 JLPT Anime Movie,"ดัดจริต, ขี้เก๊ก, สำรวยเกินเหตุ"
@@ -1014,7 +1014,7 @@ expression,reading,meaning,tags,meaning_th
 教材,きょうざい,teaching materials,JLPT_1 JLPT YouTube,สื่อการเรียนการสอน
 凶作,きょうさく,"bad harvest, poor crop",JLPT_1 JLPT,ผลผลิตทางการเกษตรตกต่ำ
 業者,ぎょうしゃ,"trader, merchant",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ผู้ประกอบการ, พ่อค้า"
-教習,きょうしゅう,"training, instruction",JLPT_1 JLPT,การฝึกอบรม
+教習,きょうしゅう,"training, instruction",JLPT_1 JLPT,การเรียนการสอนฝึกหัด (เช่น เรียนขับรถ)
 郷愁,きょうしゅう,"nostalgia, homesickness",JLPT_1 JLPT,"ความคิดถึงบ้านเกิด, ความถวิลหาอดีต"
 教職,きょうしょく,teaching profession,JLPT_1 JLPT,วิชาชีพครู
 興じる,きょうじる,"to amuse oneself, to make merry",JLPT_1 JLPT Game Novel,"เพลิดเพลิน, สนุกสนานกับ"
@@ -1066,7 +1066,7 @@ expression,reading,meaning,tags,meaning_th
 茎,くき,stalk,JLPT_1 JLPT Manga YouTube,"ลำต้น (ของพืช), ก้าน"
 区切り,くぎり,"an end, a stop, punctuation",JLPT_1 JLPT Novel YouTube,"จุดแบ่งวรรคตอน, จุดสิ้นสุดช่วงหนึ่ง"
 くぐる,くぐる,to pass through; to go around,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ลอดผ่าน, ดำน้ำ; หลบเลี่ยง (กฎหมาย)"
-くじ (～をひく),くじ (～をひく),"lottery, lot",JLPT_1 JLPT,"ฉลาก, สลาก, เซียมซี"
+くじ (～をひく),くじ,"lottery, lot",JLPT_1 JLPT,"ฉลาก, สลาก, เซียมซี"
 くじびき,くじびき,"lottery, drawn lot",JLPT_1 JLPT,การจับสลาก
 くすぐったい,くすぐったい,ticklish,JLPT_1 JLPT Anime Manga Drama Game Novel Movie,จั๊กจี้; ขวยเขิน
 愚痴,ぐち,"idle complaint, grumble",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การบ่นพร่ำเพรื่อ, การตัดพ้อ"
@@ -1148,7 +1148,7 @@ expression,reading,meaning,tags,meaning_th
 道場,どうじょう,"(arch) dojo, hall used for martial arts training, mandala",JLPT_1 JLPT Anime Manga Drama Movie,"โรงฝึกศิลปะการต่อสู้, สำนักฝึกตน"
 統制,とうせい,"regulation, control",JLPT_1 JLPT Game Novel,การควบคุมจัดระเบียบ
 当選,とうせん,"being elected, winning the prize",JLPT_1 JLPT Manga Drama YouTube Movie,"การได้รับเลือกตั้ง, การถูกรางวัล"
-逃走,とうそう,"flight, desertion, escape",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,การหลบหนี
+逃走,とうそう,"flight, desertion, escape",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,การวิ่งหลบหนีไปจากที่เกิดเหตุ
 統率,とうそつ,"command, generalship, leadership",JLPT_1 JLPT Anime Game Novel,"การบังคับบัญชา, การนำทัพ"
 到達,とうたつ,"reaching, attaining, arrival",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การไปถึงจุดหมาย, การบรรลุผล"
 統治,とうち,"rule, reign, governing",JLPT_1 JLPT Anime Game Novel YouTube,การปกครอง
@@ -1213,7 +1213,7 @@ expression,reading,meaning,tags,meaning_th
 悪しからず,あしからず,"don't take me wrong, but..., I'm sorry",JLPT JLPT_1,"ขออย่าได้ถือโทษโกรธเคือง, โปรดเข้าใจตามนี้"
 味わい,あじわい,"flavor, relish",JLPT JLPT_1 Anime Drama Game Novel YouTube,"รสชาติ, เสน่ห์ที่ลึกซึ้ง"
 焦る,あせる,"to be in a hurry, to be impatient",JLPT JLPT_1 Anime Manga Drama Game Novel YouTube Movie,"ร้อนรน, กระวนกระวาย, รีบร้อน"
-あせる (こえが～),あせる (こえが～),"to fade, to discolor",JLPT JLPT_1,ซีดจางลง (สี/ความทรงจำ)
+あせる (いろが～),あせる,"to fade, to discolor",JLPT JLPT_1,ซีดจางลง (สี/ความทรงจำ)
 値,あたい,"value, price, worth",JLPT JLPT_1 Anime Manga Drama Game Novel YouTube Movie,"ค่า, มูลค่า, คุณค่า"
 値する,あたいする,"to be worth, to deserve",JLPT JLPT_1 Anime Manga Drama Game Novel Movie,"คู่ควรแก่, มีค่าพอที่จะ"
 悪化,あっか,"deterioration, worsen",JLPT JLPT_1 Anime Manga Drama Game Novel YouTube Movie,"การเลวร้ายลง, การทรุดหนักลง"
@@ -1280,7 +1280,7 @@ expression,reading,meaning,tags,meaning_th
 意気込む,いきごむ,to be enthusiastic about,JLPT_1 JLPT Novel,"ฮึกเหิม, ตั้งอกตั้งใจอย่างแรงกล้า"
 育成,いくせい,"rearing, training, cultivation",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การเลี้ยงดูฟูมฟัก, การฝึกอบรมพัฒนาบุคลากร"
 幾多,いくた,"many, numerous",JLPT_1 JLPT Anime Game,"มากมาย, นับไม่ถ้วน"
-"(花を〜) 生ける, 活ける",(はなを～) いける,to arrange (flowers),JLPT JLPT_1 MediaMissing,จัด (ดอกไม้)
+"(花を〜) 生ける, 活ける",いける,to arrange (flowers),JLPT JLPT_1 MediaMissing,จัด (ดอกไม้)
 異見,いけん,"different opinion, objection",JLPT_1 JLPT,"ความคิดเห็นที่แตกต่าง, ข้อโต้แย้ง"
 意向,いこう,"intention, idea, inclination",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"ความตั้งใจ, เจตนารมณ์"
 移行,いこう,switching over to,JLPT_1 JLPT Anime Manga Game Novel YouTube,"การเปลี่ยนผ่าน, การย้ายระบบ"
@@ -1412,7 +1412,7 @@ expression,reading,meaning,tags,meaning_th
 据える,すえる,"to set, to lay, to place",JLPT_1 JLPT Drama Game Novel YouTube Movie,"วาง, ตั้ง, จัดวางตำแหน่ง"
 すがすがしい,すがすがしい,"fresh, refreshing",JLPT_1 JLPT Anime Drama,"สดชื่น, ปลอดโปร่งใจ"
 救い,すくい,"help, aid, relief",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ความช่วยเหลือ, การช่วยให้รอดพ้น"
-すくう (みずを～),すくう (みずを～),to scoop,JLPT_1 JLPT,"ตัก, ช้อนขึ้น (เช่น ตักน้ำ)"
+すくう (みずを～),すくう,to scoop,JLPT_1 JLPT,"ตัก, ช้อนขึ้น (เช่น ตักน้ำ)"
 健やか,すこやか,"vigorous, healthy, sound",JLPT_1 JLPT Anime Drama Game Movie,"แข็งแรงสมบูรณ์, มีสุขภาพดี"
 濯ぐ,すすぐ,"to rinse, to wash out",JLPT_1 JLPT Manga,"ล้างน้ำเปล่า, บ้วน (ปาก), ซักล้าง"
 進み,すすみ,progress,JLPT_1 JLPT,"ความคืบหน้า, การก้าวหน้า"
@@ -1567,15 +1567,15 @@ expression,reading,meaning,tags,meaning_th
 素っ気無い,そっけない,"cold, short, curt, blunt",JLPT_1 JLPT Novel,"เย็นชา, ห้วน, ไม่แยแส"
 外方,そっぽ,look (or turn) the other way,JLPT_1 JLPT,"ทางอื่น, การเบือนหน้าหนีไม่สนใจ"
 備え付ける,そなえつける,"to provide, to equip, to install",JLPT_1 JLPT,"ติดตั้งไว้ให้พร้อมใช้งาน, จัดหาอุปกรณ์มาประจำไว้"
-備わる,そなわる,to be furnished with,JLPT_1 JLPT Anime Manga Game Novel,"มีพร้อมอยู่แล้ว, เพียบพร้อมด้วยคุณสมบัตินั้นๆ"
-具わる,そなわる,to be furnished with,JLPT_1 JLPT,"มีพร้อมอยู่แล้ว, เพียบพร้อมด้วยคุณสมบัตินั้นๆ"
+備わる,そなわる,to be furnished with,JLPT_1 JLPT Anime Manga Game Novel,"มีติดตั้งพร้อมอยู่แล้ว, เพียบพร้อมครบครัน"
+具わる,そなわる,to be furnished with,JLPT_1 JLPT,มีคุณสมบัติหรือบารมีติดตัวมาตามธรรมชาติ
 聳える,そびえる,"to rise, to tower, to soar",JLPT_1 JLPT Game Novel,"ตั้งตระหง่าน, สูงเสียดฟ้า"
 素朴,そぼく,"simplicity, artlessness, naivety",JLPT_1 JLPT Manga Drama Game Novel YouTube,"เรียบง่ายตามธรรมชาติ, ซื่อบริสุทธิ์ไม่ปรุงแต่ง"
 背く,そむく,"to run counter to, to go against",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"ฝ่าฝืน, ขัดต่อ, หันหลังให้, ทรยศ"
 染まる,そまる,to be dyed,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ถูกย้อมสี, ติดสี; ซึมซับอิทธิพลไม่ดี"
 染める,そめる,"to dye, to color",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ย้อมสี, ทาสี"
 そらす,そらす,"to bend, to warp",JLPT_1 JLPT Anime Manga Drama Novel Movie,"เบี่ยงเบน, เบน (สายตาหรือประเด็น); ดัดให้โค้งงอ"
-そり (～にのる),そり (～にのる),"sleigh, sled",JLPT_1 JLPT,"เลื่อนหิมะ, แคร่เลื่อน"
+そり (～にのる),そり,"sleigh, sled",JLPT_1 JLPT,"เลื่อนหิมะ, แคร่เลื่อน"
 反る,そる,"to warp, to be warped, to curve",JLPT_1 JLPT Manga Drama YouTube Movie,"โค้งงอ, โก่งตัว, บิดงอ"
 それゆえ,それゆえ,"therefore, for that reason, so",JLPT_1 JLPT Anime Drama Game Novel Movie,"ด้วยเหตุนั้น, ดังนั้น"
 ソロ,ソロ,solo,JLPT_1 JLPT Anime Manga Drama YouTube,"โซโล่, การแสดงเดี่ยว"
@@ -1780,7 +1780,7 @@ expression,reading,meaning,tags,meaning_th
 繕う,つくろう,"to mend, to repair",JLPT_1 JLPT,ซ่อมแซมปะชุน (เสื้อผ้า); รักษาหน้าตาหรือปกปิดความผิดพลาดให้ดูดี
 付け加える,つけくわえる,to add one thing to another,JLPT_1 JLPT Novel YouTube,"เพิ่มเติมเข้าไปอีก, กล่าวเสริม"
 告げる,つげる,to inform,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"แจ้งให้ทราบ, บอกกล่าว, เป็นสัญญาณบ่งบอกการมาถึง"
-つじつま (はなしの～),つじつま (はなしの～),"coherence, consistency",JLPT_1 JLPT,ความสอดคล้องสมเหตุสมผลกันของเรื่องราว
+つじつま (はなしの～),つじつま,"coherence, consistency",JLPT_1 JLPT,ความสอดคล้องสมเหตุสมผลกันของเรื่องราว
 筒,つつ,"pipe, tube",JLPT_1 JLPT Manga Novel YouTube,"กระบอก, ท่อทรงกระบอก"
 突く,つつく,"to thrust, to strike, to attack; to poke, to nudge, to pick at",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"จิ้ม, เขี่ย, แหย่, จิกตี"
 突っ突く,つっつく,to prompt someone,JLPT_1 JLPT,จิ้มเขี่ยเบาๆ; ยุแหย่หรือสะกิดเตือนให้ทำ
@@ -1796,7 +1796,7 @@ expression,reading,meaning,tags,meaning_th
 唾,つば,"saliva, spit, sputum",JLPT_1 JLPT Manga Drama Novel Movie,น้ำลาย
 呟く,つぶやく,"to mutter, to murmur",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"พึมพำเบาๆ กับตัวเอง, บ่นงึมงำ"
 つぶら,つぶら,"round, rotund",JLPT_1 JLPT,กลมโตน่ารัก (มักใช้กับดวงตา)
-つぶる (めを～),つぶる (めを～),to close the eyes,JLPT_1 JLPT,หลับตาลง
+つぶる (めを～),つぶる,to close the eyes,JLPT_1 JLPT,หลับตาลง
 壷,つぼ,"jar, pot, vase",JLPT_1 JLPT Anime Manga Drama Game Movie,"ไห, โถกระเบื้อง, แจกันทรงป่อง; จุดสำคัญ (เช่น จุดกดนวดหรือหัวใจของเรื่อง)"
 蕾,つぼみ,"bud, flower bud",JLPT_1 JLPT,"ดอกตูม, ตาดอกไม้ที่ยังไม่บาน"
 連なる,つらなる,"to extend, to stretch out, to stand in a row",JLPT_1 JLPT Game Novel YouTube,เรียงรายต่อเนื่องกันเป็นแนวยาว; เข้าร่วมเป็นส่วนหนึ่งในงาน
@@ -2072,13 +2072,13 @@ expression,reading,meaning,tags,meaning_th
 老ける,ふける,to age,JLPT_1 JLPT Anime Drama Movie,"แก่ลง, ดูแก่กว่าวัย"
 富豪,ふごう,"wealthy person, millionaire",JLPT_1 JLPT,"มหาเศรษฐี, ผู้มั่งคั่ง"
 布告,ふこく,"edict, ordinance, proclamation",JLPT_1 JLPT,"การประกาศใช้กฎหมาย, คำแถลงการณ์"
-ブザー,ブザー,buzzer,JLPT_1 JLPT YouTube,"กริ่งสัญญาณ, ออด"
+ブザー,ブザー,buzzer,JLPT_1 JLPT YouTube,ออดสัญญาณเตือน (เสียงบี๊บ/บัซเซอร์)
 負債,ふさい,"debt, liabilities",JLPT_1 JLPT Drama,หนี้สิน
 不在,ふざい,absence,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,การไม่อยู่
 ふさわしい,ふさわしい,appropriate,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"เหมาะสม, คู่ควร"
 不順,ふじゅん,"irregularity, unseasonableness",JLPT_1 JLPT,"ความแปรปรวน, ความไม่ปกติ"
 負傷,ふしょう,"injury, wound",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"การได้รับบาดเจ็บ, บาดแผล"
-侮辱,ぶじょく,"insult, contempt, slight",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"การดูถูก, การเหยียดหยาม"
+侮辱,ぶじょく,"insult, contempt, slight",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,การดูหมิ่นเหยียดหยาม (การกระทำหรือคำพูดให้อับอาย)
 不審,ふしん,"suspicious, doubt, infidelity",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"น่าสงสัย, ความเคลือบแคลง"
 不振,ふしん,"dullness, slump, stagnation",JLPT_1 JLPT,"ความซบเซา, ความตกต่ำ"
 武装,ぶそう,"arms, armament, armed",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"การติดอาวุธ, ยุทโธปกรณ์"
@@ -2163,7 +2163,7 @@ expression,reading,meaning,tags,meaning_th
 変遷,へんせん,"change, transition, vicissitudes",JLPT_1 JLPT,การเปลี่ยนแปลงตามกาลเวลา
 返答,へんとう,reply,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"คำตอบ, การตอบกลับ"
 変動,へんどう,"change, fluctuation",JLPT_1 JLPT Anime Game Novel YouTube,"ความผันผวน, การเปลี่ยนแปลงขึ้นลง"
-弁論,べんろん,"discussion, debate, argument",JLPT_1 JLPT,"การอภิปราย, การโต้วาที"
+弁論,べんろん,"discussion, debate, argument",JLPT_1 JLPT,"การแสดงวาทศิลป์กล่าวสุนทรพจน์, การแถลงการณ์ในศาล"
 穂,ほ,"ear (of plant), head (of plant)",JLPT_1 JLPT,"รวง (ข้าว), ปลายยอด"
 保育,ほいく,"nursing, nurturing, rearing",JLPT_1 JLPT,"การเลี้ยงดูเด็ก, การบริบาลทารก"
 ボイコット,ボイコット,boycott,JLPT_1 JLPT,"การคว่ำบาตร, การบอยคอต"
@@ -2274,13 +2274,13 @@ expression,reading,meaning,tags,meaning_th
 誠に,まことに,"indeed, really (very polite), absolutely",JLPT_1 JLPT Genki_Ln.20 Genki Anime Manga Drama Game Novel YouTube Movie,"อย่างแท้จริง, อย่างยิ่ง"
 まさしく,まさしく,"surely, no doubt, evidently",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"อย่างแน่นอน, ไม่ผิดแน่"
 勝る,まさる,"to excel, to surpass, to out-rival",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"เหนือกว่า, ดีกว่า, ล้ำเลิศกว่า"
-～増し,～増し,~increase,JLPT_1 JLPT,เพิ่มขึ้น~
+～増し,～まし,~increase,JLPT_1 JLPT,เพิ่มขึ้น~
 交える,まじえる,"to mix, to converse with, to cross (swords)",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ผสมปนกัน, แลกเปลี่ยน (คำพูด/อาวุธ)"
 真下,ました,"right under, directly below",JLPT_1 JLPT Anime Game Novel YouTube,"ข้างล่างตรงๆ, ใต้ลงมาพอดี"
 まして,まして,"still more, still less (with neg. verb), to say nothing of",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ยิ่งไปกว่านั้น, นับประสาอะไรกับ~"
 交わる,まじわる,"to cross, to intersect, to mingle with,",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ตัดกัน, คบค้าสมาคมกัน, ปะปนกัน"
 麻酔,ますい,anesthesia,JLPT_1 JLPT Anime Manga Drama Movie,"การวางยาสลบ, ยาชา"
-またがる (うまを～),またがる (うまを～),to straddle,JLPT_1 JLPT,"ขึ้นคร่อม, ทอดข้าม, ครอบคลุมต่อเนื่อง"
+またがる (うまを～),またがる,to straddle,JLPT_1 JLPT,"ขึ้นคร่อม, ทอดข้าม, ครอบคลุมต่อเนื่อง"
 待ち合わせ,まちあわせ,appointment,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,การนัดพบกัน
 待ち遠しい,まちどおしい,looking forward to,JLPT_1 JLPT Anime Drama Game YouTube,เฝ้ารอคอยอย่างใจจดใจจ่อ
 待ち望む,まちのぞむ,"to look anxiously for, to wait eagerly for",JLPT_1 JLPT Anime Drama Game Novel,ตั้งตารอคอยด้วยความหวัง
@@ -2473,7 +2473,7 @@ expression,reading,meaning,tags,meaning_th
 憂鬱,ゆううつ,"depression, melancholy",JLPT_1 JLPT Manga Game Novel YouTube Movie,"ความหดหู่ซึมเศร้า, ความกลัดกลุ้มใจ"
 有益,ゆうえき,"beneficial, profitable",JLPT_1 JLPT Anime Game Novel YouTube,"เป็นประโยชน์, มีคุณค่าได้ผลดี"
 優越,ゆうえつ,"supremacy, predominance, being superior to",JLPT_1 JLPT,"ความเหนือกว่า, ความเป็นเลิศกว่า"
-勇敢,ゆうかん,"bravery, heroism, gallantry",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,ความกล้าหาญ
+勇敢,ゆうかん,"bravery, heroism, gallantry",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"กล้าหาญ, ห้าวหาญ (คำคุณศัพท์ な)"
 夕暮れ,ゆうぐれ,"evening, (evening) twilight",JLPT_1 JLPT Game Novel YouTube,"ยามพลบค่ำ, ยามสนธยา"
 融資,ゆうし,"financing, loan",JLPT_1 JLPT Drama Movie,"การให้กู้ยืมเงินทุน, สินเชื่อ"
 有する,ゆうする,"to own, to be endowed with",JLPT_1 JLPT Anime Manga Game Novel,"มีอยู่, ครอบครอง"
@@ -2528,12 +2528,12 @@ expression,reading,meaning,tags,meaning_th
 予言,よげん,"prediction, promise, prognostication",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"คำพยากรณ์, การทำนายอนาคต"
 横綱,よこづな,sumo grand champion,JLPT_1 JLPT,"โยโกซึนะ (ตำแหน่งสูงสุดของซูโม่), ยอดฝีมืออันดับหนึ่ง"
 汚れ,よごれ,"dirt, filth",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"รอยเปื้อน, ความสกปรก"
-よし (かん),よし (かん),all right!,JLPT_1 JLPT,"เอาละ!, ตกลง!, ดีละ!"
+よし,よし,all right!,JLPT_1 JLPT,"เอาละ!, ตกลง!, ดีละ!"
 良し,よし,all right!,JLPT_1 JLPT Manga Game Novel YouTube,"ดี, ตกลง"
 善し悪し,よしあし,"good or bad, merits or demerits, quality",JLPT_1 JLPT,"ข้อดีข้อเสีย, ดีหรือชั่ว"
 余所見,よそみ,"looking away, looking aside",JLPT_1 JLPT,"การมองเหม่อไปทางอื่น, การละสายตาจากข้างหน้า"
 余地,よち,"place, room, margin",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ช่องว่างที่เหลืออยู่, โอกาสหรือทางเลือกที่พอมี"
-よって (よりどころ),よって (よりどころ),"therefore, consequently",JLPT_1 JLPT,"ดังนั้น, ด้วยเหตุนี้"
+よって,よって,"therefore, consequently",JLPT_1 JLPT,"ดังนั้น, ด้วยเหตุนี้"
 与党,よとう,"government party, (ruling) party in power, government",JLPT_1 JLPT YouTube,พรรครัฐบาล
 呼び止める,よびとめる,to flag down,JLPT_1 Intermediate_Japanese_Ln.6 JLPT Intermediate_Japanese Game Novel,ร้องเรียกให้หยุด
 夜更し,よふかし,"staying up late, keeping late hours",JLPT_1 JLPT,"การนอนดึก, การอดนอนอยู่ดึก"
@@ -2553,10 +2553,10 @@ expression,reading,meaning,tags,meaning_th
 濫用,らんよう,"abuse, misuse, using to excess",JLPT_1 JLPT,"การใช้ในทางที่ผิด, การใช้มากเกินขอบเขต"
 リード,リード,lead; reed,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การนำ, ผู้นำ, ลิ้นปี่ของเครื่องดนตรีเป่า"
 理屈,りくつ,"theory, reason",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"เหตุผล, ทฤษฎี, ข้ออ้างข้างๆ คูๆ"
-利子,りし,interest (bank),JLPT_1 JLPT Drama Movie,ดอกเบี้ย
+利子,りし,interest (bank),JLPT_1 JLPT Drama Movie,ดอกเบี้ย (เน้นมุมผู้ฝากหรือผู้กู้ยืมทั่วไป)
 利潤,りじゅん,"profit, returns",JLPT_1 JLPT,ผลกำไร
 理性,りせい,"reason, sense",JLPT_1 JLPT Anime Manga Drama Game Novel Movie,"เหตุผลยับยั้งชั่งใจ, สติปัญญาไตร่ตรอง"
-利息,りそく,interest (bank),JLPT_1 JLPT Drama Movie,ดอกเบี้ย
+利息,りそく,interest (bank),JLPT_1 JLPT Drama Movie,ดอกเบี้ย (คำทางการธนาคาร เน้นผลตอบแทนที่งอกเงย)
 立体,りったい,solid body,JLPT_1 JLPT YouTube,"รูปทรงสามมิติ, วัตถุทึบสามมิติ"
 立方,りっぽう,cube,JLPT_1 JLPT,"ลูกบาศก์, กำลังสาม"
 立法,りっぽう,"legislation, lawmaking",JLPT_1 JLPT,"การตรากฎหมาย, นิติบัญญัติ"
@@ -2643,7 +2643,7 @@ expression,reading,meaning,tags,meaning_th
 美,び,beauty,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ความงาม, ความสวยงาม"
 ひいては,ひいては,"not only…but also, in addition to, consequently",JLPT_1 JLPT Anime Game Novel Movie,"ส่งผลต่อเนื่องไปถึงขั้น~, ไม่เพียงแต่เท่านั้นยัง~"
 ビールス,ビールス,virus,JLPT_1 JLPT,ไวรัส
-控室,ひかえしつ,waiting room,JLPT_1 JLPT,ห้องพักรอ
+控室,ひかえしつ,waiting room,JLPT_1 JLPT,ห้องพักรับรอง/ห้องเก็บตัว (สำหรับแขกหรือนักแสดงก่อนขึ้นเวที)
 控える,ひかえる,to hold back; to make notes,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"งดเว้นชะลอไว้, จดบันทึกไว้, รออยู่ใกล้ๆ"
 悲観,ひかん,"pessimism, disappointment",JLPT_1 JLPT,"การมองโลกในแง่ร้าย, ความท้อแท้สิ้นหวัง"
 引き上げる,ひきあげる,"to withdraw, to leave, to pull out",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ดึงขึ้น, ถอนตัวกลับ, ปรับเพิ่มให้สูงขึ้น"
@@ -2658,7 +2658,7 @@ expression,reading,meaning,tags,meaning_th
 悲惨,ひさん,"tragedy, disaster; misery, wretched, pitiful",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"น่าสลดใจ, เลวร้ายน่าเวทนาอย่างยิ่ง"
 ビジネス,ビジネス,business,JLPT JLPT_1 Genki_Ln.2 Genki_Ln.1 Genki Anime Manga Drama Game Novel YouTube Movie,"ธุรกิจ, เรื่องงาน"
 比重,ひじゅう,specific gravity,JLPT_1 JLPT,"ความถ่วงจำเพาะ, ความสำคัญเปรียบเทียบ"
-美術,びじゅつ,"art, fine arts",JLPT_1 JLPT Anime Manga Drama YouTube Movie,"ศิลปะ, วิจิตรศิลป์"
+美術,びじゅつ,"art, fine arts",JLPT_1 JLPT Anime Manga Drama YouTube Movie,"ทัศนศิลป์, วิจิตรศิลป์ (จิตรกรรม ประติมากรรม)"
 秘書,ひしょ,(private) secretary,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,เลขานุการ
 微笑,びしょう,smile,JLPT_1 JLPT Novel,"รอยยิ้มน้อยๆ, การยิ้มแย้ม"
 歪む,ひずむ,"to warp, to be distorted",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"บิดเบี้ยว, ผิดรูปทรง"
@@ -2687,7 +2687,7 @@ expression,reading,meaning,tags,meaning_th
 避難,ひなん,"taking refuge, finding shelter",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"การอพยพหนีภัย, การหลบภัย"
 日の丸,ひのまる,the Japanese flag,JLPT_1 JLPT,ธงชาติญี่ปุ่น (ดวงอาทิตย์สีแดงกลม)
 火花,ひばな,spark,JLPT_1 JLPT Game Novel,"ประกายไฟ, ลูกไฟที่กระเด็นออก"
-ひび (かべの～),ひび (かべの～),"crack, fissure, flaw",JLPT_1 JLPT,"รอยร้าว, รอยแตกปริ"
+ひび (かべの～),ひび,"crack, fissure, flaw",JLPT_1 JLPT,"รอยร้าว, รอยแตกปริ"
 悲鳴,ひめい,"shriek, scream",JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,เสียงกรีดร้องด้วยความตกใจหรือเจ็บปวด
 冷やかす,ひやかす,"to banter, to make fun of, to jeer at, to cool, to refrigerate",JLPT_1 JLPT Movie,"พูดจาหยอกล้อแซว, ดูแต่ตาไม่ซื้อของ, แช่ให้เย็น"
 日焼け,ひやけ,sunburn,JLPT_1 JLPT Anime Manga Drama Game Novel YouTube Movie,"ผิวคล้ำแดด, ผิวไหม้แดด, สีซีดเพราะโดนแดด"
@@ -2716,3 +2716,8 @@ expression,reading,meaning,tags,meaning_th
 死闘,しとう,"life-or-death struggle, mortal combat",Anime Manga Game Novel Movie,"การต่อสู้เอาเป็นเอาตาย, ศึกชี้ชะตา"
 立ち向かう,たちむかう,"to confront, to face up to",Anime Manga Drama Novel Game YouTube Movie,ยืนหยัดเผชิญหน้า (กับศัตรูหรืออุปสรรค)
 見捨てる,みすてる,"to abandon, to forsake",Anime Manga Drama Novel Game YouTube Movie,"ทอดทิ้ง, ละทิ้งไป"
+仕業,しわざ,"deed, act, one's doing (usually negative)",JLPT_N1 Jiten Anime Manga Drama Game Novel Movie,"การกระทำ, ฝีมือของ~ (มักใช้กับเรื่องร้ายหรือความผิด)"
+陰謀,いんぼう,"plot, conspiracy, intrigue",JLPT_N1 Jiten Anime Manga Drama Game Novel Movie,"แผนการร้าย, การสมคบคิดหักหลัง"
+無謀,むぼう,"reckless, rash, thoughtless",JLPT_N1 Jiten Anime Manga Drama Game Novel,"บ้าระห่ำ, มุทะลุโดยไม่คิดหน้าคิดหลัง"
+撤退,てったい,"withdrawal, retreat, evacuation",JLPT_N1 Jiten Anime Manga Drama Game Novel Movie,"การถอยทัพ, การถอนกำลังกลับ"
+復讐,ふくしゅう,"revenge, vengeance, retaliation",JLPT_N1 Jiten Anime Manga Drama Game Novel Movie,"การแก้แค้น, การล้างแค้น"

@@ -1,10 +1,10 @@
 expression,reading,meaning,tags,meaning_th
 ああ,ああ,"Ah!, Oh!",JLPT JLPT_4 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"อา!, โอ้!"
 会う,あう,"to meet, to see",JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"พบ, เจอ"
-青,あお,blue,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"สีน้ำเงิน, สีฟ้า"
-青い,あおい,blue,Genki Genki_Ln.9 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"สีน้ำเงิน, สีฟ้า"
-赤,あか,red,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,สีแดง
-赤い,あかい,red,Genki Genki_Ln.9 Intermediate_Japanese Intermediate_Japanese_Ln.12 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,สีแดง
+青,あお,blue,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"สีน้ำเงิน, สีฟ้า (คำนาม)"
+青い,あおい,blue,Genki Genki_Ln.9 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ที่เป็นสีน้ำเงิน, ที่เป็นสีฟ้า; ยังไม่สุก, ยังอ่อนประสบการณ์"
+赤,あか,red,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,สีแดง (คำนาม)
+赤い,あかい,red,Genki Genki_Ln.9 Intermediate_Japanese Intermediate_Japanese_Ln.12 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,ที่เป็นสีแดง
 明るい,あかるい,bright (in reference to personality or weather); cheerful,Genki Genki_Ln.18 Intermediate_Japanese Intermediate_Japanese_Ln.11 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"สว่าง, สดใส, ร่าเริง"
 秋,あき,fall (season),Genki Genki_Ln.10 Intermediate_Japanese Intermediate_Japanese_Ln.4 JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,ฤดูใบไม้ร่วง
 開く,あく,"to open, to become open",JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,เปิด (ออกเอง)
@@ -162,7 +162,7 @@ expression,reading,meaning,tags,meaning_th
 貸す,かす,to lend,Intermediate_Japanese Intermediate_Japanese_Ln.3 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,ให้ยืม
 風,かぜ,"wind, breeze",Genki Genki_Ln.22 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,ลม
 風邪,かぜ,"cold, flu",Genki Genki_Ln.12 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"หวัด, เป็นหวัด"
-方,かた,-- honorific form for 人 (ひと) --; way of doing,Intermediate_Japanese Intermediate_Japanese_Ln.4 JLPT JLPT_3 JLPT_4 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ท่าน (คน), วิธี..."
+方,かた,"person (honorific); way of doing, manner",Intermediate_Japanese Intermediate_Japanese_Ln.4 JLPT JLPT_3 JLPT_4 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ท่าน (คน), วิธี..."
 家族,かぞく,"family, members of a family",Genki Genki_Ln.7 Intermediate_Japanese Intermediate_Japanese_Ln.1 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,ครอบครัว
 片仮名,かたかな,katakana,JLPT JLPT_5 JLPT_N5 YouTube,อักษรคาตากานะ
 ～月,～がつ,month of year,JLPT JLPT_5 JLPT_N5,เดือน...
@@ -188,8 +188,8 @@ expression,reading,meaning,tags,meaning_th
 可愛い,かわいい,"cute, adorable",JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,น่ารัก
 漢字,かんじ,kanji; Chinese character,Genki Genki_Ln.6 Intermediate_Japanese Intermediate_Japanese_Ln.4 JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Novel YouTube Movie,อักษรคันจิ
 木,き,"tree, wood, timber",Genki Genki_Ln.22 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ต้นไม้, ไม้"
-黄色,きいろ,yellow,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,สีเหลือง
-黄色い,きいろい,yellow,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,สีเหลือง
+黄色,きいろ,yellow,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,สีเหลือง (คำนาม)
+黄色い,きいろい,yellow,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,ที่เป็นสีเหลือง
 消える,きえる,"to vanish, to disappear",Genki Genki_Ln.18 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ดับ, หายไป, ลบเลือน"
 聞く,きく,"to hear, to listen, to ask",JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ฟัง, ได้ยิน, ถาม"
 北,きた,north,Intermediate_Japanese Intermediate_Japanese_Ln.10 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,ทิศเหนือ
@@ -230,13 +230,13 @@ expression,reading,meaning,tags,meaning_th
 グラム,グラム,gram,JLPT JLPT_5 JLPT_N5 Anime Manga Drama YouTube Movie,กรัม
 来る,くる,to come,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,มา
 車,くるま,"car, vehicle",Genki Genki_Ln.7 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"รถยนต์, รถ"
-黒,くろ,black,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,สีดำ
-黒い,くろい,black; dark,Genki Genki_Ln.9 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,สีดำ
+黒,くろ,black,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,สีดำ (คำนาม)
+黒い,くろい,black; dark,Genki Genki_Ln.9 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ที่เป็นสีดำ, มืดทะมึน"
 警官,けいかん,police officer,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel Movie,เจ้าหน้าที่ตำรวจ
 今朝,けさ,this morning,Genki Genki_Ln.8 Intermediate_Japanese Intermediate_Japanese_Ln.2 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,เมื่อเช้านี้
 消す,けす,"to erase, to delete, to turn off power",JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ลบ, ปิด (ไฟ/เครื่องใช้ไฟฟ้า), ดับ"
 結構,けっこう,"splendid; enough, tolerably",JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ดีเยี่ยม; พอแล้ว, ไม่เป็นไร"
-結婚,けっこん (する),marriage (get married),JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"การแต่งงาน, แต่งงาน"
+結婚,けっこん,marriage (get married),JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"การแต่งงาน, แต่งงาน"
 月曜日,げつようび,Monday,Genki Genki_Ln.4 JLPT JLPT_3 JLPT_5 JLPT_N5 Manga Drama Novel YouTube Movie,วันจันทร์
 玄関,げんかん,entrance (to a house or a building),Intermediate_Japanese Intermediate_Japanese_Ln.5 JLPT JLPT_4 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ทางเข้าบ้าน, โถงทางเข้า"
 元気,げんき,"health(y), energetic",JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"สบายดี, แข็งแรง, ร่าเริง"
@@ -287,7 +287,7 @@ expression,reading,meaning,tags,meaning_th
 さ来年,さらいねん,year after next,JLPT JLPT_5 JLPT_N5,"สองปีข้างหน้า, ปีมะรืน"
 ～さん,～さん,"Mr. ~, Ms. ~",JLPT JLPT_2 JLPT_5 JLPT_N5,คุณ... (คำต่อท้ายชื่อ)
 三,さん,three,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,สาม
-散歩,さんぽ (する),"walk, stroll",JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,เดินเล่น
+散歩,さんぽ,"walk, stroll",JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,เดินเล่น
 四,し,four,JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,สี่
 ～時,～じ,~ o'clock (time),JLPT JLPT_1 JLPT_5 JLPT_N5,"...นาฬิกา, ...โมง"
 塩,しお,salt,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,เกลือ
@@ -322,8 +322,8 @@ expression,reading,meaning,tags,meaning_th
 醤油,しょうゆ,soy sauce,Genki Genki_Ln.18 JLPT JLPT_5 JLPT_N5 Anime Manga Drama YouTube Movie,"โชยุ, ซีอิ๊วญี่ปุ่น"
 食堂,しょくどう,"cafeteria, dining hall",Genki Genki_Ln.7 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"โรงอาหาร, ร้านอาหาร"
 知る,しる,"to know, to understand",Genki Genki_Ln.7 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"รู้, ทราบ, รู้จัก"
-白,しろ,white,JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,สีขาว
-白い,しろい,white,Genki Genki_Ln.9 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,สีขาว
+白,しろ,white,JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,สีขาว (คำนาม); ผู้บริสุทธิ์
+白い,しろい,white,Genki Genki_Ln.9 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,ที่เป็นสีขาว
 ～人,～じん,counter for people,JLPT JLPT_5 JLPT_N5,ชาว... (สัญชาติ/เชื้อชาติ)
 新聞,しんぶん,newspaper,Genki Genki_Ln.2 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,หนังสือพิมพ์
 水曜日,すいようび,Wednesday,Genki Genki_Ln.4 JLPT JLPT_5 JLPT_N5 Manga Drama YouTube Movie,วันพุธ
@@ -357,7 +357,7 @@ expression,reading,meaning,tags,meaning_th
 洗濯,せんたく,"washing, laundry",Intermediate_Japanese Intermediate_Japanese_Ln.11 JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,การซักผ้า
 全部,ぜんぶ,"all, entire, whole",Genki Genki_Ln.13 Intermediate_Japanese Intermediate_Japanese_Ln.3 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,ทั้งหมด
 そう; そうです,そう; そうです,"yes; appears, to be the case",JLPT JLPT_5 JLPT_N5,"ใช่, อย่างนั้น, เป็นเช่นนั้น"
-掃除,そうじ (する),"cleaning, sweeping",JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"การทำความสะอาด, ทำความสะอาด"
+掃除,そうじ,"cleaning, sweeping",JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"การทำความสะอาด, ทำความสะอาด"
 そうして; そして,そうして; そして,"and, like that",JLPT JLPT_5 JLPT_N5,"แล้วก็, และ"
 そこ,そこ,"that place, there; bottom, sole",Genki Genki_Ln.4 JLPT JLPT_2 JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ที่นั่น, ตรงนั้น"
 そちら,そちら,over there,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ทางนั้น, ท่านนั้น (สุภาพ)"
@@ -405,7 +405,7 @@ expression,reading,meaning,tags,meaning_th
 地下鉄,ちかてつ,"underground train, subway",Genki Genki_Ln.10 JLPT JLPT_5 JLPT_N5 Anime Manga Drama YouTube Movie,รถไฟใต้ดิน
 地図,ちず,a map,Genki Genki_Ln.15 Intermediate_Japanese Intermediate_Japanese_Ln.12 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,แผนที่
 父,ちち,(my) father,Genki Genki_Ln.7 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,พ่อ (ของฉัน)
-茶色,ちゃいろ,brown,JLPT JLPT_5 JLPT_N5 Drama Game Novel YouTube,สีน้ำตาล
+茶色,ちゃいろ,brown,JLPT JLPT_5 JLPT_N5 Drama Game Novel YouTube,สีน้ำตาล (คำนาม)
 茶碗,ちゃわん,rice bowl,JLPT JLPT_5 JLPT_N5 Novel YouTube Movie,"ถ้วยข้าว, ชามข้าว"
 ～中,～ちゅう,"during, while ~ing",JLPT JLPT_5 JLPT_N5,"กำลัง..., อยู่ระหว่าง..."
 丁度,ちょうど,"just, right, exactly",JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"พอดี, เป๊ะ"
@@ -449,7 +449,7 @@ expression,reading,meaning,tags,meaning_th
 どうぞ,どうぞ,"please, kindly, by all means",JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"เชิญ, กรุณา"
 動物,どうぶつ,animal,Intermediate_Japanese Intermediate_Japanese_Ln.10 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,สัตว์
 どうも,どうも,Thank you; somehow; no matter how hard one may try,Genki Genki_Ln.2 Intermediate_Japanese Intermediate_Japanese_Ln.1 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ขอบคุณมาก; รู้สึกว่า..., ไม่ว่าจะ...อย่างไรก็..."
-十,(〜を) とお,ten (~),Genki Genki_Ln.9 JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,10 อัน
+十,とお,ten (~),Genki Genki_Ln.9 JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,10 อัน
 遠い,とおい,"far (away), distant",Genki Genki_Ln.21 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,ไกล
 十日,とおか,ten days; tenth day of the month,Genki Genki_Ln.13 JLPT JLPT_5 JLPT_N5 Manga Novel,"วันที่ 10, 10 วัน"
 ～時,～とき,at the time of ~,JLPT JLPT_3 JLPT_5 JLPT_N5,"ตอนที่..., เมื่อ..."
@@ -597,7 +597,7 @@ expression,reading,meaning,tags,meaning_th
 部屋,へや,a room,Genki Genki_Ln.5 Intermediate_Japanese Intermediate_Japanese_Ln.2 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,ห้อง
 辺,へん,"area, vicinity",JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"แถวๆ, บริเวณ"
 ペン,ペン,pen,Genki Genki_Ln.2 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,ปากกา
-勉強,べんきょう (する),study,JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"การเรียน, เรียนหนังสือ"
+勉強,べんきょう,study,JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"การเรียน, เรียนหนังสือ"
 便利,べんり,"convenient, handy",JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"สะดวก, สะดวกสบาย"
 帽子,ぼうし,hat; cap,Genki Genki_Ln.2 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,หมวก
 ボールペン,ボールペン,ball-point pen,JLPT JLPT_5 JLPT_N5 Drama Novel YouTube,ปากกาลูกลื่น
@@ -698,14 +698,14 @@ expression,reading,meaning,tags,meaning_th
 ラジオカセ,ラジオカセ,radio cassette player,JLPT JLPT_5 JLPT_N5,เครื่องเล่นวิทยุเทปคาสเซ็ท
 りっぱ,りっぱ,"splendid, fine",JLPT JLPT_3 JLPT_5 JLPT_N5 Manga Game,"ยอดเยี่ยม, สง่างาม, น่ายกย่อง"
 留学生,りゅうがくせい,international student,Genki Genki_Ln.1 JLPT JLPT_5 JLPT_N5 YouTube,"นักเรียนแลกเปลี่ยน, นักศึกษาต่างชาติ"
-両親,りょうしん,"parents (lit., both parents)",Genki Genki_Ln.14 Intermediate_Japanese Intermediate_Japanese_Ln.1 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"พ่อแม่, ผู้ปกครอง"
+両親,りょうしん,"parents (lit., both parents)",Genki Genki_Ln.14 Intermediate_Japanese Intermediate_Japanese_Ln.1 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,พ่อและแม่ (ทั้งสองคน)
 料理,りょうり,cooking; cuisine,Intermediate_Japanese Intermediate_Japanese_Ln.4 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"อาหาร, การทำอาหาร"
 旅行,りょこう,"travel, trip",Genki Genki_Ln.5 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"การท่องเที่ยว, การเดินทางท่องเที่ยว"
 零,れい,"zero, nought",JLPT JLPT_3 JLPT_5 JLPT_N5 Anime Manga Game Novel,ศูนย์ (0)
 冷蔵庫,れいぞうこ,refrigerator,Genki Genki_Ln.18 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,ตู้เย็น
 レコード,レコード,record,JLPT JLPT_5 JLPT_N5 Drama Game YouTube Movie,แผ่นเสียง; สถิติ
 レストラン,レストラン,restaurant,Genki Genki_Ln.4 JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ภัตตาคาร, ร้านอาหาร"
-練習,れんしゅう (する),(to) practice,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"การฝึกฝน, การฝึกซ้อม, ฝึกซ้อม"
+練習,れんしゅう,(to) practice,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"การฝึกฝน, การฝึกซ้อม, ฝึกซ้อม"
 廊下,ろうか,corridor,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,"ทางเดิน, ระเบียงทางเดิน"
 六,ろく,six,JLPT JLPT_5 JLPT_N5 Anime Manga Drama Game Novel YouTube Movie,หก
 ワイシャツ,ワイシャツ,"shirt (lit: white shirt), business shirt",JLPT JLPT_5 JLPT_N5,เสื้อเชิ้ต (ทำงาน)
