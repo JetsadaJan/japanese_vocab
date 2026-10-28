@@ -274,19 +274,72 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
     totalMatching === 0 ? 0 : (safePage - 1) * ITEMS_PER_PAGE + 1;
   const endItemNumber = Math.min(safePage * ITEMS_PER_PAGE, totalMatching);
 
-  const pageNumbers = useMemo(() => {
-    const pages: number[] = [];
-    const maxButtons = 5;
-    let start = Math.max(1, safePage - Math.floor(maxButtons / 2));
-    let end = Math.min(totalPages, start + maxButtons - 1);
-    if (end - start + 1 < maxButtons) {
-      start = Math.max(1, end - maxButtons + 1);
+  const [pageInputStr, setPageInputStr] = useState<string>(String(safePage));
+
+  useEffect(() => {
+    setPageInputStr(String(safePage));
+  }, [safePage]);
+
+  const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Only allow digits
+    const rawDigits = e.target.value.replace(/\D/g, '');
+    if (rawDigits === '') {
+      setPageInputStr('');
+      return;
     }
-    for (let p = start; p <= end; p++) {
-      pages.push(p);
+    const num = parseInt(rawDigits, 10);
+    // Disallow numbers greater than totalPages
+    if (num > totalPages) {
+      setPageInputStr(String(totalPages));
+    } else {
+      setPageInputStr(String(num));
     }
-    return pages;
-  }, [safePage, totalPages]);
+  };
+
+  const handlePageInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleJumpToPage();
+      return;
+    }
+    const allowedKeys = [
+      'Backspace',
+      'Delete',
+      'ArrowLeft',
+      'ArrowRight',
+      'Tab',
+      'Home',
+      'End',
+    ];
+    if (allowedKeys.includes(e.key) || e.ctrlKey || e.metaKey) {
+      return;
+    }
+    // Block any non-digit character
+    if (!/^[0-9]$/.test(e.key)) {
+      e.preventDefault();
+    }
+  };
+
+  const handleJumpToPage = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    let target = parseInt(pageInputStr, 10);
+    if (isNaN(target) || target < 1) {
+      target = 1;
+    } else if (target > totalPages) {
+      target = totalPages;
+    }
+    setCurrentPage(target);
+    setPageInputStr(String(target));
+    if (listContainerRef.current) {
+      listContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handlePageInputBlur = () => {
+    if (pageInputStr === '' || parseInt(pageInputStr, 10) < 1) {
+      setPageInputStr(String(safePage));
+    }
+  };
 
   const shuffleButtonLabel = useMemo(() => {
     const lvlLabel = activeLevel === 'ALL' ? '' : ` ${activeLevel}`;
@@ -1927,35 +1980,34 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                   <span>ก่อนหน้า</span>
                 </button>
 
-                <div className="hidden sm:flex items-center gap-1">
-                  {pageNumbers.map((pageNum) => (
-                    <button
-                      key={pageNum}
-                      type="button"
-                      onClick={() => setCurrentPage(pageNum)}
-                      className={`min-w-[30px] px-2 py-1.5 rounded-lg font-bold transition-colors cursor-pointer ${
-                        pageNum === safePage
-                          ? 'bg-rose-500 text-white'
-                          : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300'
-                      }`}
-                    >
-                      {pageNum}
-                    </button>
-                  ))}
-                </div>
-
-                <select
-                  value={safePage}
-                  onChange={(e) => setCurrentPage(Number(e.target.value))}
-                  aria-label="เลือกหน้า"
-                  className="px-2 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-slate-200 font-semibold focus:outline-none focus:border-rose-500 cursor-pointer"
+                {/* Direct Page Input [1] / 81 + Go Button */}
+                <form
+                  onSubmit={handleJumpToPage}
+                  className="inline-flex items-center gap-1.5 bg-slate-950 border border-slate-700/80 rounded-xl px-2.5 py-1 shadow-inner"
                 >
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                    <option key={p} value={p}>
-                      หน้า {p} / {totalPages}
-                    </option>
-                  ))}
-                </select>
+                  <span className="text-xs text-slate-400 font-medium">หน้า</span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    value={pageInputStr}
+                    onChange={handlePageInputChange}
+                    onKeyDown={handlePageInputKeyDown}
+                    onBlur={handlePageInputBlur}
+                    className="w-11 sm:w-12 text-center py-0.5 px-1 rounded-lg bg-slate-900 border border-slate-600 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 text-rose-300 font-bold font-mono text-xs sm:text-sm outline-none transition-all"
+                    aria-label="หมายเลขหน้าที่ต้องการไป"
+                  />
+                  <span className="text-xs text-slate-400 font-mono font-bold select-none">
+                    / {totalPages}
+                  </span>
+                  <button
+                    type="submit"
+                    className="px-2.5 py-1 rounded-lg bg-rose-500 hover:bg-rose-400 active:scale-95 text-slate-950 font-black text-xs transition-all cursor-pointer shadow-sm shadow-rose-500/20"
+                    title="ไปยังหน้าที่ระบุ"
+                  >
+                    ไป
+                  </button>
+                </form>
 
                 <button
                   type="button"
