@@ -59,7 +59,7 @@ expression,reading,meaning,tags,meaning_th
 ごみ,ごみ,"trash, garbage",Genki Genki_Ln.16 JLPT JLPT_N4 Anime Drama YouTube Movie,ขยะ
 アフリカ,アフリカ,Africa,JLPT JLPT_N4 Anime Drama YouTube Movie,แอฟริกา
 点,てん,"mark, score, grade; point, dot",Intermediate_Japanese_Ln.5 JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"คะแนน, จุด"
-一生懸命,いっしょうけんめい,"very hard (as in ""to work hard""), with utmost effort",Intermediate_Japanese_Ln.5 JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"อย่างสุดความสามารถ, อย่างเต็มที่"
+一生懸命,いっしょうけんめい,"very hard, with utmost effort",Intermediate_Japanese_Ln.5 JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"อย่างสุดความสามารถ, อย่างเต็มที่"
 今度,こんど,"now, this time, near future, one of these days, next time",Genki Genki_Ln.9 JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"คราวหน้า, คราวนี้"
 機会,きかい,"chance, opportunity",JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,โอกาส
 建てる,たてる,to build,JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,สร้าง (อาคาร/บ้าน)
@@ -370,7 +370,7 @@ expression,reading,meaning,tags,meaning_th
 邪魔,じゃま,"hindrance, intrusion",JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"การรบกวน, สิ่งกีดขวาง, เกะกะ"
 国際,こくさい,international,JLPT JLPT_N4 Anime Manga Drama YouTube Movie,"นานาชาติ, ระหว่างประเทศ"
 隅,すみ,corner,JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"มุม, ซอก"
-伺う,うかがう,"humble form of 行く (いく), 聞く (きく) and 来る (くる)",JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"ไป, มา, ถาม, ได้ยิน (ถ่อมตัว)"
+伺う,うかがう,"humble form of to go, to hear, and to come",JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"ไป, มา, ถาม, ได้ยิน (ถ่อมตัว)"
 再来週,さらいしゅう,the week after next,JLPT JLPT_N4,สัปดาห์โน้น (อีกสองสัปดาห์ข้างหน้า)
 夢,ゆめ,a dream,Genki Genki_Ln.11 JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,ความฝัน
 喉,のど,throat,JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"คอ, ลำคอ (ภายใน)"
@@ -424,7 +424,7 @@ expression,reading,meaning,tags,meaning_th
 きっと,きっと,"surely, definitely, undoubtedly, certainly",Intermediate_Japanese_Ln.7 JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"อย่างแน่นอน, ต้อง...แน่ๆ"
 まず,まず,"first (of all), to start with",Genki Genki_Ln.18 JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"ก่อนอื่น, อันดับแรก"
 遠く,とおく,"far away, distant",JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"ที่ไกลๆ, ห่างไกล"
-大体,だいたい,approximately; in most cases; in general; to begin with (same as もともと),Intermediate_Japanese_Ln.15 Intermediate_Japanese_Ln.3 JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"โดยประมาณ, ส่วนใหญ่, โดยสรุป"
+大体,だいたい,approximately; in most cases; in general; to begin with,Intermediate_Japanese_Ln.15 Intermediate_Japanese_Ln.3 JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"โดยประมาณ, ส่วนใหญ่, โดยสรุป"
 折れる,おれる,"to break, to be folded, to give in; to turn (a corner)",JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"หัก (เอง), พับ, เลี้ยว"
 正しい,ただしい,correct,JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,ถูกต้อง
 輸入,ゆにゅう,import,JLPT JLPT_N4 Drama YouTube Movie,การนำเข้า (สินค้า)
@@ -462,7 +462,7 @@ expression,reading,meaning,tags,meaning_th
 送る,おくる,"to send, to dispatch",Genki Genki_Ln.14 Intermediate_Japanese_Ln.3 JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"ส่ง, ไปส่ง"
 あげる,あげる,to give,JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"ให้, ยกขึ้น"
 騒ぐ,さわぐ,"to make noise, to clamor",JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"ส่งเสียงดังเอะอะ, วุ่นวาย"
-尋ねる,たずねる,to inquire (same as 質問する),JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"ถาม, สอบถาม"
+尋ねる,たずねる,to inquire,JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"ถาม, สอบถาม"
 放送,ほうそう,broadcasting,JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"การออกอากาศ, การกระจายเสียง, ออกอากาศ"
 政治,せいじ,politics,Genki Genki_Ln.1 Genki_Ln.12 Intermediate_Japanese_Ln.3 JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,การเมือง
 市民,しみん,citizen,JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"พลเมือง, ประชาชนชาวเมือง"
@@ -602,7 +602,7 @@ expression,reading,meaning,tags,meaning_th
 取り替える,とりかえる,"to exchange, to replace",JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"สับเปลี่ยน, เปลี่ยนใหม่"
 急ぐ,いそぐ,"to hurry, to be in a hurry, to rush",Genki Genki_Ln.6 Intermediate_Japanese_Ln.2 JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"รีบ, เร่งรีบ"
 簡単,かんたん,simple,JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"ง่าย, ไม่ซับซ้อน"
-参る,まいる,humble expression for 行く and 来る,Genki Genki_Ln.20 Intermediate_Japanese_Ln.6 JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"ไป, มา (ถ่อมตัว)"
+参る,まいる,humble expression for to go and to come,Genki Genki_Ln.20 Intermediate_Japanese_Ln.6 JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"ไป, มา (ถ่อมตัว)"
 全然,ぜんぜん,"not at all; wholly, entirely",JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,"(ไม่)...เลย, ทั้งหมด, โดยสิ้นเชิง"
 特別,とくべつ,special,JLPT JLPT_N4 Anime Manga Drama Game Novel YouTube Movie,พิเศษ
 復習,ふくしゅう,"review (of lessons), revision",JLPT JLPT_N4 Anime Manga Game YouTube,การทบทวนบทเรียน

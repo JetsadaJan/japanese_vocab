@@ -100,7 +100,7 @@ expression,reading,meaning,tags,meaning_th
 人命,じんめい,(human) life,JLPT JLPT_2 Drama Movie,ชีวิตมนุษย์
 深夜,しんや,late at night,JLPT JLPT_2 Anime Manga Drama Game Novel YouTube Movie,"กลางดึก, ดึกดื่น"
 森林,しんりん,"forest, woods",JLPT JLPT_2 Game YouTube,ป่าไม้
-親類,しんるい,relative(s) (same as 親戚 (しんせき)),JLPT Intermediate_Japanese JLPT_2 Intermediate_Japanese_Ln.8 Intermediate_Japanese_Ln.9 Movie,ญาติพี่น้อง
+親類,しんるい,relative(s),JLPT Intermediate_Japanese JLPT_2 Intermediate_Japanese_Ln.8 Intermediate_Japanese_Ln.9 Movie,ญาติพี่น้อง
 針路,しんろ,"course, direction",JLPT JLPT_2,"เส้นทางเดินเรือ/เครื่องบิน, ทิศทาง, แนวทางในอนาคต"
 神話,しんわ,"myth, legend",JLPT JLPT_2 Anime Manga Game Novel YouTube,"ตำนานเทพปกรณัม, เทวตำนาน"
 水産,すいさん,"marine products, fisheries",JLPT JLPT_2,"การประมง, ผลิตภัณฑ์ทางทะเล"
@@ -433,7 +433,7 @@ expression,reading,meaning,tags,meaning_th
 担ぐ,かつぐ,"to shoulder, to carry on shoulder",JLPT JLPT_2 Anime Manga Drama Game Novel YouTube Movie,"แบกขึ้นบ่า, หาม, หลอกต้ม, ยกยอให้เป็นหัวหน้า"
 括弧,かっこ,"parenthesis, brackets",JLPT JLPT_2 Manga,วงเล็บ
 活字,かつじ,printing type,JLPT JLPT_2,"ตัวพิมพ์, ตัวอักษรตีพิมพ์"
-勝手に,かってに,"arbitrarily,",JLPT JLPT_2 Anime Manga Drama Game Novel YouTube Movie,"ตามอำเภอใจ, โดยพลการ"
+勝手に,かってに,arbitrarily,JLPT JLPT_2 Anime Manga Drama Game Novel YouTube Movie,"ตามอำเภอใจ, โดยพลการ"
 活力,かつりょく,"vitality, energy",JLPT JLPT_2 Game Novel,"พลังชีวิต, ความมีชีวิตชีวา"
 仮名,かな,kana,JLPT JLPT_2 Anime Manga Drama Game Novel YouTube Movie,อักษรคานะ (ฮิรางานะและคาตาคานะ)
 仮名遣い,かなづかい,"kana orthography, syllabary spelling",JLPT JLPT_2,หลักการใช้ตัวอักษรคานะในการสะกดคำ
@@ -475,7 +475,7 @@ expression,reading,meaning,tags,meaning_th
 寒帯,かんたい,frigid zone,JLPT JLPT_2,เขตหนาว (ภูมิศาสตร์)
 官庁,かんちょう,"government office, authorities",JLPT JLPT_2,"หน่วยงานราชการ, กรมกองของรัฐ"
 勘違い,かんちがい,"misunderstanding, wrong guess",JLPT JLPT_2 Anime Manga Drama Game Novel YouTube Movie,"ความเข้าใจผิด, การคิดไปเองผิดๆ"
-缶詰,かんづめ,"canning, canned goods,",JLPT JLPT_2 Anime Drama Game YouTube Movie,"อาหารกระป๋อง, การบรรจุกระป๋อง"
+缶詰,かんづめ,"canning, canned goods",JLPT JLPT_2 Anime Drama Game YouTube Movie,"อาหารกระป๋อง, การบรรจุกระป๋อง"
 乾電池,かんでんち,"dry cell, battery",JLPT JLPT_2,"ถ่านไฟฉาย, แบตเตอรี่แห้ง"
 関東,かんとう,"eastern half of Japan, including Tokyo",JLPT JLPT_2 Anime Manga Drama YouTube Movie,ภูมิภาคคันโต (แถบโตเกียวและปริมณฑล)
 観念,かんねん,"idea, notion; sense",JLPT JLPT_2 Anime Manga Drama Game Novel Movie,"แนวคิด, มโนทัศน์, การยอมจำนนตัดใจ"
@@ -769,7 +769,7 @@ expression,reading,meaning,tags,meaning_th
 シーズン,シーズン,season (sporting),JLPT JLPT_2 Anime Manga Drama Game YouTube Movie,ฤดูกาล (ท่องเที่ยว/กีฬา)
 シーツ,シーツ,sheet,JLPT JLPT_2 Manga Drama Game Novel YouTube Movie,ผ้าปูที่นอน
 寺院,じいん,temple,JLPT JLPT_2 Game YouTube,"วัด, อาราม"
-しいんと (する),しいんと,"silent (as the grave), (deathly) quiet",JLPT JLPT_2,"เงียบกริบ, เงียบสงัด"
+しいんと (する),しいんと,"silent, (deathly) quiet",JLPT JLPT_2,"เงียบกริบ, เงียบสงัด"
 自衛,じえい,self-defense,JLPT JLPT_2,การป้องกันตนเอง
 塩辛い,しおからい,salty (taste),JLPT JLPT_2,เค็มจัด
 司会,しかい,"host, chairperson",JLPT JLPT_2 Anime Drama Movie,"พิธีกร, ผู้ดำเนินรายการ"
@@ -793,7 +793,7 @@ expression,reading,meaning,tags,meaning_th
 子孫,しそん,"descendant, offspring",JLPT JLPT_2 Anime Manga Drama Game Novel YouTube Movie,"ลูกหลาน, ทายาท, ผู้สืบสกุล"
 死体,したい,corpse,JLPT JLPT_2 Anime Manga Drama Game Novel YouTube Movie,"ศพ, ร่างไร้วิญญาณ"
 下書き,したがき,"rough copy, draft",JLPT JLPT_2,"ต้นฉบับร่าง, ภาพร่าง"
-自宅,じたく,one's own home (same as 自分の家 (じぶんのいえ)),Intermediate_Japanese_Ln.5 JLPT JLPT_2 Intermediate_Japanese Anime Manga Drama Game Novel YouTube Movie,บ้านของตนเอง
+自宅,じたく,one's own home,Intermediate_Japanese_Ln.5 JLPT JLPT_2 Intermediate_Japanese Anime Manga Drama Game Novel YouTube Movie,บ้านของตนเอง
 下町,したまち,old parts of town,JLPT JLPT_2 Drama YouTube Movie,"ย่านเมืองเก่า, ย่านการค้าชาวบ้าน"
 自治,じち,"self-government, autonomy",JLPT JLPT_2,การปกครองตนเอง
 室～,しつ～,room,JLPT JLPT_2,"ในร่ม~, ห้อง~"
@@ -918,7 +918,7 @@ expression,reading,meaning,tags,meaning_th
 足元,あしもと,at one's feet,JLPT JLPT_2 Anime Manga Drama Game Novel YouTube Movie,"บริเวณใกล้เท้า, จุดที่ยืนอยู่"
 味わう,あじわう,"to taste, to savor",JLPT JLPT_2 Anime Manga Drama Game Novel YouTube Movie,"ลิ้มรส, ดื่มด่ำกับรสชาติ/ความรู้สึก"
 あちらこちら,あちらこちら,here and there,JLPT JLPT_2 Novel,"ที่นั่นที่นี่, หลายๆ ที่"
-厚かましい,あつかましい,"impudent, shameless,",JLPT JLPT_2 Drama Game Movie,"หน้าด้าน, ไร้ยางอาย, เกรงใจไม่เป็น"
+厚かましい,あつかましい,"impudent, shameless",JLPT JLPT_2 Drama Game Movie,"หน้าด้าน, ไร้ยางอาย, เกรงใจไม่เป็น"
 圧縮,あっしゅく,"compression, condensation, pressure",JLPT JLPT_2 Anime Manga Game Novel YouTube,"การบีบอัด, การอัดแน่น"
 宛名,あてな,"address, direction",JLPT JLPT_2,ชื่อและที่อยู่ของผู้รับ (บนซองจดหมาย)
 当てはまる,あてはまる,"to be applicable, to come under (a category)",JLPT JLPT_2 Anime Drama Game Novel YouTube Movie,"ตรงตามเงื่อนไข, เข้าข่าย, ใช้ได้กับ"
@@ -1023,7 +1023,7 @@ expression,reading,meaning,tags,meaning_th
 エチケット,エチケット,etiquette,JLPT JLPT_2,มารยาททางสังคม
 絵の具,えのぐ,"colors, paints",JLPT JLPT_2 Drama Game YouTube,"สีวาดรูป, สีระบายภาพ"
 エプロン,エプロン,apron,JLPT JLPT_2 Anime Manga Drama Novel YouTube,ผ้ากันเปื้อน
-偉い,えらい,"great, celebrated, remarkable,",JLPT JLPT_2 Anime Manga Drama Game Novel YouTube Movie,"ยิ่งใหญ่, น่ายกย่อง, ตำแหน่งสูง; หนักหนา"
+偉い,えらい,"great, celebrated, remarkable",JLPT JLPT_2 Anime Manga Drama Game Novel YouTube Movie,"ยิ่งใหญ่, น่ายกย่อง, ตำแหน่งสูง; หนักหนา"
 ～園,～えん,~ garden (especially man made),JLPT JLPT_2,สวน~
 宴会,えんかい,"party, banquet",JLPT JLPT_2 Anime Manga Drama Game Novel Movie,งานเลี้ยงสังสรรค์
 園芸,えんげい,"horticulture, gardening",JLPT JLPT_2,"การทำสวน, ศิลปะการจัดสวนและปลูกต้นไม้"
@@ -1205,7 +1205,7 @@ expression,reading,meaning,tags,meaning_th
 ×,ばつ,cross,JLPT JLPT_2,"เครื่องหมายกากบาท, ผิด"
 発揮,はっき,"exhibition, demonstration, display",JLPT JLPT_2 Anime Manga Drama Game Novel YouTube Movie,"การแสดงความสามารถออกมา, การสำแดงผล"
 バック,バック,back,JLPT JLPT_2 Anime Manga Drama Game Novel YouTube Movie,"ด้านหลัง, การถอยหลัง, ฉากหลัง"
-発想,はっそう,idea; way of thinking (same as 考え方 (かんがえかた)),JLPT_2 JLPT Intermediate_Japanese_Ln.15 Intermediate_Japanese Anime Manga Drama Game Novel YouTube Movie,"แนวคิด, วิธีคิด"
+発想,はっそう,idea; way of thinking,JLPT_2 JLPT Intermediate_Japanese_Ln.15 Intermediate_Japanese Anime Manga Drama Game Novel YouTube Movie,"แนวคิด, วิธีคิด"
 発電,はつでん,"generation (e.g., power)",JLPT JLPT_2 YouTube,การผลิตกระแสไฟฟ้า
 発売,はつばい,sale,JLPT JLPT_2 Anime Manga Drama Game Novel YouTube Movie,"การวางจำหน่าย, การออกขาย"
 話合い,はなしあい,"discussion, talk",JLPT JLPT_2,การพูดคุยปรึกษาหารือ
@@ -1914,7 +1914,7 @@ expression,reading,meaning,tags,meaning_th
 怪物,かいぶつ,"monster, beast, prodigy",JLPT_N2 JMdict Jiten,"สัตว์ประหลาด, อสูรกาย"
 異変,いへん,"unusual event, anomaly, strange occurrence, accident",JLPT_N2 JMdict Jiten,"เหตุผิดปกติ, ความผิดปกติ, เหตุการณ์ประหลาด"
 実在,じつざい,"actual existence, existing in real life",JLPT_N2 JMdict Jiten,"การมีอยู่จริง, ตัวตนที่มีอยู่จริง"
-一段,いちだん,"one step, one level, even more, much more (as 一段と)",JLPT_N2 JMdict Jiten,"หนึ่งขั้น, หนึ่งระดับ, ยิ่งขึ้นไปอีก (มักใช้เป็น 一段と)"
+一段,いちだん,"one step, one level, even more, much more",JLPT_N2 JMdict Jiten,"หนึ่งขั้น, หนึ่งระดับ, ยิ่งขึ้นไปอีก (มักใช้เป็น 一段と)"
 最終的,さいしゅうてき,"final, ultimate, eventual",JLPT_N2 JMdict Jiten,"ท้ายที่สุด, ในขั้นสุดท้าย"
 防御,ぼうぎょ,"defense, protection, safeguard",JLPT_N2 JMdict Jiten,"การป้องกัน, การตั้งรับ"
 横たわる,よこたわる,"to lie down, to stretch out, to lie ahead (of a problem)",JLPT_N2 JMdict Jiten,"นอนเหยียดยาว, ทอดตัวอยู่, (ปัญหา/อุปสรรค) ขวางกั้นอยู่ข้างหน้า"
