@@ -1,0 +1,1986 @@
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  X,
+  Search,
+  Volume2,
+  BookOpen,
+  ExternalLink,
+  Globe,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+  Shuffle,
+  RotateCcw,
+  ChevronDown,
+  ChevronUp,
+  ArrowLeft,
+  Sparkles,
+  Link2,
+  Layers,
+  AlertTriangle,
+  Lightbulb,
+  MessageCircle,
+} from 'lucide-react';
+import {
+  JLPTLevel,
+  KanjiDatabase,
+  KanjiNode,
+  MeaningLanguage,
+  VocabWord,
+  WordCategory,
+} from '../types';
+import {
+  JLPT_LEVELS,
+  LEVEL_METADATA,
+  VocabDatabase,
+  WORD_CATEGORIES,
+  WORD_CATEGORY_META,
+  formatKanjiLinkLabel,
+  formatWordMeaning,
+  hasWordExtraDetails,
+  speakJapanese,
+} from '../utils/vocabData';
+import {
+  ConfusableIndex,
+  doesNoteMatchWord,
+  getConfusableWords,
+  getPrimaryGroupIdForWord,
+  resolveSemanticGroup,
+} from '../utils/confusableWords';
+
+interface WordExplorerModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  db: VocabDatabase;
+  kanjiDb: KanjiDatabase;
+  wordMap: Record<string, VocabWord>;
+  confusableIndex: ConfusableIndex | null;
+  initialLevel?: JLPTLevel;
+  initialTab?: 'VOCAB' | 'KANJI';
+  initialKanji?: string | null;
+  meaningLanguage: MeaningLanguage;
+  onChangeLanguage: (lang: MeaningLanguage) => void;
+}
+
+type ExplorerTab = 'VOCAB' | 'KANJI';
+
+type GraphHistoryItem =
+  | { type: 'KANJI'; char: string }
+  | { type: 'WORD'; wordId: string }
+  | { type: 'GROUP'; groupId: string };
+
+const ITEMS_PER_PAGE = 100;
+
+export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
+  isOpen,
+  onClose,
+  db,
+  kanjiDb,
+  wordMap,
+  confusableIndex,
+  initialLevel = 'N5',
+  initialTab = 'VOCAB',
+  initialKanji = null,
+  meaningLanguage,
+  onChangeLanguage,
+}) => {
+  const [activeTab, setActiveTab] = useState<ExplorerTab>(initialTab);
+  const [activeLevel, setActiveLevel] = useState<JLPTLevel | 'ALL'>('ALL');
+  const [activeCategory, setActiveCategory] = useState<WordCategory | 'ALL'>('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showReading, setShowReading] = useState(true);
+  const [showRomaji, setShowRomaji] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [shuffleSeed, setShuffleSeed] = useState<number>(0);
+
+  // Track which vocabulary cards and kanji cards have their "แสดงเพิ่มเติม" panel expanded
+  const [expandedWordIds, setExpandedWordIds] = useState<Set<string>>(new Set());
+  const [expandedKanjiChars, setExpandedKanjiChars] = useState<Set<string>>(new Set());
+
+  // Graph navigation history stack for free jumping between Words <-> Kanji
+  const [graphHistory, setGraphHistory] = useState<GraphHistoryItem[]>([]);
+
+  const listContainerRef = useRef<HTMLDivElement | null>(null);
+
+  // Lock background page scroll while WordExplorerModal is open
+  useEffect(() => {
+    if (!isOpen) return;
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen) {
+      if (initialKanji && kanjiDb[initialKanji]) {
+        setGraphHistory([{ type: 'KANJI', char: initialKanji }]);
+      } else {
+        setActiveTab(initialTab);
+      }
+    }
+  }, [isOpen, initialKanji, initialTab, kanjiDb]);
+
+  // Reset to page 1 when filters, tab, search, or shuffle change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, activeLevel, activeCategory, searchQuery, shuffleSeed]);
+
+  // Scroll list back to top when page, shuffle, or graph view changes
+  useEffect(() => {
+    if (listContainerRef.current) {
+      listContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [currentPage, shuffleSeed, activeTab, graphHistory]);
+
+  const toggleExpandWord = (wordId: string) => {
+    setExpandedWordIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(wordId)) {
+        next.delete(wordId);
+      } else {
+        next.add(wordId);
+      }
+      return next;
+    });
+  };
+
+  const toggleExpandKanji = (char: string) => {
+    setExpandedKanjiChars((prev) => {
+      const next = new Set(prev);
+      if (next.has(char)) {
+        next.delete(char);
+      } else {
+        next.add(char);
+      }
+      return next;
+    });
+  };
+
+  const navigateToKanji = (char: string) => {
+    if (!kanjiDb[char]) return;
+    setGraphHistory((prev) => [...prev, { type: 'KANJI', char }]);
+  };
+
+  const navigateToWord = (wordId: string) => {
+    if (!wordMap[wordId]) return;
+    setGraphHistory((prev) => [...prev, { type: 'WORD', wordId }]);
+  };
+
+  const navigateToGroup = (groupId: string) => {
+    setGraphHistory((prev) => [...prev, { type: 'GROUP', groupId }]);
+  };
+
+  const navigateBack = () => {
+    setGraphHistory((prev) => prev.slice(0, -1));
+  };
+
+  const clearGraphHistory = () => {
+    setGraphHistory([]);
+  };
+
+  // All Kanji list sorted by JLPT N5 -> N1
+  const allKanjiList = useMemo(() => {
+    return Object.values(kanjiDb);
+  }, [kanjiDb]);
+
+  // Filtered Vocab list
+  const baseFilteredWords = useMemo(() => {
+    let pool =
+      activeLevel === 'ALL'
+        ? JLPT_LEVELS.flatMap((lvl) => db[lvl])
+        : db[activeLevel] || [];
+
+    if (activeCategory !== 'ALL') {
+      pool = pool.filter((w) => w.category === activeCategory);
+    }
+
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return pool;
+
+    return pool.filter(
+      (w) =>
+        w.expression.toLowerCase().includes(q) ||
+        w.reading.toLowerCase().includes(q) ||
+        w.romaji.toLowerCase().includes(q) ||
+        w.meaning.toLowerCase().includes(q) ||
+        w.meaningTh.toLowerCase().includes(q)
+    );
+  }, [activeLevel, activeCategory, db, searchQuery]);
+
+  const allMatchingWords = useMemo(() => {
+    if (shuffleSeed === 0) return baseFilteredWords;
+    const copy: VocabWord[] = [...baseFilteredWords];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }, [baseFilteredWords, shuffleSeed]);
+
+  // Filtered Kanji list
+  const baseFilteredKanji = useMemo(() => {
+    let pool =
+      activeLevel === 'ALL'
+        ? allKanjiList
+        : allKanjiList.filter((k) => k.level === activeLevel);
+
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return pool;
+
+    return pool.filter(
+      (k) =>
+        k.character.includes(q) ||
+        k.meaningTh.toLowerCase().includes(q) ||
+        k.meaningEn.toLowerCase().includes(q) ||
+        k.onyomi.some((r) => r.includes(q)) ||
+        k.kunyomi.some((r) => r.includes(q)) ||
+        k.onyomiRomaji.some((r) => r.toLowerCase().includes(q)) ||
+        k.kunyomiRomaji.some((r) => r.toLowerCase().includes(q))
+    );
+  }, [activeLevel, allKanjiList, searchQuery]);
+
+  const allMatchingKanji = useMemo(() => {
+    if (shuffleSeed === 0) return baseFilteredKanji;
+    const copy: KanjiNode[] = [...baseFilteredKanji];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }, [baseFilteredKanji, shuffleSeed]);
+
+  const totalMatching =
+    activeTab === 'VOCAB' ? allMatchingWords.length : allMatchingKanji.length;
+  const totalPages = Math.max(1, Math.ceil(totalMatching / ITEMS_PER_PAGE));
+  const safePage = Math.min(currentPage, totalPages);
+
+  const paginatedWords = useMemo(() => {
+    const startIdx = (safePage - 1) * ITEMS_PER_PAGE;
+    return allMatchingWords.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+  }, [allMatchingWords, safePage]);
+
+  const paginatedKanji = useMemo(() => {
+    const startIdx = (safePage - 1) * ITEMS_PER_PAGE;
+    return allMatchingKanji.slice(startIdx, startIdx + ITEMS_PER_PAGE);
+  }, [allMatchingKanji, safePage]);
+
+  const startItemNumber =
+    totalMatching === 0 ? 0 : (safePage - 1) * ITEMS_PER_PAGE + 1;
+  const endItemNumber = Math.min(safePage * ITEMS_PER_PAGE, totalMatching);
+
+  const pageNumbers = useMemo(() => {
+    const pages: number[] = [];
+    const maxButtons = 5;
+    let start = Math.max(1, safePage - Math.floor(maxButtons / 2));
+    let end = Math.min(totalPages, start + maxButtons - 1);
+    if (end - start + 1 < maxButtons) {
+      start = Math.max(1, end - maxButtons + 1);
+    }
+    for (let p = start; p <= end; p++) {
+      pages.push(p);
+    }
+    return pages;
+  }, [safePage, totalPages]);
+
+  const shuffleButtonLabel = useMemo(() => {
+    const lvlLabel = activeLevel === 'ALL' ? '' : ` ${activeLevel}`;
+    const countLabel = Math.min(ITEMS_PER_PAGE, totalMatching);
+    if (activeTab === 'KANJI') {
+      return `สุ่มคันจิ${lvlLabel} ${countLabel} ตัว`;
+    }
+    const catLabel =
+      activeCategory === 'ALL'
+        ? 'คำทุกชนิด'
+        : WORD_CATEGORY_META[activeCategory].labelTh;
+    return `สุ่ม${catLabel}${lvlLabel} ${countLabel} คำ`;
+  }, [activeCategory, activeLevel, activeTab, totalMatching]);
+
+  // Render a single Vocab Card (used in both main Vocab list and inside Kanji related words)
+  // Links to Kanji / Homophones / Similar-Meaning words are ONLY shown after clicking "แสดงเพิ่มเติม"
+  const renderVocabCard = (word: VocabWord, wordNumber?: number) => {
+    const meta = LEVEL_METADATA[word.level];
+    const catMeta = WORD_CATEGORY_META[word.category];
+    const confusables = confusableIndex
+      ? getConfusableWords(word, confusableIndex)
+      : [];
+    const soundConfusables = confusables.filter(
+      (c) => c.type !== 'SIMILAR_MEANING'
+    );
+    const meaningSimilars = confusables.filter(
+      (c) => c.type === 'SIMILAR_MEANING'
+    );
+    const groupId = confusableIndex
+      ? getPrimaryGroupIdForWord(word, confusableIndex, meaningSimilars.length)
+      : null;
+    const canExpand = hasWordExtraDetails(word, confusables.length);
+    const isExpanded = expandedWordIds.has(word.id);
+
+    return (
+      <div
+        key={`${word.id}-${shuffleSeed}`}
+        className={`flex flex-col justify-between rounded-2xl border transition-all p-3.5 ${
+          isExpanded
+            ? 'border-rose-500/50 bg-slate-900/90 shadow-lg'
+            : 'border-slate-800/90 bg-slate-950/60 hover:border-slate-700'
+        }`}
+      >
+        {/* Top Content of Vocab Card (Clean, no links until "แสดงเพิ่มเติม" is clicked) */}
+        <div>
+          <div className="flex items-start justify-between gap-2">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {wordNumber !== undefined && (
+                <span className="text-[11px] font-mono font-bold text-slate-500">
+                  #{wordNumber}
+                </span>
+              )}
+              <span
+                className={`text-[11px] font-bold px-2 py-0.5 rounded-md border ${meta.badgeClass}`}
+              >
+                {word.level}
+              </span>
+              <span
+                className={`text-[11px] font-bold px-2 py-0.5 rounded-md border ${catMeta.badgeClass}`}
+              >
+                {catMeta.labelTh}
+              </span>
+              {showReading && word.reading !== word.expression && (
+                <span className="text-xs text-rose-300 font-jp font-medium">
+                  {word.reading}
+                </span>
+              )}
+              {showRomaji && word.romaji && (
+                <span className="text-xs text-amber-300 font-mono font-semibold">
+                  [{word.romaji}]
+                </span>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => speakJapanese(word.reading || word.expression)}
+              title="ฟังเสียงอ่านภาษาญี่ปุ่น"
+              className="p-2 rounded-xl bg-slate-800/80 text-slate-300 hover:text-rose-300 hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
+            >
+              <Volume2 className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="mt-1 flex items-center gap-2">
+            <span className="text-xl font-bold text-slate-100 font-jp">
+              {word.expression}
+            </span>
+          </div>
+
+          {/* Meaning Display: Separated into 2 distinct lines when in BOTH (ไทย+EN) mode */}
+          {meaningLanguage === 'BOTH' ? (
+            <div className="mt-2 pt-2 border-t border-slate-800/80 space-y-1">
+              <div className="text-xs sm:text-sm text-white font-semibold break-words flex items-start gap-1.5">
+                <span className="text-[11px] px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-300 font-bold shrink-0 mt-0.5">
+                  TH
+                </span>
+                <span>{word.meaningTh || word.meaning}</span>
+              </div>
+              <div className="text-xs sm:text-sm text-sky-300/90 break-words flex items-start gap-1.5">
+                <span className="text-[11px] px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 font-bold shrink-0 mt-0.5">
+                  EN
+                </span>
+                <span>{word.meaning}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="text-xs sm:text-sm text-slate-200 mt-1.5 break-words font-medium">
+              {meaningLanguage === 'TH'
+                ? word.meaningTh || word.meaning
+                : word.meaning}
+            </div>
+          )}
+        </div>
+
+        {/* Bottom Row: Clean Bottom-Right "แสดงเพิ่มเติม" Button ONLY */}
+        <div className="mt-3 pt-2.5 border-t border-slate-800/60 flex items-center justify-end gap-2">
+          <button
+            type="button"
+            disabled={!canExpand}
+            onClick={() => canExpand && toggleExpandWord(word.id)}
+            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-bold border transition-all shrink-0 ${
+              !canExpand
+                ? 'bg-slate-900/60 border-slate-800/80 text-slate-600 cursor-not-allowed select-none'
+                : isExpanded
+                ? 'bg-rose-500 text-white border-rose-400 shadow-sm cursor-pointer'
+                : 'bg-slate-800 hover:bg-slate-700 text-rose-300 border-slate-700 cursor-pointer'
+            }`}
+          >
+            <span>{isExpanded ? 'ซ่อนรายละเอียด' : 'แสดงเพิ่มเติม'}</span>
+            {canExpand &&
+              (isExpanded ? (
+                <ChevronUp className="w-3.5 h-3.5" />
+              ) : (
+                <ChevronDown className="w-3.5 h-3.5" />
+              ))}
+          </button>
+        </div>
+
+        {/* Expanded Extra Details Drawer (1. Homophones/Confusables in RED FIRST -> 2. Similar Meaning -> 3. Kanji Links) */}
+        {isExpanded && canExpand && (
+          <div className="mt-3 pt-3 border-t border-slate-700/80 space-y-3 bg-slate-950/80 -mx-1.5 p-3 rounded-xl">
+            {/* 1. Red Warning Section for Homophones / Confusable Words (shown FIRST) */}
+            {soundConfusables.length > 0 && (
+              <div className="rounded-xl border border-rose-500/40 bg-rose-950/25 p-3 space-y-2">
+                <div className="flex items-center gap-1.5 text-xs font-extrabold text-rose-400">
+                  <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
+                  <span>
+                    พ้องเสียง / เสียงคล้าย ({soundConfusables.length})
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 gap-1.5">
+                  {soundConfusables.map((c) => (
+                    <button
+                      key={c.word.id}
+                      type="button"
+                      onClick={() => navigateToWord(c.word.id)}
+                      className="w-full text-left rounded-lg border border-rose-500/30 bg-slate-950/85 hover:bg-rose-950/40 hover:border-rose-400/60 px-2.5 py-2 transition-all cursor-pointer flex items-center justify-between gap-2 group"
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                            {c.labelTh}
+                          </span>
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">
+                            {c.word.level}
+                          </span>
+                          <span className="text-sm font-extrabold text-rose-200 group-hover:text-white font-jp">
+                            {c.word.expression}
+                          </span>
+                          <span className="text-xs text-rose-300/90 font-jp font-semibold">
+                            【{c.word.reading}】
+                          </span>
+                          {showRomaji && c.word.romaji && (
+                            <span className="text-[11px] text-amber-300/90 font-mono">
+                              [{c.word.romaji}]
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-xs font-semibold text-white mt-1 truncate">
+                          {formatWordMeaning(c.word, meaningLanguage)}
+                        </div>
+                      </div>
+
+                      <span className="text-[11px] font-bold text-rose-300 group-hover:translate-x-0.5 transition-transform shrink-0">
+                        ดู ➔
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 2. Similar Meaning Words Section ("ความหมายใกล้เคียง" e.g. ageru/morau/kureru, inochi/jinsei) */}
+            {meaningSimilars.length > 0 && (
+              <div className="rounded-xl border border-amber-500/40 bg-amber-950/20 p-3 space-y-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 text-xs font-extrabold text-amber-300">
+                    <Link2 className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span>ความหมายใกล้เคียง ({meaningSimilars.length})</span>
+                  </div>
+
+                  {groupId && (
+                    <button
+                      type="button"
+                      onClick={() => navigateToGroup(groupId)}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 text-[11px] font-extrabold shadow-md shadow-amber-500/20 transition-all cursor-pointer"
+                    >
+                      <Layers className="w-3.5 h-3.5" />
+                      <span>Group เปรียบเทียบ ➔</span>
+                    </button>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-1 gap-1.5">
+                  {meaningSimilars.map((c) => (
+                    <button
+                      key={c.word.id}
+                      type="button"
+                      onClick={() => navigateToWord(c.word.id)}
+                      className="w-full text-left rounded-lg border border-amber-500/30 bg-slate-950/85 hover:bg-amber-950/40 hover:border-amber-400/60 px-2.5 py-2 transition-all cursor-pointer flex items-center justify-between gap-2 group"
+                    >
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                            {c.labelTh}
+                          </span>
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">
+                            {c.word.level}
+                          </span>
+                          <span className="text-sm font-extrabold text-white group-hover:text-amber-200 font-jp">
+                            {c.word.expression}
+                          </span>
+                          <span className="text-xs text-amber-200/90 font-jp font-semibold">
+                            【{c.word.reading}】
+                          </span>
+                          {showRomaji && c.word.romaji && (
+                            <span className="text-[11px] text-amber-300/90 font-mono">
+                              [{c.word.romaji}]
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-xs font-semibold text-white mt-1 truncate">
+                          {formatWordMeaning(c.word, meaningLanguage)}
+                        </div>
+                      </div>
+
+                      <span className="text-[11px] font-bold text-amber-300 group-hover:translate-x-0.5 transition-transform shrink-0">
+                        ดู ➔
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 3. Kanji Breakdown Section */}
+            {word.kanjiChars.length > 0 && (
+              <>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-rose-300 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    คันจิในคำนี้ ({word.kanjiChars.length})
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => navigateToWord(word.id)}
+                    className="text-[11px] text-sky-400 hover:text-sky-300 font-semibold underline cursor-pointer"
+                  >
+                    ดูเต็มจอ ➔
+                  </button>
+                </div>
+
+                {/* Quick Kanji Link Pills in format ( 脚 ➔ ความหมาย ) */}
+                <div className="flex flex-wrap gap-1.5">
+                  {word.kanjiChars.map((ch) => (
+                    <button
+                      key={`pill-${ch}`}
+                      type="button"
+                      onClick={() => navigateToKanji(ch)}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-900 hover:bg-rose-500/20 border border-slate-700 hover:border-rose-500/40 text-xs font-jp font-bold text-amber-200 hover:text-rose-200 transition-all cursor-pointer"
+                    >
+                      <span>{formatKanjiLinkLabel(ch, kanjiDb, meaningLanguage)}</span>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="space-y-2">
+                  {word.kanjiChars.map((ch) => {
+                    const kNode = kanjiDb[ch];
+                    if (!kNode) return null;
+                    const kLvlMeta = LEVEL_METADATA[kNode.level];
+
+                    return (
+                      <div
+                        key={ch}
+                        className="rounded-xl border border-slate-800 bg-slate-900/90 p-2.5 flex items-start justify-between gap-3"
+                      >
+                        <div className="flex items-start gap-3 min-w-0 flex-1">
+                          <button
+                            type="button"
+                            onClick={() => navigateToKanji(ch)}
+                            title={`คลิกเพื่อดูคำศัพท์ทั้งหมดที่ใช้คันจิ ${ch}`}
+                            className="w-12 h-12 rounded-xl bg-slate-950 border border-slate-700 hover:border-rose-500 flex flex-col items-center justify-center shrink-0 transition-all cursor-pointer group"
+                          >
+                            <span className="text-2xl font-extrabold text-white group-hover:text-rose-400 font-jp leading-none">
+                              {ch}
+                            </span>
+                          </button>
+
+                          <div className="min-w-0 flex-1 space-y-1">
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span
+                                className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${kLvlMeta.badgeClass}`}
+                              >
+                                คันจิ {kNode.level}
+                              </span>
+                              {kNode.strokes > 0 && (
+                                <span className="text-[10px] text-slate-400">
+                                  {kNode.strokes} ขีด
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="text-xs space-y-0.5">
+                              <div className="text-white font-semibold">
+                                🇹🇭 {kNode.meaningTh || kNode.meaningEn}
+                              </div>
+                              <div className="text-sky-300/90">
+                                🇬🇧 {kNode.meaningEn}
+                              </div>
+                            </div>
+
+                            {/* On'yomi & Kun'yomi Readings */}
+                            <div className="text-[11px] text-slate-300 space-y-0.5 pt-0.5">
+                              {kNode.onyomi.length > 0 && (
+                                <div>
+                                  <span className="text-amber-400 font-semibold">
+                                    เสียงอน (On):{' '}
+                                  </span>
+                                  <span className="font-jp">{kNode.onyomi.join('・')}</span>
+                                  {showRomaji && kNode.onyomiRomaji.length > 0 && (
+                                    <span className="text-slate-400 font-mono ml-1">
+                                      [{kNode.onyomiRomaji.join(', ')}]
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                              {kNode.kunyomi.length > 0 && (
+                                <div>
+                                  <span className="text-emerald-400 font-semibold">
+                                    เสียงคุน (Kun):{' '}
+                                  </span>
+                                  <span className="font-jp">{kNode.kunyomi.join('・')}</span>
+                                  {showRomaji && kNode.kunyomiRomaji.length > 0 && (
+                                    <span className="text-slate-400 font-mono ml-1">
+                                      [{kNode.kunyomiRomaji.join(', ')}]
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => navigateToKanji(ch)}
+                          className="shrink-0 px-2.5 py-1.5 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-[11px] font-bold transition-colors cursor-pointer"
+                        >
+                          ดูคำที่ใช้ {ch} ({kNode.relatedWordIds.length}) ➔
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+
+            {word.extraNote && (
+              <div className="rounded-xl border border-amber-500/30 bg-amber-950/20 p-2.5 text-xs text-amber-200">
+                <span className="font-bold">คำอธิบายเพิ่มเติม: </span>
+                {word.extraNote}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  if (!isOpen) return null;
+
+  const currentGraphItem =
+    graphHistory.length > 0 ? graphHistory[graphHistory.length - 1] : null;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/80 backdrop-blur-md overscroll-contain"
+      onWheel={(e) => e.stopPropagation()}
+    >
+      <div className="w-full max-w-5xl max-h-[92vh] flex flex-col rounded-3xl border border-slate-800 bg-slate-900 shadow-2xl overflow-hidden overscroll-contain">
+        {/* Top Modal Header with Vocab <-> Kanji Tab Switcher */}
+        <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 border-b border-slate-800 bg-slate-900/95">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-400">
+              <BookOpen className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-base sm:text-lg font-bold text-slate-100">
+                  คลังคำศัพท์ ⇄ คันจิ (N5–N1)
+                </h2>
+              </div>
+              <a
+                href="https://github.com/elzup/jlpt-word-list"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-rose-400 transition-colors"
+              >
+                เชื่อมโยงคำศัพท์ {Object.keys(wordMap).length.toLocaleString()} คำ กับคันจิ {allKanjiList.length.toLocaleString()} ตัว
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          </div>
+
+          {/* Primary Tab Switcher: คลังคำศัพท์ vs คลังคันจิ */}
+          <div className="flex items-center gap-2">
+            <div className="inline-flex items-center rounded-2xl bg-slate-950 p-1 border border-slate-800">
+              <button
+                type="button"
+                onClick={() => {
+                  clearGraphHistory();
+                  setActiveTab('VOCAB');
+                }}
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
+                  activeTab === 'VOCAB' && !currentGraphItem
+                    ? 'bg-rose-500 text-white shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                <span>คลังคำศัพท์ ({Object.keys(wordMap).length.toLocaleString()})</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  clearGraphHistory();
+                  setActiveTab('KANJI');
+                }}
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-extrabold transition-all cursor-pointer ${
+                  activeTab === 'KANJI' && !currentGraphItem
+                    ? 'bg-amber-500 text-slate-950 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                <Layers className="w-3.5 h-3.5" />
+                <span>คลังคันจิ ({allKanjiList.length.toLocaleString()})</span>
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-slate-100 hover:bg-slate-700 transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        {/* If user is inspecting a Kanji Node or Word Node in the Graph, show Breadcrumb Navigation Bar */}
+        {currentGraphItem && (
+          <div className="px-5 py-2.5 bg-slate-950 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-1.5 flex-wrap text-xs">
+              <button
+                type="button"
+                onClick={navigateBack}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold cursor-pointer mr-1"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                ย้อนกลับ
+              </button>
+
+              <button
+                type="button"
+                onClick={clearGraphHistory}
+                className="text-slate-400 hover:text-white underline cursor-pointer"
+              >
+                {activeTab === 'VOCAB' ? 'คลังคำศัพท์' : 'คลังคันจิ'}
+              </button>
+
+              {graphHistory.map((item, idx) => {
+                const isLast = idx === graphHistory.length - 1;
+                const label =
+                  item.type === 'KANJI'
+                    ? `คันจิ 「${item.char}」`
+                    : item.type === 'WORD'
+                    ? `คำศัพท์ 「${wordMap[item.wordId]?.expression || ''}」`
+                    : `Group 「${
+                        (confusableIndex &&
+                          resolveSemanticGroup(item.groupId, confusableIndex, wordMap)
+                            ?.titleTh) ||
+                        'เปรียบเทียบคำใกล้เคียง'
+                      }」`;
+                return (
+                  <React.Fragment key={idx}>
+                    <span className="text-slate-600">/</span>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setGraphHistory((prev) => prev.slice(0, idx + 1))
+                      }
+                      className={`px-2 py-0.5 rounded-md font-jp font-bold cursor-pointer ${
+                        isLast
+                          ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
+                          : 'text-slate-300 hover:text-white'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  </React.Fragment>
+                );
+              })}
+            </div>
+
+            <button
+              type="button"
+              onClick={clearGraphHistory}
+              className="text-xs text-slate-400 hover:text-rose-300 font-semibold cursor-pointer"
+            >
+              ปิดหน้าเชื่อมโยง ✕
+            </button>
+          </div>
+        )}
+
+        {/* GRAPH NODE VIEW 1: Detailed Kanji Node View */}
+        {currentGraphItem?.type === 'KANJI' && kanjiDb[currentGraphItem.char] ? (
+          <div
+            ref={listContainerRef}
+            className="flex-1 overflow-y-auto p-5 space-y-6"
+          >
+            {(() => {
+              const kNode = kanjiDb[currentGraphItem.char];
+              const kMeta = LEVEL_METADATA[kNode.level];
+              const relatedWords = kNode.relatedWordIds
+                .map((id) => wordMap[id])
+                .filter(Boolean);
+
+              return (
+                <>
+                  {/* Kanji Node Hero Card */}
+                  <div className="rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-rose-950/30 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                    <div className="flex items-start sm:items-center gap-5">
+                      <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-3xl bg-slate-950 border-2 border-rose-500/50 shadow-xl flex flex-col items-center justify-center shrink-0">
+                        <span className="text-5xl sm:text-6xl font-extrabold text-white font-jp">
+                          {kNode.character}
+                        </span>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span
+                            className={`text-xs font-extrabold px-3 py-1 rounded-full border ${kMeta.badgeClass}`}
+                          >
+                            คันจิระดับ {kNode.level}
+                          </span>
+                          {kNode.strokes > 0 && (
+                            <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                              จำนวนขีด: {kNode.strokes} ขีด
+                            </span>
+                          )}
+                          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-rose-500/15 text-rose-300 border border-rose-500/30">
+                            พบในคำศัพท์ {relatedWords.length} คำ
+                          </span>
+                        </div>
+
+                        <div className="space-y-1 pt-1">
+                          <div className="text-lg sm:text-xl font-extrabold text-white flex items-center gap-2">
+                            <span className="text-xs px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 font-bold">
+                              TH
+                            </span>
+                            <span>{kNode.meaningTh || kNode.meaningEn}</span>
+                          </div>
+                          <div className="text-sm sm:text-base font-semibold text-sky-300 flex items-center gap-2">
+                            <span className="text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-300 font-bold">
+                              EN
+                            </span>
+                            <span>{kNode.meaningEn}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => speakJapanese(kNode.character)}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs sm:text-sm font-bold transition-colors cursor-pointer shrink-0"
+                    >
+                      <Volume2 className="w-4 h-4" />
+                      ฟังเสียงอ่านคันจิ
+                    </button>
+                  </div>
+
+                  {/* Readings Breakdown (On'yomi & Kun'yomi) */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4 space-y-2">
+                      <div className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+                        เสียงอน (On'yomi — คำอ่านเสียงจีน มักใช้ในคำประสม)
+                      </div>
+                      {kNode.onyomi.length > 0 ? (
+                        <div className="flex flex-wrap gap-2">
+                          {kNode.onyomi.map((r, i) => (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => speakJapanese(r.replace(/[.\-]/g, ''))}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-sm font-bold text-amber-200 cursor-pointer"
+                            >
+                              <span className="font-jp">{r}</span>
+                              {kNode.onyomiRomaji[i] && (
+                                <span className="text-xs font-mono text-amber-300/80">
+                                  [{kNode.onyomiRomaji[i]}]
+                                </span>
+                              )}
+                              <Volume2 className="w-3 h-3 opacity-70" />
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-xs text-slate-500">ไม่มีเสียงอ่าน On'yomi ที่ใช้ทั่วไป</div>
+                      )}
+                    </div>
+
+                    <div className="rounded-2xl border border-slate-800 bg-slate-950/70 p-4 space-y-2">
+                      <div className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+                        เสียงคุน (Kun'yomi — คำอ่านเสียงญี่ปุ่นแท้)
+                      </div>
+                      {kNode.kunyomi.length > 0 ? (
+                        <div className="flex flex-wrap gap-2">
+                          {kNode.kunyomi.map((r, i) => (
+                            <button
+                              key={i}
+                              type="button"
+                              onClick={() => speakJapanese(r.replace(/[.\-]/g, ''))}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-sm font-bold text-emerald-200 cursor-pointer"
+                            >
+                              <span className="font-jp">{r}</span>
+                              {kNode.kunyomiRomaji[i] && (
+                                <span className="text-xs font-mono text-emerald-300/80">
+                                  [{kNode.kunyomiRomaji[i]}]
+                                </span>
+                              )}
+                              <Volume2 className="w-3 h-3 opacity-70" />
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-xs text-slate-500">ไม่มีเสียงอ่าน Kun'yomi ที่ใช้ทั่วไป</div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* All Related Vocabulary Words using this Kanji */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-base font-bold text-white flex items-center gap-2">
+                        <Link2 className="w-4 h-4 text-rose-400" />
+                        คำศัพท์ในคลังที่ใช้คันจิ 「{kNode.character}」 ({relatedWords.length} คำ)
+                      </h3>
+                      <span className="text-xs text-slate-400">
+                        คลิกที่ตัวคันจิอื่นในคำศัพท์เพื่อลิงก์ต่อไปได้เรื่อยๆ
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {relatedWords.map((word, idx) =>
+                        renderVocabCard(word, idx + 1)
+                      )}
+                    </div>
+                  </div>
+                </>
+              );
+            })()}
+          </div>
+        ) : currentGraphItem?.type === 'WORD' && wordMap[currentGraphItem.wordId] ? (
+          /* GRAPH NODE VIEW 2: Detailed Word Node View */
+          <div
+            ref={listContainerRef}
+            className="flex-1 overflow-y-auto p-5 space-y-6"
+          >
+            {(() => {
+              const word = wordMap[currentGraphItem.wordId];
+              const wMeta = LEVEL_METADATA[word.level];
+              const cMeta = WORD_CATEGORY_META[word.category];
+              const confusables = confusableIndex
+                ? getConfusableWords(word, confusableIndex)
+                : [];
+              const soundConfusables = confusables.filter(
+                (c) => c.type !== 'SIMILAR_MEANING'
+              );
+              const meaningSimilars = confusables.filter(
+                (c) => c.type === 'SIMILAR_MEANING'
+              );
+              const groupId = confusableIndex
+                ? getPrimaryGroupIdForWord(word, confusableIndex, meaningSimilars.length)
+                : null;
+
+              return (
+                <>
+                  <div className="rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950/30 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span
+                          className={`text-xs font-extrabold px-3 py-1 rounded-full border ${wMeta.badgeClass}`}
+                        >
+                          {word.level}
+                        </span>
+                        <span
+                          className={`text-xs font-bold px-3 py-1 rounded-full border ${cMeta.badgeClass}`}
+                        >
+                          {cMeta.labelTh}
+                        </span>
+                        {word.reading !== word.expression && (
+                          <span className="text-sm text-rose-300 font-jp font-semibold">
+                            【{word.reading}】
+                          </span>
+                        )}
+                        <span className="text-sm text-amber-300 font-mono font-semibold">
+                          [{word.romaji}]
+                        </span>
+                      </div>
+
+                      <div className="pt-1">
+                        <span className="text-4xl sm:text-5xl font-bold text-slate-100 font-jp">
+                          {word.expression}
+                        </span>
+                      </div>
+
+                      <div className="space-y-1 pt-2">
+                        <div className="text-base sm:text-lg font-bold text-white">
+                          🇹🇭 {word.meaningTh || word.meaning}
+                        </div>
+                        <div className="text-sm sm:text-base text-sky-300">
+                          🇬🇧 {word.meaning}
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => speakJapanese(word.reading || word.expression)}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-500/30 text-rose-300 text-xs sm:text-sm font-bold transition-colors cursor-pointer shrink-0"
+                    >
+                      <Volume2 className="w-4 h-4" />
+                      ฟังเสียงอ่านคำศัพท์
+                    </button>
+                  </div>
+
+                  {/* 1. Red Warning Section for Homophones / Confusable Words (shown FIRST) */}
+                  {soundConfusables.length > 0 && (
+                    <div className="rounded-2xl border border-rose-500/40 bg-rose-950/25 p-5 space-y-3">
+                      <div className="flex items-center gap-2 text-sm font-extrabold text-rose-400">
+                        <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0" />
+                        <span>
+                          พ้องเสียง / เสียงคล้าย ({soundConfusables.length})
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        {soundConfusables.map((c) => (
+                          <button
+                            key={c.word.id}
+                            type="button"
+                            onClick={() => navigateToWord(c.word.id)}
+                            className="w-full text-left rounded-xl border border-rose-500/30 bg-slate-950/85 hover:bg-rose-950/40 hover:border-rose-400/60 p-3 transition-all cursor-pointer flex items-center justify-between gap-2 group"
+                          >
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                                  {c.labelTh}
+                                </span>
+                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">
+                                  {c.word.level}
+                                </span>
+                                <span className="text-base font-extrabold text-rose-200 group-hover:text-white font-jp">
+                                  {c.word.expression}
+                                </span>
+                                <span className="text-xs text-rose-300/90 font-jp font-semibold">
+                                  【{c.word.reading}】
+                                </span>
+                                <span className="text-[11px] text-amber-300/90 font-mono">
+                                  [{c.word.romaji}]
+                                </span>
+                              </div>
+                              <div className="text-xs font-semibold text-white mt-1 truncate">
+                                {formatWordMeaning(c.word, meaningLanguage)}
+                              </div>
+                            </div>
+
+                            <span className="text-xs font-bold text-rose-300 group-hover:translate-x-0.5 transition-transform shrink-0">
+                              ดู ➔
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 2. Similar Meaning Words Section ("ความหมายใกล้เคียง" e.g. ageru/morau/kureru, inochi/jinsei) */}
+                  {meaningSimilars.length > 0 && (
+                    <div className="rounded-2xl border border-amber-500/40 bg-amber-950/20 p-5 space-y-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 text-sm font-extrabold text-amber-300">
+                          <Link2 className="w-5 h-5 text-amber-400 shrink-0" />
+                          <span>ความหมายใกล้เคียง ({meaningSimilars.length})</span>
+                        </div>
+
+                        {groupId && (
+                          <button
+                            type="button"
+                            onClick={() => navigateToGroup(groupId)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 text-xs font-extrabold shadow-md shadow-amber-500/20 transition-all cursor-pointer"
+                          >
+                            <Layers className="w-4 h-4" />
+                            <span>Group เปรียบเทียบ ➔</span>
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        {meaningSimilars.map((c) => (
+                          <button
+                            key={c.word.id}
+                            type="button"
+                            onClick={() => navigateToWord(c.word.id)}
+                            className="w-full text-left rounded-xl border border-amber-500/30 bg-slate-950/85 hover:bg-amber-950/40 hover:border-amber-400/60 p-3 transition-all cursor-pointer flex items-center justify-between gap-2 group"
+                          >
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                                  {c.labelTh}
+                                </span>
+                                <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">
+                                  {c.word.level}
+                                </span>
+                                <span className="text-base font-extrabold text-white group-hover:text-amber-200 font-jp">
+                                  {c.word.expression}
+                                </span>
+                                <span className="text-xs text-amber-200/90 font-jp font-semibold">
+                                  【{c.word.reading}】
+                                </span>
+                                <span className="text-[11px] text-amber-300/90 font-mono">
+                                  [{c.word.romaji}]
+                                </span>
+                              </div>
+                              <div className="text-xs text-slate-200 mt-1 truncate">
+                                ความหมาย:{' '}
+                                <span className="font-semibold text-white">
+                                  {formatWordMeaning(c.word, meaningLanguage)}
+                                </span>
+                              </div>
+                            </div>
+
+                            <span className="text-xs font-bold text-amber-300 group-hover:translate-x-0.5 transition-transform shrink-0">
+                              ดูคำนี้ ➔
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 2. Kanji Nodes inside this Word */}
+                  {word.kanjiChars.length > 0 && (
+                    <div className="space-y-3">
+                      <h3 className="text-base font-bold text-white">
+                        คันจิที่ประกอบในคำว่า 「{word.expression}」 ({word.kanjiChars.length} ตัว)
+                      </h3>
+
+                      <div className="flex flex-wrap gap-2">
+                        {word.kanjiChars.map((ch) => (
+                          <button
+                            key={`pill-node-${ch}`}
+                            type="button"
+                            onClick={() => navigateToKanji(ch)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-rose-500/20 border border-slate-700 hover:border-rose-500/40 text-xs font-jp font-bold text-amber-200 hover:text-rose-200 transition-all cursor-pointer"
+                          >
+                            <span>{formatKanjiLinkLabel(ch, kanjiDb, meaningLanguage)}</span>
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {word.kanjiChars.map((ch) => {
+                          const kNode = kanjiDb[ch];
+                          if (!kNode) return null;
+                          return (
+                            <div
+                              key={ch}
+                              onClick={() => navigateToKanji(ch)}
+                              className="rounded-2xl border border-slate-800 hover:border-rose-500/50 bg-slate-950/70 p-4 flex items-start justify-between gap-4 cursor-pointer transition-all"
+                            >
+                              <div className="flex items-start gap-3.5">
+                                <div className="w-14 h-14 rounded-2xl bg-slate-900 border border-slate-700 flex items-center justify-center text-3xl font-extrabold text-white font-jp shrink-0">
+                                  {ch}
+                                </div>
+                                <div className="space-y-1">
+                                  <div className="text-sm font-bold text-white">
+                                    🇹🇭 {kNode.meaningTh || kNode.meaningEn}
+                                  </div>
+                                  <div className="text-xs text-sky-300">
+                                    🇬🇧 {kNode.meaningEn}
+                                  </div>
+                                  {kNode.onyomi.length > 0 && (
+                                    <div className="text-xs text-slate-300">
+                                      <span className="text-amber-400 font-semibold">On: </span>
+                                      {kNode.onyomi.join('・')}
+                                    </div>
+                                  )}
+                                  {kNode.kunyomi.length > 0 && (
+                                    <div className="text-xs text-slate-300">
+                                      <span className="text-emerald-400 font-semibold">Kun: </span>
+                                      {kNode.kunyomi.join('・')}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                              <span className="text-xs font-bold text-rose-400 shrink-0">
+                                ดู {kNode.relatedWordIds.length} คำ ➔
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
+          </div>
+        ) : currentGraphItem?.type === 'GROUP' ? (
+          /* GRAPH NODE VIEW 3: Semantic Group Nuance Comparison View */
+          <div
+            ref={listContainerRef}
+            className="flex-1 overflow-y-auto overscroll-contain p-5 space-y-5"
+          >
+            {(() => {
+              const group = confusableIndex
+                ? resolveSemanticGroup(
+                    currentGraphItem.groupId,
+                    confusableIndex,
+                    wordMap
+                  )
+                : null;
+
+              if (!group) {
+                return (
+                  <div className="py-12 text-center text-slate-400 text-sm">
+                    ไม่พบข้อมูลกลุ่มคำที่มีความหมายใกล้เคียงนี้
+                  </div>
+                );
+              }
+
+              const memberWords = group.matchedWords || [];
+
+              return (
+                <>
+                  {/* Group Hero Header */}
+                  <div className="rounded-3xl border border-amber-500/40 bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/35 p-6 space-y-4">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="inline-flex items-center gap-1.5 text-xs font-extrabold px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                        <Layers className="w-3.5 h-3.5" />
+                        Group เปรียบเทียบคำที่มีความหมายใกล้เคียง ({group.memberNotes.length} คำ)
+                      </span>
+                      <span className="text-xs font-semibold px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700">
+                        เปรียบเทียบ ความหมาย • Feeling • การใช้งาน
+                      </span>
+                    </div>
+
+                    <div>
+                      <h3 className="text-xl sm:text-2xl font-extrabold text-white">
+                        {group.titleTh}
+                      </h3>
+                      <p className="text-sm text-amber-200/90 mt-1 font-medium">
+                        {group.summaryTh}
+                      </p>
+                    </div>
+
+                    {/* Core Difference Explanation Box */}
+                    <div className="rounded-2xl border border-slate-700/80 bg-slate-950/85 p-4 space-y-2">
+                      <div className="flex items-center gap-1.5 text-xs font-extrabold text-rose-300 uppercase tracking-wider">
+                        <Sparkles className="w-4 h-4 text-rose-400 shrink-0" />
+                        <span>สรุปจุดต่างหลัก (Core Difference)</span>
+                      </div>
+                      <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                        {group.coreDifferenceTh}
+                      </p>
+                    </div>
+
+                    {/* Quick Tip Box */}
+                    <div className="rounded-2xl border border-emerald-500/35 bg-emerald-950/20 p-4 space-y-1.5">
+                      <div className="flex items-center gap-1.5 text-xs font-extrabold text-emerald-300">
+                        <Lightbulb className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>เคล็ดลับจำง่าย & วิธีเลือกใช้ไม่ให้พลาด</span>
+                      </div>
+                      <p className="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
+                        {group.quickTipTh}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Detailed Comparison Cards for Each Word in the Group */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
+                        <BookOpen className="w-4 h-4 text-amber-400" />
+                        <span>
+                          เจาะลึกความต่างของแต่ละคำ (ความหมาย • Feeling • การใช้งาน)
+                        </span>
+                      </h4>
+                      <span className="text-xs text-slate-400">
+                        คลิก "ดูคำศัพท์นี้ ➔" เพื่อดูคันจิและคำพ้องเสียงของคำนั้น
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-3.5">
+                      {group.memberNotes.map((note, idx) => {
+                        const linkedWord = memberWords.find((w) =>
+                          doesNoteMatchWord(note, w)
+                        );
+                        const mwMeta = linkedWord
+                          ? LEVEL_METADATA[linkedWord.level]
+                          : null;
+                        const mwCatMeta = linkedWord
+                          ? WORD_CATEGORY_META[linkedWord.category]
+                          : null;
+
+                        return (
+                          <div
+                            key={`${note.key}-${idx}`}
+                            className="rounded-2xl border border-slate-800 hover:border-amber-500/40 bg-slate-950/85 p-4 sm:p-5 space-y-3.5 transition-all"
+                          >
+                            {/* Word Header */}
+                            <div className="flex flex-wrap items-start justify-between gap-3 pb-3 border-b border-slate-800/80">
+                              <div className="space-y-1.5">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <span className="text-xs font-mono font-bold text-slate-500">
+                                    #{idx + 1}
+                                  </span>
+                                  {mwMeta && linkedWord && (
+                                    <span
+                                      className={`text-[11px] font-extrabold px-2.5 py-0.5 rounded-md border ${mwMeta.badgeClass}`}
+                                    >
+                                      {linkedWord.level}
+                                    </span>
+                                  )}
+                                  {mwCatMeta && (
+                                    <span
+                                      className={`text-[11px] font-bold px-2.5 py-0.5 rounded-md border ${mwCatMeta.badgeClass}`}
+                                    >
+                                      {mwCatMeta.labelTh}
+                                    </span>
+                                  )}
+                                  <span className="text-xl sm:text-2xl font-extrabold text-amber-300 font-jp">
+                                    {note.key}
+                                  </span>
+                                  {note.readingLabel && (
+                                    <span className="text-sm text-rose-300 font-jp font-semibold">
+                                      {note.readingLabel}
+                                    </span>
+                                  )}
+                                </div>
+
+                                {linkedWord && (
+                                  <div className="text-xs sm:text-sm text-slate-200">
+                                    🇹🇭{' '}
+                                    <span className="font-bold text-white">
+                                      {linkedWord.meaningTh || linkedWord.meaning}
+                                    </span>{' '}
+                                    <span className="text-slate-500">|</span>{' '}
+                                    <span className="text-sky-300">
+                                      🇬🇧 {linkedWord.meaning}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="flex items-center gap-2 shrink-0">
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    speakJapanese(linkedWord?.reading || note.key)
+                                  }
+                                  title="ฟังเสียงอ่าน"
+                                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-rose-300 transition-colors cursor-pointer"
+                                >
+                                  <Volume2 className="w-4 h-4" />
+                                </button>
+                                {linkedWord && (
+                                  <button
+                                    type="button"
+                                    onClick={() => navigateToWord(linkedWord.id)}
+                                    className="px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 text-xs font-extrabold transition-colors cursor-pointer"
+                                  >
+                                    ดูคำศัพท์นี้ ➔
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Nuance Breakdown: Meaning Diff, Feeling, Usage, Example */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-xs">
+                              <div className="rounded-xl border border-slate-800 bg-slate-900/75 p-3 space-y-1">
+                                <div className="font-extrabold text-rose-300 flex items-center gap-1">
+                                  <span>🎯 ความหมาย</span>
+                                </div>
+                                <p className="text-slate-200 leading-relaxed">
+                                  {note.meaningDiff}
+                                </p>
+                              </div>
+
+                              <div className="rounded-xl border border-slate-800 bg-slate-900/75 p-3 space-y-1">
+                                <div className="font-extrabold text-amber-300 flex items-center gap-1">
+                                  <span>💭 Feeling</span>
+                                </div>
+                                <p className="text-slate-200 leading-relaxed">
+                                  {note.feelingNuance}
+                                </p>
+                              </div>
+
+                              <div className="rounded-xl border border-slate-800 bg-slate-900/75 p-3 space-y-1">
+                                <div className="font-extrabold text-sky-300 flex items-center gap-1">
+                                  <span>🛠️ การใช้</span>
+                                </div>
+                                <p className="text-slate-200 leading-relaxed">
+                                  {note.usageContext}
+                                </p>
+                              </div>
+                            </div>
+
+                            {note.exampleJa && (
+                              <div className="rounded-xl border border-indigo-500/30 bg-indigo-950/20 px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+                                <div className="flex items-start gap-2 min-w-0 flex-1">
+                                  <MessageCircle className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
+                                  <div className="space-y-0.5">
+                                    <div className="font-bold text-indigo-200 font-jp">
+                                      ตัวอย่าง: {note.exampleJa}
+                                    </div>
+                                    {note.exampleTh && (
+                                      <div className="text-slate-300">
+                                        คำแปล: {note.exampleTh}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => speakJapanese(note.exampleJa!)}
+                                  className="px-2.5 py-1 rounded-lg bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-200 text-[11px] font-bold cursor-pointer shrink-0"
+                                >
+                                  🔊 ฟังประโยค
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Direct Links to All Words in the Vocabulary DB in this Group */}
+                  {memberWords.length > 0 && (
+                    <div className="space-y-2.5 pt-2 border-t border-slate-800">
+                      <h4 className="text-xs sm:text-sm font-bold text-slate-300">
+                        คำศัพท์ในคลังที่อยู่ในกลุ่มนี้ ({memberWords.length} คำ):
+                      </h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        {memberWords.map((mw) => {
+                          const mwMeta = LEVEL_METADATA[mw.level];
+                          return (
+                            <button
+                              key={mw.id}
+                              type="button"
+                              onClick={() => navigateToWord(mw.id)}
+                              className="text-left rounded-xl border border-slate-800 hover:border-amber-500/50 bg-slate-950/75 hover:bg-slate-900 p-3 flex items-center justify-between gap-2 transition-all cursor-pointer"
+                            >
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span
+                                    className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${mwMeta.badgeClass}`}
+                                  >
+                                    {mw.level}
+                                  </span>
+                                  <span className="text-sm font-extrabold text-white font-jp">
+                                    {mw.expression}
+                                  </span>
+                                  <span className="text-xs text-rose-300 font-jp">
+                                    【{mw.reading}】
+                                  </span>
+                                </div>
+                                <div className="text-xs text-slate-300 mt-0.5 truncate">
+                                  {formatWordMeaning(mw, meaningLanguage)}
+                                </div>
+                              </div>
+                              <span className="text-xs font-bold text-amber-300 shrink-0">
+                                ดูคำนี้ ➔
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
+          </div>
+        ) : (
+          /* STANDARD LIST VIEW (VOCAB TAB or KANJI TAB) */
+          <>
+            {/* Filters */}
+            <div className="p-4 border-b border-slate-800 space-y-2.5 bg-slate-950/40">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setActiveLevel('ALL')}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                      activeLevel === 'ALL'
+                        ? 'bg-rose-500 text-white'
+                        : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                    }`}
+                  >
+                    ทั้งหมด (
+                    {activeTab === 'VOCAB'
+                      ? Object.keys(wordMap).length.toLocaleString()
+                      : allKanjiList.length.toLocaleString()}
+                    )
+                  </button>
+                  {JLPT_LEVELS.map((lvl) => {
+                    const count =
+                      activeTab === 'VOCAB'
+                        ? db[lvl].length
+                        : allKanjiList.filter((k) => k.level === lvl).length;
+                    return (
+                      <button
+                        key={lvl}
+                        type="button"
+                        onClick={() => setActiveLevel(lvl)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                          activeLevel === lvl
+                            ? 'bg-rose-500 text-white'
+                            : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                        }`}
+                      >
+                        {lvl} ({count.toLocaleString()})
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {/* Language Switcher */}
+                  <div className="inline-flex items-center rounded-xl bg-slate-950 p-0.5 border border-slate-800">
+                    <Globe className="w-3.5 h-3.5 text-sky-400 ml-2 mr-1" />
+                    {(['TH', 'EN', 'BOTH'] as MeaningLanguage[]).map((lang) => {
+                      const active = meaningLanguage === lang;
+                      return (
+                        <button
+                          key={lang}
+                          type="button"
+                          onClick={() => onChangeLanguage(lang)}
+                          className={`px-2 py-1 rounded-lg text-[11px] font-extrabold transition-all cursor-pointer ${
+                            active
+                              ? 'bg-sky-500 text-slate-950'
+                              : 'text-slate-400 hover:text-slate-200'
+                          }`}
+                        >
+                          {lang === 'TH' ? '🇹🇭 ไทย' : lang === 'EN' ? '🇬🇧 EN' : 'ไทย+EN'}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowReading((prev) => !prev)}
+                    className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                      showReading
+                        ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'
+                        : 'bg-slate-800 border-slate-700 text-slate-400'
+                    }`}
+                  >
+                    {showReading ? 'Hiragana: เปิด' : 'Hiragana: ปิด'}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setShowRomaji((prev) => !prev)}
+                    className={`px-2.5 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                      showRomaji
+                        ? 'bg-amber-500/15 border-amber-500/40 text-amber-300'
+                        : 'bg-slate-800 border-slate-700 text-slate-400'
+                    }`}
+                  >
+                    {showRomaji ? 'Romaji: เปิด' : 'Romaji: ปิด'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Part of Speech Filter Row (for VOCAB) + Random 100 Shuffle Controls */}
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5">
+                {activeTab === 'VOCAB' ? (
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="text-xs text-slate-400 mr-1">ชนิดคำ:</span>
+                    <button
+                      type="button"
+                      onClick={() => setActiveCategory('ALL')}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                        activeCategory === 'ALL'
+                          ? 'bg-slate-200 text-slate-950'
+                          : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700'
+                      }`}
+                    >
+                      ทุกชนิดคำ
+                    </button>
+                    {WORD_CATEGORIES.map((cat) => {
+                      const catMeta = WORD_CATEGORY_META[cat];
+                      const active = activeCategory === cat;
+                      return (
+                        <button
+                          key={cat}
+                          type="button"
+                          onClick={() => setActiveCategory(cat)}
+                          className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all cursor-pointer ${
+                            active
+                              ? catMeta.badgeClass + ' ring-1 ring-white/30'
+                              : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                          }`}
+                        >
+                          {catMeta.labelTh}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <div className="text-xs text-slate-400">
+                    กดปุ่ม "แสดงเพิ่มเติม" ที่มุมขวาล่างของการ์ดคันจิเพื่อดูและกดลิงก์ไปยังคำศัพท์ที่ใช้คันจิตัวนั้น
+                  </div>
+                )}
+
+                {/* Random 100 Shuffle & Reset Order Buttons */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => setShuffleSeed((prev) => prev + 1)}
+                    disabled={totalMatching <= 1}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-500 to-amber-500 hover:from-rose-400 hover:via-pink-400 hover:to-amber-400 text-slate-950 text-xs font-extrabold shadow-md shadow-rose-500/15 transition-all cursor-pointer disabled:opacity-40"
+                  >
+                    <Shuffle className="w-3.5 h-3.5" />
+                    <span>{shuffleButtonLabel}</span>
+                  </button>
+
+                  {shuffleSeed > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setShuffleSeed(0)}
+                      title="เรียงตามลำดับปกติ"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors cursor-pointer"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>เรียงตามเดิม</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="relative">
+                <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={
+                    activeTab === 'VOCAB'
+                      ? 'ค้นหาคำศัพท์ (ภาษาไทย, คันจิ, ฮิรางานะ, โรมันจิ, หรือภาษาอังกฤษ)...'
+                      : 'ค้นหาคันจิ (ตัวคันจิ เช่น 人 字 引, ความหมายไทย/อังกฤษ, หรือคำอ่าน)...'
+                  }
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-rose-500"
+                />
+              </div>
+            </div>
+
+            {/* Main Paginated Grid (Vocab Cards OR Kanji Cards) */}
+            <div
+              ref={listContainerRef}
+              className="flex-1 overflow-y-auto p-4 grid grid-cols-1 sm:grid-cols-2 gap-2.5"
+            >
+              {activeTab === 'VOCAB'
+                ? paginatedWords.map((word, idx) =>
+                    renderVocabCard(word, startItemNumber + idx)
+                  )
+                : paginatedKanji.map((kNode, idx) => {
+                    const meta = LEVEL_METADATA[kNode.level];
+                    const itemNumber = startItemNumber + idx;
+                    const relatedWords = kNode.relatedWordIds
+                      .map((id) => wordMap[id])
+                      .filter(Boolean);
+                    const canExpandKanji = relatedWords.length > 0;
+                    const isKanjiExpanded = expandedKanjiChars.has(
+                      kNode.character
+                    );
+
+                    return (
+                      <div
+                        key={`${kNode.character}-${shuffleSeed}`}
+                        className={`rounded-2xl border p-3.5 flex flex-col justify-between gap-3 transition-all ${
+                          isKanjiExpanded
+                            ? 'border-amber-500/50 bg-slate-900/90 shadow-lg'
+                            : 'border-slate-800/90 bg-slate-950/60 hover:border-slate-700'
+                        }`}
+                      >
+                        <div className="flex items-start gap-3.5">
+                          <div className="w-16 h-16 rounded-2xl bg-slate-900 border border-slate-700 flex flex-col items-center justify-center shrink-0">
+                            <span className="text-3xl font-extrabold text-white font-jp">
+                              {kNode.character}
+                            </span>
+                          </div>
+
+                          <div className="min-w-0 flex-1 space-y-1">
+                            <div className="flex items-center justify-between gap-2">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="text-[11px] font-mono font-bold text-slate-500">
+                                  #{itemNumber}
+                                </span>
+                                <span
+                                  className={`text-[11px] font-bold px-2 py-0.5 rounded-md border ${meta.badgeClass}`}
+                                >
+                                  {kNode.level}
+                                </span>
+                                {kNode.strokes > 0 && (
+                                  <span className="text-[11px] text-slate-400">
+                                    {kNode.strokes} ขีด
+                                  </span>
+                                )}
+                              </div>
+
+                              <button
+                                type="button"
+                                onClick={() => speakJapanese(kNode.character)}
+                                title="ฟังเสียงอ่านคันจิ"
+                                className="p-1.5 rounded-xl bg-slate-800/80 text-slate-300 hover:text-amber-300 hover:bg-slate-800 transition-colors cursor-pointer shrink-0"
+                              >
+                                <Volume2 className="w-4 h-4" />
+                              </button>
+                            </div>
+
+                            {meaningLanguage === 'BOTH' ? (
+                              <div className="space-y-0.5 pt-0.5">
+                                <div className="text-xs sm:text-sm font-bold text-white">
+                                  🇹🇭 {kNode.meaningTh || kNode.meaningEn}
+                                </div>
+                                <div className="text-xs text-sky-300/90">
+                                  🇬🇧 {kNode.meaningEn}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="text-xs sm:text-sm font-bold text-white pt-0.5">
+                                {meaningLanguage === 'TH'
+                                  ? kNode.meaningTh || kNode.meaningEn
+                                  : kNode.meaningEn}
+                              </div>
+                            )}
+
+                            {/* On / Kun Readings */}
+                            <div className="text-[11px] text-slate-300 space-y-0.5 pt-0.5">
+                              {kNode.onyomi.length > 0 && (
+                                <div className="truncate">
+                                  <span className="text-amber-400 font-semibold">On: </span>
+                                  <span className="font-jp">{kNode.onyomi.join('・')}</span>
+                                  {showRomaji && kNode.onyomiRomaji.length > 0 && (
+                                    <span className="text-slate-400 font-mono ml-1">
+                                      [{kNode.onyomiRomaji.join(', ')}]
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                              {kNode.kunyomi.length > 0 && (
+                                <div className="truncate">
+                                  <span className="text-emerald-400 font-semibold">Kun: </span>
+                                  <span className="font-jp">{kNode.kunyomi.join('・')}</span>
+                                  {showRomaji && kNode.kunyomiRomaji.length > 0 && (
+                                    <span className="text-slate-400 font-mono ml-1">
+                                      [{kNode.kunyomiRomaji.join(', ')}]
+                                    </span>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Bottom Row: Clean Bottom-Right "แสดงเพิ่มเติม" Button ONLY */}
+                        <div className="pt-2 border-t border-slate-800/70 flex items-center justify-end gap-2">
+                          <button
+                            type="button"
+                            disabled={!canExpandKanji}
+                            onClick={() =>
+                              canExpandKanji && toggleExpandKanji(kNode.character)
+                            }
+                            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-xl text-xs font-bold border transition-all shrink-0 ${
+                              !canExpandKanji
+                                ? 'bg-slate-900/60 border-slate-800/80 text-slate-600 cursor-not-allowed select-none'
+                                : isKanjiExpanded
+                                ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-sm cursor-pointer'
+                                : 'bg-slate-800 hover:bg-slate-700 text-amber-300 border-slate-700 cursor-pointer'
+                            }`}
+                          >
+                            <span>
+                              {isKanjiExpanded ? 'ซ่อนรายละเอียด' : 'แสดงเพิ่มเติม'}
+                            </span>
+                            {canExpandKanji &&
+                              (isKanjiExpanded ? (
+                                <ChevronUp className="w-3.5 h-3.5" />
+                              ) : (
+                                <ChevronDown className="w-3.5 h-3.5" />
+                              ))}
+                          </button>
+                        </div>
+
+                        {/* Expanded Drawer for Kanji Card: Links to Vocabulary Words using this Kanji */}
+                        {isKanjiExpanded && canExpandKanji && (
+                          <div className="pt-3 border-t border-slate-700/80 space-y-2.5 bg-slate-950/85 -mx-1.5 p-3 rounded-xl">
+                            <div className="flex items-center justify-between gap-2 text-xs">
+                              <span className="font-bold text-amber-300 flex items-center gap-1.5">
+                                <Link2 className="w-3.5 h-3.5" />
+                                คำศัพท์ที่ใช้คันจิ 「{kNode.character}」 ({relatedWords.length} คำ)
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => navigateToKanji(kNode.character)}
+                                className="text-[11px] text-sky-400 hover:text-sky-300 font-semibold underline cursor-pointer"
+                              >
+                                เปิดหน้าคันจิ 「{kNode.character}」 เต็มจอ ➔
+                              </button>
+                            </div>
+
+                            <div className="grid grid-cols-1 gap-1.5 max-h-60 overflow-y-auto pr-1">
+                              {relatedWords.map((sw) => {
+                                const swMeta = LEVEL_METADATA[sw.level];
+                                return (
+                                  <button
+                                    key={sw.id}
+                                    type="button"
+                                    onClick={() => navigateToWord(sw.id)}
+                                    className="w-full text-left rounded-lg border border-slate-800 hover:border-amber-500/50 bg-slate-900/90 hover:bg-slate-900 px-2.5 py-2 flex items-center justify-between gap-2 transition-all cursor-pointer group"
+                                  >
+                                    <div className="min-w-0 flex-1">
+                                      <div className="flex items-center gap-1.5 flex-wrap">
+                                        <span
+                                          className={`text-[10px] font-bold px-1.5 py-0.2 rounded border ${swMeta.badgeClass}`}
+                                        >
+                                          {sw.level}
+                                        </span>
+                                        <span className="text-sm font-extrabold text-white group-hover:text-amber-300 font-jp">
+                                          {sw.expression}
+                                        </span>
+                                        <span className="text-xs text-rose-300 font-jp">
+                                          【{sw.reading}】
+                                        </span>
+                                        {showRomaji && sw.romaji && (
+                                          <span className="text-[11px] text-amber-300/90 font-mono">
+                                            [{sw.romaji}]
+                                          </span>
+                                        )}
+                                      </div>
+                                      <div className="text-xs text-slate-300 mt-0.5 truncate">
+                                        {formatWordMeaning(sw, meaningLanguage)}
+                                      </div>
+                                    </div>
+                                    <span className="text-[11px] font-bold text-amber-400 shrink-0">
+                                      ดูคำนี้ ➔
+                                    </span>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+
+              {totalMatching === 0 && (
+                <div className="col-span-full py-12 text-center text-slate-400 text-sm">
+                  ไม่พบรายการที่ตรงกับตัวกรองหรือคำค้นหา "{searchQuery}"
+                </div>
+              )}
+            </div>
+
+            {/* Pagination Footer */}
+            <div className="px-4 sm:px-5 py-3 border-t border-slate-800 bg-slate-900/95 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-300">
+              <div className="flex items-center gap-2">
+                <span>
+                  แสดงรายการที่{' '}
+                  <strong className="text-white">
+                    {startItemNumber.toLocaleString()}–{endItemNumber.toLocaleString()}
+                  </strong>{' '}
+                  จากทั้งหมด{' '}
+                  <strong className="text-rose-300">
+                    {totalMatching.toLocaleString()}
+                  </strong>{' '}
+                  รายการ (หน้าละ {ITEMS_PER_PAGE})
+                </span>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-1.5">
+                <button
+                  type="button"
+                  disabled={safePage <= 1}
+                  onClick={() => setCurrentPage(1)}
+                  title="หน้าแรก"
+                  className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:pointer-events-none text-slate-200 cursor-pointer"
+                >
+                  <ChevronsLeft className="w-4 h-4" />
+                </button>
+
+                <button
+                  type="button"
+                  disabled={safePage <= 1}
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:pointer-events-none text-slate-200 font-semibold cursor-pointer"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                  <span>ก่อนหน้า</span>
+                </button>
+
+                <div className="hidden sm:flex items-center gap-1">
+                  {pageNumbers.map((pageNum) => (
+                    <button
+                      key={pageNum}
+                      type="button"
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`min-w-[30px] px-2 py-1.5 rounded-lg font-bold transition-colors cursor-pointer ${
+                        pageNum === safePage
+                          ? 'bg-rose-500 text-white'
+                          : 'bg-slate-800/80 hover:bg-slate-700 text-slate-300'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  ))}
+                </div>
+
+                <select
+                  value={safePage}
+                  onChange={(e) => setCurrentPage(Number(e.target.value))}
+                  aria-label="เลือกหน้า"
+                  className="px-2 py-1.5 rounded-lg bg-slate-950 border border-slate-700 text-slate-200 font-semibold focus:outline-none focus:border-rose-500 cursor-pointer"
+                >
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                    <option key={p} value={p}>
+                      หน้า {p} / {totalPages}
+                    </option>
+                  ))}
+                </select>
+
+                <button
+                  type="button"
+                  disabled={safePage >= totalPages}
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:pointer-events-none text-slate-200 font-semibold cursor-pointer"
+                >
+                  <span>ถัดไป</span>
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+
+                <button
+                  type="button"
+                  disabled={safePage >= totalPages}
+                  onClick={() => setCurrentPage(totalPages)}
+                  title="หน้าสุดท้าย"
+                  className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 disabled:opacity-40 disabled:pointer-events-none text-slate-200 cursor-pointer"
+                >
+                  <ChevronsRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
