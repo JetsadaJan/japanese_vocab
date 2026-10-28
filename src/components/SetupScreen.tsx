@@ -1,7 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   BookOpen,
+  Check,
   CheckCircle2,
+  ChevronDown,
+  ChevronUp,
   Eye,
   EyeOff,
   Flame,
@@ -10,6 +13,7 @@ import {
   Layers,
   Play,
   Shuffle,
+  Sliders,
   Sparkles,
 } from 'lucide-react';
 import {
@@ -19,12 +23,15 @@ import {
   MeaningLanguage,
   QuizMode,
   QuizSettings,
+  WordCategory,
 } from '../types';
 import {
   DEFAULT_LEVEL_WEIGHTS,
   JLPT_LEVELS,
   LEVEL_METADATA,
   VocabDatabase,
+  WORD_CATEGORIES,
+  WORD_CATEGORY_META,
 } from '../utils/vocabData';
 import { LevelDistributionPanel } from './LevelDistributionPanel';
 import { JapaneseText } from './JapaneseText';
@@ -62,17 +69,55 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
   );
   const totalKanjiCount = Object.keys(kanjiDb).length;
 
-  const activeQuizWordsCount = useMemo(() => {
-    const activeLevels = JLPT_LEVELS.filter(
+  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
+
+  const activeLevels = useMemo(() => {
+    const list = JLPT_LEVELS.filter(
       (lvl) => (settings.customWeights[lvl] || 0) > 0
     );
-    const levelsToCount =
-      activeLevels.length > 0 ? activeLevels : [settings.selectedLevel];
-    return levelsToCount.reduce(
-      (sum, lvl) => sum + (db[lvl]?.length || 0),
-      0
-    );
-  }, [db, settings.customWeights, settings.selectedLevel]);
+    return list.length > 0 ? list : [settings.selectedLevel];
+  }, [settings.customWeights, settings.selectedLevel]);
+
+  const hasCategoryFilter = Boolean(
+    settings.selectedCategories &&
+      settings.selectedCategories.length > 0 &&
+      settings.selectedCategories.length < WORD_CATEGORIES.length
+  );
+
+  const activeQuizWordsCount = useMemo(() => {
+    return activeLevels.reduce((sum, lvl) => {
+      const words = db[lvl] || [];
+      if (!hasCategoryFilter) return sum + words.length;
+      return (
+        sum +
+        words.filter((w) =>
+          settings.selectedCategories!.includes(w.category)
+        ).length
+      );
+    }, 0);
+  }, [db, activeLevels, hasCategoryFilter, settings.selectedCategories]);
+
+  const handleToggleCategory = (cat: WordCategory) => {
+    const current = settings.selectedCategories || [];
+    const isFiltered =
+      current.length > 0 && current.length < WORD_CATEGORIES.length;
+
+    if (!isFiltered) {
+      // Currently all categories are active; clicking one selects ONLY this one!
+      onUpdateSettings({ selectedCategories: [cat] });
+    } else {
+      if (current.includes(cat)) {
+        const next = current.filter((c) => c !== cat);
+        onUpdateSettings({ selectedCategories: next.length > 0 ? next : [] });
+      } else {
+        const next = [...current, cat];
+        onUpdateSettings({
+          selectedCategories:
+            next.length === WORD_CATEGORIES.length ? [] : next,
+        });
+      }
+    }
+  };
 
   const handleSelectLevel = (level: JLPTLevel) => {
     onUpdateSettings({
@@ -390,6 +435,125 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
             );
           })}
         </div>
+      </section>
+
+      {/* 5. Advanced Settings (ตั้งค่าขั้นสูง: กรองเฉพาะประเภทคำ) */}
+      <section className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden transition-all">
+        <button
+          type="button"
+          onClick={() => setIsAdvancedOpen(!isAdvancedOpen)}
+          className="w-full p-4 flex items-center justify-between gap-3 text-left hover:bg-slate-800/40 transition-colors cursor-pointer"
+        >
+          <div className="flex flex-wrap items-center gap-2">
+            <Sliders className="w-4 h-4 text-rose-400" />
+            <span className="text-sm sm:text-base font-bold text-white">
+              ตั้งค่าขั้นสูง
+            </span>
+            {hasCategoryFilter ? (
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/40 font-bold">
+                กรอง {settings.selectedCategories!.length} ประเภทคำ
+              </span>
+            ) : (
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 font-medium">
+                ทุกประเภทคำ
+              </span>
+            )}
+          </div>
+
+          <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium shrink-0">
+            <span>{isAdvancedOpen ? 'ซ่อน' : 'แสดง'}</span>
+            {isAdvancedOpen ? (
+              <ChevronUp className="w-4 h-4 text-slate-400" />
+            ) : (
+              <ChevronDown className="w-4 h-4 text-slate-400" />
+            )}
+          </div>
+        </button>
+
+        {isAdvancedOpen && (
+          <div className="p-4 pt-2 border-t border-slate-800/80 space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h4 className="text-xs sm:text-sm font-bold text-slate-200">
+                  เลือกประเภทคำศัพท์ (Part of Speech)
+                </h4>
+                <p className="text-[11px] text-slate-400 mt-0.5">
+                  จิ้มเลือกประเภทคำที่ต้องการให้ออกในแบบฝึกหัด (เลือกได้มากกว่า 1 ประเภท):
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => onUpdateSettings({ selectedCategories: [] })}
+                className={`text-xs px-3 py-1 rounded-xl font-bold transition-all cursor-pointer ${
+                  !hasCategoryFilter
+                    ? 'bg-rose-500 text-slate-950 shadow-sm'
+                    : 'bg-slate-800 hover:bg-slate-700 text-slate-300'
+                }`}
+              >
+                เลือกทุกประเภท
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+              {WORD_CATEGORIES.map((cat) => {
+                const meta = WORD_CATEGORY_META[cat];
+                const isSelected =
+                  !hasCategoryFilter ||
+                  (settings.selectedCategories &&
+                    settings.selectedCategories.includes(cat));
+
+                const countInActiveLevels = activeLevels.reduce(
+                  (sum, lvl) =>
+                    sum +
+                    (db[lvl] || []).filter((w) => w.category === cat).length,
+                  0
+                );
+
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => handleToggleCategory(cat)}
+                    className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-2 ${
+                      isSelected
+                        ? 'bg-slate-800/90 border-rose-500/60 ring-1 ring-rose-500/40 text-white shadow-md'
+                        : 'bg-slate-950/60 border-slate-800/80 text-slate-500 hover:border-slate-700'
+                    }`}
+                  >
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span
+                          className={`text-xs sm:text-sm font-bold ${
+                            isSelected ? 'text-white' : 'text-slate-400'
+                          }`}
+                        >
+                          {meta.labelTh}
+                        </span>
+                        <span className="text-[10px] text-slate-500">
+                          ({meta.labelEn})
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-slate-400 font-mono mt-0.5">
+                        {countInActiveLevels.toLocaleString()} คำ
+                      </div>
+                    </div>
+
+                    <div
+                      className={`w-5 h-5 rounded-lg flex items-center justify-center border transition-all shrink-0 ${
+                        isSelected
+                          ? 'bg-rose-500 border-rose-400 text-slate-950'
+                          : 'border-slate-700 bg-slate-900 text-transparent'
+                      }`}
+                    >
+                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Start CTA Button */}

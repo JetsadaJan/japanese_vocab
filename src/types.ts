@@ -59,6 +59,7 @@ export interface QuizSettings {
   customWeights: LevelWeights;
   distractorSameLevelPrefer: boolean;
   categoryFilter?: WordCategory | 'ALL';
+  selectedCategories?: WordCategory[];
 }
 
 export interface QuizQuestion {

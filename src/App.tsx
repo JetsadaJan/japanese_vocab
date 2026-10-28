@@ -134,7 +134,8 @@ export function App() {
       settings.selectedLevel,
       settings.quizMode,
       usedWordIdsRef.current,
-      settings.categoryFilter
+      settings.categoryFilter,
+      settings.selectedCategories
     );
     usedWordIdsRef.current.add(firstQ.targetWord.id);
     setCurrentQuestion(firstQ);
@@ -167,7 +168,8 @@ export function App() {
       settings.selectedLevel,
       settings.quizMode,
       usedWordIdsRef.current,
-      settings.categoryFilter
+      settings.categoryFilter,
+      settings.selectedCategories
     );
     usedWordIdsRef.current.add(nextQ.targetWord.id);
     setCurrentQuestion(nextQ);

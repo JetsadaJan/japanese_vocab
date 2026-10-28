@@ -7,7 +7,7 @@ import {
   VocabWord,
   WordCategory,
 } from '../types';
-import { JLPT_LEVELS } from './constants';
+import { JLPT_LEVELS, WORD_CATEGORIES } from './constants';
 
 export type VocabDatabase = Record<JLPTLevel, VocabWord[]>;
 
@@ -186,14 +186,24 @@ export function generateQuizQuestion(
   selectedLevel: JLPTLevel,
   quizMode: QuizMode,
   usedWordIds: Set<string>,
-  categoryFilter?: WordCategory | 'ALL'
+  categoryFilter?: WordCategory | 'ALL',
+  selectedCategories?: WordCategory[]
 ): QuizQuestion {
   const chosenLevel = pickLevelByWeights(weights, db, selectedLevel);
   let levelPool = db[chosenLevel].length > 0 ? db[chosenLevel] : db[selectedLevel];
 
   // Apply Category / Part of Speech filter if requested
-  if (categoryFilter && categoryFilter !== 'ALL') {
-    const filtered = levelPool.filter((w) => w.category === categoryFilter);
+  const activeCategories =
+    selectedCategories &&
+    selectedCategories.length > 0 &&
+    selectedCategories.length < WORD_CATEGORIES.length
+      ? selectedCategories
+      : categoryFilter && categoryFilter !== 'ALL'
+      ? [categoryFilter]
+      : null;
+
+  if (activeCategories && activeCategories.length > 0) {
+    const filtered = levelPool.filter((w) => activeCategories.includes(w.category));
     if (filtered.length > 0) {
       levelPool = filtered;
     }
