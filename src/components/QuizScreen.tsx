@@ -419,7 +419,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                 <h2 className="text-2xl sm:text-4xl font-medium text-[#F3F4F6] leading-snug break-words">
                   “{currentQuestion.targetWord.meaningTh || currentQuestion.targetWord.meaning}”
                 </h2>
-                <div className="text-base sm:text-xl font-medium text-[#FDE047] break-words">
+                <div className="text-base sm:text-xl font-medium text-[#FBBF24] break-words">
                   ({currentQuestion.targetWord.meaning})
                 </div>
               </div>
@@ -527,7 +527,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                                 {opt.meaningTh}
                               </span>
                             </div>
-                            <div className="text-[#FDE047]">
+                            <div className="text-[#FBBF24]">
                               <span>{opt.meaning}</span>
                             </div>
                             <div className="flex flex-wrap items-center gap-1 pt-1">
@@ -548,7 +548,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                             <div className="text-base sm:text-lg font-medium leading-snug break-words text-[#F3F4F6]">
                               {opt.meaningTh || opt.meaning}
                             </div>
-                            <div className="text-xs sm:text-sm font-normal text-[#FDE047] break-words">
+                            <div className="text-xs sm:text-sm font-normal text-[#FBBF24] break-words">
                               {opt.meaning}
                             </div>
                           </div>
@@ -574,7 +574,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                               )}
                             </div>
                             {settings.meaningLanguage === 'TH' && (
-                              <div className="text-[#FDE047]">{opt.meaning}</div>
+                              <div className="text-[#FBBF24]">{opt.meaning}</div>
                             )}
                             {settings.meaningLanguage === 'EN' && (
                               <div className="text-[#9CA3AF]">{opt.meaningTh}</div>
@@ -826,7 +826,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                 <span className="font-sans font-medium text-[#F3F4F6]">
                   {currentQuestion.targetWord.meaningTh}
                 </span>{' '}
-                <span className="font-sans text-[#FDE047]">
+                <span className="font-sans text-[#FBBF24]">
                   ({currentQuestion.targetWord.meaning})
                 </span>
               </div>

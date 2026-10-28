@@ -341,7 +341,7 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({
                         <div className="text-[#F3F4F6] font-medium">
                           {word.meaningTh || word.meaning}
                         </div>
-                        <div className="text-[#FDE047]">
+                        <div className="text-[#FBBF24]">
                           {word.meaning}
                         </div>
                       </div>

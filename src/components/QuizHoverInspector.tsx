@@ -172,7 +172,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                           <div className="text-sm sm:text-base font-bold text-[#F3F4F6]">
                             {kNode.meaningTh || kNode.meaningEn}
                           </div>
-                          <div className="text-xs sm:text-sm text-[#FDE047] font-medium">
+                          <div className="text-xs sm:text-sm text-[#FBBF24] font-medium">
                             {kNode.meaningEn}
                           </div>
                         </div>
@@ -342,7 +342,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                         <div className="text-sm font-bold text-[#F3F4F6]">
                           {word.meaningTh || word.meaning}
                         </div>
-                        <div className="text-xs text-[#FDE047]">
+                        <div className="text-xs text-[#FBBF24]">
                           {word.meaning}
                         </div>
                       </div>
