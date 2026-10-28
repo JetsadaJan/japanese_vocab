@@ -413,17 +413,13 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
 
         {/* Prompt Content */}
         {currentQuestion.direction === 'EN_TO_JA' ? (
-          <div className="py-3 sm:py-5 space-y-2">
-            <div className="inline-flex items-center gap-1.5 text-xs font-medium text-[#D4AF37]">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>ความหมาย ({langDisplayLabel})</span>
-            </div>
+          <div className="py-4 sm:py-6 space-y-2">
             {settings.meaningLanguage === 'BOTH' ? (
               <div className="space-y-1.5 max-w-2xl mx-auto">
                 <h2 className="text-2xl sm:text-4xl font-medium text-[#F3F4F6] leading-snug break-words">
                   “{currentQuestion.targetWord.meaningTh || currentQuestion.targetWord.meaning}”
                 </h2>
-                <div className="text-base sm:text-xl font-normal text-[#9CA3AF] break-words">
+                <div className="text-base sm:text-xl font-medium text-[#FDE047] break-words">
                   ({currentQuestion.targetWord.meaning})
                 </div>
               </div>
@@ -434,21 +430,15 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
             )}
           </div>
         ) : (
-          <div className="py-3 sm:py-5 space-y-2">
-            <div className="inline-flex items-center gap-1.5 text-xs font-medium text-[#D4AF37]">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>คำศัพท์ญี่ปุ่น</span>
-            </div>
-            <div className="py-1">
-              <JapaneseText
-                expression={currentQuestion.targetWord.expression}
-                reading={currentQuestion.targetWord.reading}
-                romaji={currentQuestion.targetWord.romaji}
-                showHiragana={effectiveShowHiragana}
-                showRomaji={effectiveShowRomaji}
-                size="xl"
-              />
-            </div>
+          <div className="py-4 sm:py-6">
+            <JapaneseText
+              expression={currentQuestion.targetWord.expression}
+              reading={currentQuestion.targetWord.reading}
+              romaji={currentQuestion.targetWord.romaji}
+              showHiragana={effectiveShowHiragana}
+              showRomaji={effectiveShowRomaji}
+              size="xl"
+            />
           </div>
         )}
       </div>
@@ -559,7 +549,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                             <div className="text-base sm:text-lg font-medium leading-snug break-words text-[#F3F4F6]">
                               {opt.meaningTh || opt.meaning}
                             </div>
-                            <div className="text-xs sm:text-sm font-normal text-[#9CA3AF] break-words">
+                            <div className="text-xs sm:text-sm font-normal text-[#FDE047] break-words">
                               {opt.meaning}
                             </div>
                           </div>
@@ -576,7 +566,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                                 {opt.expression}
                               </span>
                               {opt.reading !== opt.expression && (
-                                <span className="text-[#9CA3AF]"> ({opt.reading})</span>
+                                <span className="text-[#FB923C]"> ({opt.reading})</span>
                               )}
                               {opt.romaji && (
                                 <span className="text-[#FBBF24] font-mono ml-1">
@@ -690,7 +680,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                                 <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                   {c.word.expression}
                                 </span>
-                                <span className="text-xs text-[#9CA3AF] font-jp">
+                                <span className="text-xs text-[#FB923C] font-jp font-medium">
                                   ({c.word.reading})
                                 </span>
                                 {effectiveShowRomaji && c.word.romaji && (
@@ -748,7 +738,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                                 <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                   {c.word.expression}
                                 </span>
-                                <span className="text-xs text-[#9CA3AF] font-jp">
+                                <span className="text-xs text-[#FB923C] font-jp font-medium">
                                   ({c.word.reading})
                                 </span>
                                 {effectiveShowRomaji && c.word.romaji && (
@@ -823,7 +813,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                 </span>
                 {currentQuestion.targetWord.reading !==
                   currentQuestion.targetWord.expression && (
-                  <span className="text-[#9CA3AF] font-medium">
+                  <span className="text-[#FB923C] font-medium">
                     {' '}
                     【{currentQuestion.targetWord.reading}】
                   </span>
@@ -837,7 +827,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
                 <span className="font-sans font-medium text-[#F3F4F6]">
                   {currentQuestion.targetWord.meaningTh}
                 </span>{' '}
-                <span className="font-sans text-[#9CA3AF]">
+                <span className="font-sans text-[#FDE047]">
                   ({currentQuestion.targetWord.meaning})
                 </span>
               </div>

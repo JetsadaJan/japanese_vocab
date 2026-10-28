@@ -172,7 +172,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                           <div className="text-sm sm:text-base font-bold text-[#F3F4F6]">
                             🇹🇭 {kNode.meaningTh || kNode.meaningEn}
                           </div>
-                          <div className="text-xs sm:text-sm text-[#9CA3AF] font-medium">
+                          <div className="text-xs sm:text-sm text-[#FDE047] font-medium">
                             🇬🇧 {kNode.meaningEn}
                           </div>
                         </div>
@@ -275,7 +275,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                                 {w.level}
                               </span>
                             </div>
-                            <div className="text-[11px] text-[#9CA3AF] font-jp">
+                            <div className="text-[11px] text-[#FB923C] font-jp font-medium">
                               {w.reading}
                               {showRomaji && w.romaji ? (
                                 <span className="text-[#FBBF24] font-mono ml-1">[{w.romaji}]</span>
@@ -326,7 +326,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                         >
                           {catMeta.labelTh}
                         </span>
-                        <span className="text-xs text-[#9CA3AF] font-jp font-medium">
+                        <span className="text-xs text-[#FB923C] font-jp font-medium">
                           【{word.reading}】
                         </span>
                         <span className="text-xs text-[#FBBF24] font-mono font-semibold">
@@ -342,7 +342,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                         <div className="text-sm font-bold text-[#F3F4F6]">
                           🇹🇭 {word.meaningTh || word.meaning}
                         </div>
-                        <div className="text-xs text-[#9CA3AF]">
+                        <div className="text-xs text-[#FDE047]">
                           🇬🇧 {word.meaning}
                         </div>
                       </div>
@@ -384,7 +384,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                                 <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                   {c.word.expression}
                                 </span>
-                                <span className="text-xs text-[#9CA3AF] font-jp">
+                                <span className="text-xs text-[#FB923C] font-jp font-medium">
                                   ({c.word.reading})
                                 </span>
                                 {showRomaji && c.word.romaji && (
@@ -443,7 +443,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                                 <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                   {c.word.expression}
                                 </span>
-                                <span className="text-xs text-[#9CA3AF] font-jp">
+                                <span className="text-xs text-[#FB923C] font-jp font-medium">
                                   ({c.word.reading})
                                 </span>
                                 {showRomaji && c.word.romaji && (
@@ -559,7 +559,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                                   {note.key}
                                 </span>
                                 {note.readingLabel && (
-                                  <span className="text-xs text-[#9CA3AF] font-jp">
+                                  <span className="text-xs text-[#FB923C] font-jp font-medium">
                                     {note.readingLabel}
                                   </span>
                                 )}
@@ -675,7 +675,7 @@ export const QuizHoverInspector: React.FC<QuizHoverInspectorProps> = ({
                                 <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                   {mw.expression}
                                 </span>
-                                <span className="text-xs text-[#9CA3AF] font-jp">
+                                <span className="text-xs text-[#FB923C] font-jp font-medium">
                                   ({mw.reading})
                                 </span>
                               </div>

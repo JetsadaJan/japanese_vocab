@@ -403,7 +403,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                 {catMeta.labelTh}
               </span>
               {showReading && word.reading !== word.expression && (
-                <span className="text-xs text-[#9CA3AF] font-jp font-medium">
+                <span className="text-xs text-[#FB923C] font-jp font-medium">
                   {word.reading}
                 </span>
               )}
@@ -439,8 +439,8 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                 </span>
                 <span>{word.meaningTh || word.meaning}</span>
               </div>
-              <div className="text-xs sm:text-sm text-[#9CA3AF] break-words flex items-start gap-1.5">
-                <span className="text-[11px] px-1.5 py-0.2 rounded bg-[#1F2229] text-[#9CA3AF] border border-[#2A2D36] font-bold shrink-0 mt-0.5">
+              <div className="text-xs sm:text-sm text-[#FDE047] break-words flex items-start gap-1.5">
+                <span className="text-[11px] px-1.5 py-0.2 rounded bg-[#1F2229] text-[#FDE047] border border-[#2A2D36] font-bold shrink-0 mt-0.5">
                   EN
                 </span>
                 <span>{word.meaning}</span>
@@ -511,7 +511,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                           <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                             {c.word.expression}
                           </span>
-                          <span className="text-xs text-[#9CA3AF] font-jp font-medium">
+                          <span className="text-xs text-[#FB923C] font-jp font-medium">
                             【{c.word.reading}】
                           </span>
                           {showRomaji && c.word.romaji && (
@@ -574,7 +574,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                           <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                             {c.word.expression}
                           </span>
-                          <span className="text-xs text-[#9CA3AF] font-jp font-medium">
+                          <span className="text-xs text-[#FB923C] font-jp font-medium">
                             【{c.word.reading}】
                           </span>
                           {showRomaji && c.word.romaji && (
@@ -672,7 +672,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                               <div className="text-[#F3F4F6] font-medium">
                                 🇹🇭 {kNode.meaningTh || kNode.meaningEn}
                               </div>
-                              <div className="text-[#9CA3AF]">
+                              <div className="text-[#FDE047]">
                                 🇬🇧 {kNode.meaningEn}
                               </div>
                             </div>
@@ -929,8 +929,8 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                             </span>
                             <span>{kNode.meaningTh || kNode.meaningEn}</span>
                           </div>
-                          <div className="text-sm sm:text-base font-normal text-[#9CA3AF] flex items-center gap-2">
-                            <span className="text-xs px-2 py-0.5 rounded bg-[#1F2229] text-[#9CA3AF] border border-[#2A2D36] font-bold">
+                          <div className="text-sm sm:text-base font-normal text-[#FDE047] flex items-center gap-2">
+                            <span className="text-xs px-2 py-0.5 rounded bg-[#1F2229] text-[#FDE047] border border-[#2A2D36] font-bold">
                               EN
                             </span>
                             <span>{kNode.meaningEn}</span>
@@ -1069,7 +1069,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                           {cMeta.labelTh}
                         </span>
                         {word.reading !== word.expression && (
-                          <span className="text-sm text-[#9CA3AF] font-jp font-medium">
+                          <span className="text-sm text-[#FB923C] font-jp font-medium">
                             【{word.reading}】
                           </span>
                         )}
@@ -1088,7 +1088,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                         <div className="text-base sm:text-lg font-bold text-[#F3F4F6]">
                           🇹🇭 {word.meaningTh || word.meaning}
                         </div>
-                        <div className="text-sm sm:text-base text-[#9CA3AF]">
+                        <div className="text-sm sm:text-base text-[#FDE047]">
                           🇬🇧 {word.meaning}
                         </div>
                       </div>
@@ -1133,7 +1133,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                                 <span className="text-base font-medium text-[#F3F4F6] font-jp">
                                   {c.word.expression}
                                 </span>
-                                <span className="text-xs text-[#9CA3AF] font-jp font-medium">
+                                <span className="text-xs text-[#FB923C] font-jp font-medium">
                                   【{c.word.reading}】
                                 </span>
                                 <span className="text-[11px] text-[#FBBF24] font-mono">
@@ -1194,7 +1194,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                                 <span className="text-base font-medium text-[#F3F4F6] font-jp">
                                   {c.word.expression}
                                 </span>
-                                <span className="text-xs text-[#9CA3AF] font-jp font-medium">
+                                <span className="text-xs text-[#FB923C] font-jp font-medium">
                                   【{c.word.reading}】
                                 </span>
                                 <span className="text-[11px] text-[#FBBF24] font-mono">
@@ -1256,7 +1256,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                                   <div className="text-sm font-bold text-[#F3F4F6]">
                                     🇹🇭 {kNode.meaningTh || kNode.meaningEn}
                                   </div>
-                                  <div className="text-xs text-[#9CA3AF]">
+                                  <div className="text-xs text-[#FDE047]">
                                     🇬🇧 {kNode.meaningEn}
                                   </div>
                                   {kNode.onyomi.length > 0 && (
@@ -1413,7 +1413,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                                     {note.key}
                                   </span>
                                   {note.readingLabel && (
-                                    <span className="text-sm text-[#9CA3AF] font-jp font-medium">
+                                    <span className="text-sm text-[#FB923C] font-jp font-medium">
                                       {note.readingLabel}
                                     </span>
                                   )}
@@ -1426,7 +1426,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                                       {linkedWord.meaningTh || linkedWord.meaning}
                                     </span>{' '}
                                     <span className="text-[#6B7280]">|</span>{' '}
-                                    <span className="text-[#9CA3AF]">
+                                    <span className="text-[#FDE047]">
                                       🇬🇧 {linkedWord.meaning}
                                     </span>
                                   </div>
@@ -1542,7 +1542,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                                   <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                     {mw.expression}
                                   </span>
-                                  <span className="text-xs text-[#9CA3AF] font-jp">
+                                  <span className="text-xs text-[#FB923C] font-jp font-medium">
                                     【{mw.reading}】
                                   </span>
                                 </div>
@@ -1808,7 +1808,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                                 <div className="text-xs sm:text-sm font-medium text-[#F3F4F6]">
                                   🇹🇭 {kNode.meaningTh || kNode.meaningEn}
                                 </div>
-                                <div className="text-xs text-[#9CA3AF]">
+                                <div className="text-xs text-[#FDE047]">
                                   🇬🇧 {kNode.meaningEn}
                                 </div>
                               </div>
@@ -1913,7 +1913,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                                         <span className="text-sm font-medium text-[#F3F4F6] font-jp">
                                           {sw.expression}
                                         </span>
-                                        <span className="text-xs text-[#9CA3AF] font-jp">
+                                        <span className="text-xs text-[#FB923C] font-jp font-medium">
                                           【{sw.reading}】
                                         </span>
                                         {showRomaji && sw.romaji && (
