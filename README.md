@@ -17,29 +17,57 @@ Thai translations and contextual usage distinctions were supplemented and curate
 
 ### Prerequisites
 
-- Node.js 18 or higher
-- npm
+- Node.js 18 or higher ([nodejs.org](https://nodejs.org/))
+- Git ([git-scm.com](https://git-scm.com/))
 
-### Installation
+### macOS
+
+Open Terminal and execute the following:
 
 ```bash
+# Clone the repository
 git clone https://github.com/JetsadaJan/japanese_vocab.git
 cd japanese_vocab
+
+# Install dependencies
 npm install
-```
 
-### Development
-
-```bash
+# Start development server (http://localhost:5173/)
 npm run dev
+
+# Build for production
+npm run build
 ```
 
-The local development server runs at `http://localhost:5173/`.
-
-### Production Build
+Production build artifacts will be created in the `dist` folder. To preview the production build locally:
 
 ```bash
+npm run preview
+```
+
+### Windows
+
+Open PowerShell or Command Prompt (cmd.exe) and execute the following:
+
+```powershell
+# Clone the repository
+git clone https://github.com/JetsadaJan/japanese_vocab.git
+cd japanese_vocab
+
+# Install dependencies
+npm install
+
+# Start development server (http://localhost:5173/)
+npm run dev
+
+# Build for production
 npm run build
+```
+
+Production build artifacts will be created in the `dist` folder. To preview the production build locally:
+
+```powershell
+npm run preview
 ```
 
 ## License
