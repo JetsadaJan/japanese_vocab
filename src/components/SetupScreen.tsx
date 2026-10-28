@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   BookOpen,
   CheckCircle2,
@@ -61,7 +61,18 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
     0
   );
   const totalKanjiCount = Object.keys(kanjiDb).length;
-  const currentLevelWordsCount = db[settings.selectedLevel]?.length || 0;
+
+  const activeQuizWordsCount = useMemo(() => {
+    const activeLevels = JLPT_LEVELS.filter(
+      (lvl) => (settings.customWeights[lvl] || 0) > 0
+    );
+    const levelsToCount =
+      activeLevels.length > 0 ? activeLevels : [settings.selectedLevel];
+    return levelsToCount.reduce(
+      (sum, lvl) => sum + (db[lvl]?.length || 0),
+      0
+    );
+  }, [db, settings.customWeights, settings.selectedLevel]);
 
   const handleSelectLevel = (level: JLPTLevel) => {
     onUpdateSettings({
@@ -386,12 +397,12 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
         <button
           type="button"
           onClick={onStartQuiz}
-          disabled={currentLevelWordsCount === 0}
+          disabled={activeQuizWordsCount === 0}
           className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-rose-500 via-pink-500 to-amber-500 hover:from-rose-400 hover:via-pink-400 hover:to-amber-400 text-slate-950 font-extrabold text-base sm:text-lg shadow-xl shadow-rose-500/20 hover:shadow-rose-500/35 transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <Play className="w-5 h-5 fill-slate-950" />
           <span>
-            เริ่มทายคำศัพท์ {settings.selectedLevel} ({currentLevelWordsCount.toLocaleString()} คำ)
+            เริ่มทายคำศัพท์ ({activeQuizWordsCount.toLocaleString()} คำ)
           </span>
         </button>
       </div>
