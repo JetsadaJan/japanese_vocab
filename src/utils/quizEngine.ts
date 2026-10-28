@@ -8,6 +8,7 @@ import {
   WordCategory,
 } from '../types';
 import { JLPT_LEVELS, WORD_CATEGORIES } from './constants';
+import { ConfusableIndex, getConfusableWords } from './confusableWords';
 
 export type VocabDatabase = Record<JLPTLevel, VocabWord[]>;
 
@@ -187,7 +188,8 @@ export function generateQuizQuestion(
   quizMode: QuizMode,
   usedWordIds: Set<string>,
   categoryFilter?: WordCategory | 'ALL',
-  selectedCategories?: WordCategory[]
+  selectedCategories?: WordCategory[],
+  confusableIndex?: ConfusableIndex | null
 ): QuizQuestion {
   const chosenLevel = pickLevelByWeights(weights, db, selectedLevel);
   let levelPool = db[chosenLevel].length > 0 ? db[chosenLevel] : db[selectedLevel];
@@ -238,6 +240,49 @@ export function generateQuizQuestion(
     return copy;
   };
 
+  const isDistinctOption = (existing: VocabWord, candidate: VocabWord): boolean => {
+    if (existing.id === candidate.id) return false;
+    if (existing.expression.trim() === candidate.expression.trim()) return false;
+    const thA = existing.meaningTh.trim();
+    const thB = candidate.meaningTh.trim();
+    if (thA && thB && thA === thB) return false;
+    const enA = existing.meaning.toLowerCase().trim();
+    const enB = candidate.meaning.toLowerCase().trim();
+    if (enA && enB && enA === enB) return false;
+    return true;
+  };
+
+  // Weighted probability for confusable/similar distractors (0 to 2 choices):
+  // - 25% chance: 0 confusable distractors (all 3 distractors are random)
+  // - 50% chance: 1 confusable distractor (1 confusable + 2 random)
+  // - 25% chance: 2 confusable distractors (2 confusables + 1 random)
+  if (confusableIndex) {
+    const roll = Math.random();
+    const targetConfusableCount = roll < 0.25 ? 0 : roll < 0.75 ? 1 : 2;
+
+    if (targetConfusableCount > 0) {
+      const allConfusables = getConfusableWords(targetWord, confusableIndex, 6, 6);
+      const soundMatches = shuffleArray(
+        allConfusables.filter((m) => m.type !== 'SIMILAR_MEANING')
+      ).slice(0, 3);
+      const meaningMatches = shuffleArray(
+        allConfusables.filter((m) => m.type === 'SIMILAR_MEANING')
+      ).slice(0, 3);
+
+      const confusableCandidates = shuffleArray([
+        ...soundMatches.map((m) => m.word),
+        ...meaningMatches.map((m) => m.word),
+      ]);
+
+      for (const candidate of confusableCandidates) {
+        if (selectedOptions.length >= 1 + targetConfusableCount) break;
+        if (selectedOptions.every((existing) => isDistinctOption(existing, candidate))) {
+          selectedOptions.push(candidate);
+        }
+      }
+    }
+  }
+
   const shuffledSameCat = shuffleArray(sameLevelSameCategoryPool);
   for (const candidate of shuffledSameCat) {
     if (selectedOptions.length >= 4) break;
@@ -252,14 +297,7 @@ export function generateQuizQuestion(
   if (selectedOptions.length < 4) {
     for (const candidate of shuffledSameCat) {
       if (selectedOptions.length >= 4) break;
-      const alreadyPicked = selectedOptions.some(
-        (existing) =>
-          existing.id === candidate.id ||
-          existing.expression === candidate.expression ||
-          existing.meaningTh.trim() === candidate.meaningTh.trim() ||
-          existing.meaning.toLowerCase().trim() === candidate.meaning.toLowerCase().trim()
-      );
-      if (!alreadyPicked) {
+      if (selectedOptions.every((existing) => isDistinctOption(existing, candidate))) {
         selectedOptions.push(candidate);
       }
     }

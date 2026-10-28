@@ -135,7 +135,8 @@ export function App() {
       settings.quizMode,
       usedWordIdsRef.current,
       settings.categoryFilter,
-      settings.selectedCategories
+      settings.selectedCategories,
+      confusableIndex
     );
     usedWordIdsRef.current.add(firstQ.targetWord.id);
     setCurrentQuestion(firstQ);
@@ -169,7 +170,8 @@ export function App() {
       settings.quizMode,
       usedWordIdsRef.current,
       settings.categoryFilter,
-      settings.selectedCategories
+      settings.selectedCategories,
+      confusableIndex
     );
     usedWordIdsRef.current.add(nextQ.targetWord.id);
     setCurrentQuestion(nextQ);
