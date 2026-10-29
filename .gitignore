@@ -44,3 +44,8 @@ jittten/
 # Local staging, databases, and backup files
 backend_data/
 public/data/backups/
+
+# Local planning and documentation
+docs/
+*.plan.md
+OFFLINE_PWA_TAURI_PLAN.md
