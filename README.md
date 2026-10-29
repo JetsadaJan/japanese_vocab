@@ -18,11 +18,12 @@ Compiled desktop binaries and application bundles are available on the [GitHub R
 
 | Platform | Format | Direct Download Link | Notes |
 | :--- | :--- | :--- | :--- |
+| Windows | `.exe` Setup Installer | [JLPT.Kotoba.Master_1.0.0_x64-setup.exe](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.0/JLPT.Kotoba.Master_1.0.0_x64-setup.exe) (~3.1 MB) | Standard Windows NSIS installer (64-bit). Download and run to install. |
+| Windows | `.msi` Package | [JLPT.Kotoba.Master_1.0.0_x64_en-US.msi](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.0/JLPT.Kotoba.Master_1.0.0_x64_en-US.msi) (~4.0 MB) | Windows Installer package (64-bit). |
 | macOS | `.dmg` Installer | [JLPT_Kotoba_Master_1.0.0_aarch64.dmg](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.0/JLPT_Kotoba_Master_1.0.0_aarch64.dmg) (~5.8 MB) | Apple Silicon (M1/M2/M3/M4). Drag-and-drop installer to Applications. |
 | macOS | `.zip` (Standalone .app) | [JLPT_Kotoba_Master_1.0.0_macOS.zip](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.0/JLPT_Kotoba_Master_1.0.0_macOS.zip) (~4.8 MB) | Extract and run `JLPT Kotoba Master.app` directly. |
 | iOS | Progressive Web App | Installed via Safari (see instructions below) | Runs as a fullscreen standalone offline application on iPhone and iPad. |
 | Android | Progressive Web App | Installed via Chrome (see instructions below) | Installs as a standalone WebAPK with full offline persistence. |
-| Windows | PWA / Native Binary | Installed via Edge/Chrome or built via Tauri | Runs as a dedicated desktop window. Native `.exe` build instructions below. |
 
 ---
 
@@ -71,13 +72,19 @@ The application implements a Progressive Web App (PWA) architecture. All vocabul
 
 ### Windows and Linux
 
-#### Option 1: Desktop Web App (PWA) - Recommended
+#### Method 1: Using the Native Windows Installer (`.exe` / `.msi`) - Recommended for Windows
+1. Download [JLPT.Kotoba.Master_1.0.0_x64-setup.exe](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.0/JLPT.Kotoba.Master_1.0.0_x64-setup.exe) (or the `.msi` package).
+2. Double-click the downloaded file to run the setup wizard.
+3. Follow the installation prompts. The setup will create desktop and start menu shortcuts.
+4. Launch **JLPT Kotoba Master** directly from your desktop or Start Menu.
+
+#### Method 2: Desktop Web App (PWA)
 1. Open the application URL in **Google Chrome** or **Microsoft Edge**.
 2. Click the install icon located on the right side of the URL address bar (or go to **Menu > Apps > Install JLPT Kotoba Master**).
 3. Confirm installation. The application will launch in its own standalone desktop window and register a shortcut in the Start Menu and Desktop.
 
-#### Option 2: Native Windows Installer (`.exe` / `.msi`) via Tauri
-To compile a native Windows installer:
+#### Method 3: Compiling from Source via Tauri
+To compile a native Windows installer from source:
 1. Install [Node.js](https://nodejs.org/) and the [Rust toolchain](https://www.rust-lang.org/) on your Windows environment.
 2. Clone the repository and run:
    ```powershell
