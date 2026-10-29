@@ -1,0 +1,60 @@
+name: Release Desktop Apps (macOS & Windows)
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'macos-latest'
+            args: ''
+          - platform: 'windows-latest'
+            args: ''
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Build Tauri Desktop Bundle
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: 'JLPT Kotoba Master ${{ github.ref_name }}'
+          releaseBody: |
+            ### JLPT Kotoba Master ${{ github.ref_name }} — 100% Offline Multi-Platform
+
+            - **macOS (.dmg):** ดาวน์โหลดไฟล์ `.dmg` แล้วลาก `JLPT Kotoba Master.app` ลงใน Applications เปิดเล่นได้ทันทีแบบ 100% Offline
+            - **Windows (.exe):** ดาวน์โหลดไฟล์ตัวติดตั้ง `.exe` ติดตั้งลงเครื่อง แล้วฝึกคำศัพท์ได้ทันทีแบบ 100% Offline
+            - **Mobile & Web (iOS / Android):** เข้าใช้งานผ่านเบราว์เซอร์ได้ที่ https://jetsadajan.github.io/japanese_vocab/ (กด Add to Home Screen เพื่อใช้เป็นแอป Offline บนมือถือ)
+          releaseDraft: false
+          prerelease: false
+          args: ${{ matrix.args }}
