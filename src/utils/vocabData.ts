@@ -235,39 +235,29 @@ export async function loadAllVocabData(): Promise<{
     N1: [],
   };
 
-  let usedGithubFallback = false;
+  const base = import.meta.env.BASE_URL.endsWith('/')
+    ? import.meta.env.BASE_URL
+    : `${import.meta.env.BASE_URL}/`;
 
   const [, rawKanjiMap, curatedSemanticGroups] = await Promise.all([
     Promise.all(
       JLPT_LEVELS.map(async (level) => {
         const lower = level.toLowerCase();
-        const localUrl = `/data/${lower}.csv`;
-        const githubUrl = `https://raw.githubusercontent.com/elzup/jlpt-word-list/master/src/${lower}.csv`;
+        const localUrl = `${base}data/${lower}.csv`;
 
-        try {
-          const res = await fetch(localUrl);
-          if (res.ok) {
-            const text = await res.text();
-            const parsed = parseJLPTCsv(text, level);
-            if (parsed.length > 0) {
-              db[level] = parsed;
-              return;
-            }
-          }
-        } catch {
-          // Fallback to GitHub below
+        const res = await fetch(localUrl);
+        if (!res.ok) {
+          throw new Error(`ไม่สามารถโหลดข้อมูลคำศัพท์ระดับ ${level} ได้ (${res.status} ${res.statusText})`);
         }
-
-        usedGithubFallback = true;
-        const ghRes = await fetch(githubUrl);
-        if (!ghRes.ok) {
-          throw new Error(`ไม่สามารถโหลดข้อมูลคำศัพท์ระดับ ${level} ได้`);
+        const text = await res.text();
+        const parsed = parseJLPTCsv(text, level);
+        if (parsed.length === 0) {
+          throw new Error(`ไฟล์ข้อมูลคำศัพท์ระดับ ${level} ว่างเปล่า`);
         }
-        const ghText = await ghRes.text();
-        db[level] = parseJLPTCsv(ghText, level);
+        db[level] = parsed;
       })
     ),
-    fetch('/data/kanji.json')
+    fetch(`${base}data/kanji.json`)
       .then(
         (res): Promise<Record<string, RawKanjiEntry>> =>
           res.ok ? res.json() : Promise.resolve({})
@@ -336,7 +326,7 @@ export async function loadAllVocabData(): Promise<{
     kanjiDb,
     wordMap,
     confusableIndex,
-    source: usedGithubFallback ? 'github' : 'local',
+    source: 'local',
   };
 }
 

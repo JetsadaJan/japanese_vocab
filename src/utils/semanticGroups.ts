@@ -25,7 +25,10 @@ export interface SemanticGroup {
 
 export async function loadSemanticGroups(): Promise<SemanticGroup[]> {
   try {
-    const res = await fetch('/data/semantic-groups.json');
+    const base = import.meta.env.BASE_URL.endsWith('/')
+      ? import.meta.env.BASE_URL
+      : `${import.meta.env.BASE_URL}/`;
+    const res = await fetch(`${base}data/semantic-groups.json`);
     if (res.ok) {
       const data = await res.json();
       if (Array.isArray(data)) {
@@ -33,7 +36,7 @@ export async function loadSemanticGroups(): Promise<SemanticGroup[]> {
       }
     }
   } catch {
-    // Fallback to empty array if offline
+    // Fallback to empty array if error
   }
   return [];
 }
