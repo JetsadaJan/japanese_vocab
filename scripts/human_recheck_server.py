@@ -39,7 +39,7 @@ CSV_PATH = os.path.join(BACKEND_DIR, "candidate_vocab_master.csv")
 REF_DIR = os.path.join(BACKEND_DIR, "reference")
 REF_INDEX_PATH = os.path.join(REF_DIR, "thai_reference_index.json")
 PUBLIC_DATA_DIR = os.path.join(PROJECT_ROOT, "public", "data")
-BACKUP_BASE_DIR = os.path.join(PUBLIC_DATA_DIR, "backups")
+BACKUP_BASE_DIR = os.path.join(BACKEND_DIR, "backups")
 WEB_DIR = os.path.join(PROJECT_ROOT, "scripts", "recheck_web")
 
 THAI_CHAR_RE = re.compile(r"[\u0E00-\u0E7F]")
@@ -1253,6 +1253,8 @@ class RecheckRequestHandler(BaseHTTPRequestHandler):
                 return
 
             backup_dir = last_export["backup_dir"]
+            if not os.path.exists(backup_dir) and "public/data/backups" in backup_dir:
+                backup_dir = backup_dir.replace("public/data/backups", "backend_data/backups")
             ranks = json.loads(last_export["ranks_json"])
 
             if not os.path.exists(backup_dir):
