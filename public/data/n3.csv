@@ -2365,3 +2365,4 @@ expression,reading,meaning,tags,meaning_th
 買い出し,かいだし,"going out to buy supplies, bulk shopping",JLPT_N3 JMdict Jiten,"การออกไปซื้อเสบียง, การไปจ่ายตลาดซื้อของเข้าบ้าน"
 早起き,はやおき,"getting up early, early rising",JLPT_N3 JMdict Jiten,"การตื่นเช้า, คนตื่นเช้า"
 参加者,さんかしゃ,"participant, attendee, entrant",JLPT_N3 JMdict Jiten,ผู้เข้าร่วม
+的,てき,"-ical, -ive, -al",ADJECTIVE,"ในเชิง..., ที่มีลักษณะเป็น... (คำปัจจัย)"

@@ -9,8 +9,22 @@ import {
 } from '../types';
 import { JLPT_LEVELS, WORD_CATEGORIES } from './constants';
 import { ConfusableIndex, getConfusableWords } from './confusableWords';
+import { wordKey } from './mistakeTracker';
 
 export type VocabDatabase = Record<JLPTLevel, VocabWord[]>;
+
+/**
+ * Review options for re-asking words the learner previously got wrong.
+ * - scores: review weight per word key (see mistakeTracker.wordKey)
+ * - recentKeys: keys asked in the last few questions (cooldown, avoids back-to-back repeats)
+ */
+export interface ReviewOptions {
+  scores: Record<string, number>;
+  recentKeys: Set<string>;
+}
+
+/** Chance that a question is drawn from the review pool when eligible words exist (~40%). */
+export const REVIEW_CHANCE = 0.4;
 
 export function pickLevelByWeights(
   weights: LevelWeights,
@@ -189,11 +203,10 @@ export function generateQuizQuestion(
   usedWordIds: Set<string>,
   categoryFilter?: WordCategory | 'ALL',
   selectedCategories?: WordCategory[],
-  confusableIndex?: ConfusableIndex | null
+  confusableIndex?: ConfusableIndex | null,
+  review?: ReviewOptions | null,
+  forcedTargetWord?: VocabWord | null
 ): QuizQuestion {
-  const chosenLevel = pickLevelByWeights(weights, db, selectedLevel);
-  let levelPool = db[chosenLevel].length > 0 ? db[chosenLevel] : db[selectedLevel];
-
   // Apply Category / Part of Speech filter if requested
   const activeCategories =
     selectedCategories &&
@@ -203,6 +216,43 @@ export function generateQuizQuestion(
       : categoryFilter && categoryFilter !== 'ALL'
       ? [categoryFilter]
       : null;
+
+  // Review pass: if forcedTargetWord is provided, use it directly (e.g. MISTAKES_ONLY mode).
+  // In normal mode:
+  // "ผิดครั้งแรก % ที่จะออกมา เริ่มที่ 25% ผิดติดๆกัน 4 รอบ 100% (random ถ้ามีหลายตัวที่ผิดเท่ากัน priority คำที่ผิดมากๆก่อน)"
+  let reviewTarget: VocabWord | null = forcedTargetWord || null;
+  if (!reviewTarget && review && Object.keys(review.scores).length > 0) {
+    const enabledLevels = JLPT_LEVELS.filter((lvl) => (weights[lvl] || 0) > 0);
+    const levelsToSearch = enabledLevels.length > 0 ? enabledLevels : [selectedLevel];
+    const candidates: { word: VocabWord; rating: number }[] = [];
+    for (const lvl of levelsToSearch) {
+      for (const w of db[lvl] || []) {
+        const key = wordKey(w);
+        const rating = review.scores[key];
+        if (!rating || review.recentKeys.has(key)) continue;
+        if (activeCategories && !activeCategories.includes(w.category)) continue;
+        candidates.push({ word: w, rating });
+      }
+    }
+    if (candidates.length > 0) {
+      // Sort candidates by rating descending (highest rating first)
+      candidates.sort((a, b) => b.rating - a.rating);
+      const maxRating = candidates[0].rating;
+
+      // Review chance: missed 1st time = 25%, 2 times = 50%, 3 times = 75%, 4+ consecutive times = 100%
+      const reviewChance = Math.min(1.0, maxRating * 0.25);
+      if (Math.random() < reviewChance) {
+        // Random selection among candidates tied for the maximum rating tier
+        const topTier = candidates.filter((c) => c.rating === maxRating);
+        reviewTarget = topTier[Math.floor(Math.random() * topTier.length)].word;
+      }
+    }
+  }
+
+  const chosenLevel = reviewTarget
+    ? reviewTarget.level
+    : pickLevelByWeights(weights, db, selectedLevel);
+  let levelPool = db[chosenLevel].length > 0 ? db[chosenLevel] : db[selectedLevel];
 
   if (activeCategories && activeCategories.length > 0) {
     const filtered = levelPool.filter((w) => activeCategories.includes(w.category));
@@ -216,7 +266,8 @@ export function generateQuizQuestion(
     availableTargets = levelPool;
   }
 
-  const targetWord = availableTargets[Math.floor(Math.random() * availableTargets.length)];
+  const targetWord =
+    reviewTarget || availableTargets[Math.floor(Math.random() * availableTargets.length)];
 
   const direction: QuestionDirection =
     quizMode === 'MIXED'
@@ -339,5 +390,6 @@ export function generateQuizQuestion(
     targetWord,
     options: allOptions,
     correctIndex,
+    isReview: Boolean(reviewTarget),
   };
 }

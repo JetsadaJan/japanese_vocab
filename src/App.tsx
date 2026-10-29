@@ -11,10 +11,23 @@ import {
 import {
   DEFAULT_LEVEL_WEIGHTS,
   VocabDatabase,
+  WORD_CATEGORIES,
   generateQuizQuestion,
   loadAllVocabData,
 } from './utils/vocabData';
 import { ConfusableIndex } from './utils/confusableWords';
+import type { ReviewOptions } from './utils/quizEngine';
+import {
+  MistakeStore,
+  clearMistakes,
+  getReviewScores,
+  getSortedMistakeWords,
+  loadMistakes,
+  recordAnswer,
+  removeSingleMistake,
+  saveMistakes,
+  wordKey,
+} from './utils/mistakeTracker';
 import { SetupScreen } from './components/SetupScreen';
 import { QuizScreen } from './components/QuizScreen';
 import { SummaryScreen } from './components/SummaryScreen';
@@ -23,6 +36,9 @@ import { WordExplorerModal } from './components/WordExplorerModal';
 type ScreenState = 'SETUP' | 'QUIZ' | 'SUMMARY';
 
 const STORAGE_KEY = 'jlpt_vocab_master_settings_v2';
+
+/** A reviewed word cannot be re-asked until this many other questions have passed. */
+const REVIEW_COOLDOWN = 4;
 
 const DEFAULT_SETTINGS: QuizSettings = {
   selectedLevel: 'N3',
@@ -60,14 +76,42 @@ export function App() {
   });
 
   const [screen, setScreen] = useState<ScreenState>('SETUP');
+  const [targetMode, setTargetMode] = useState<'ALL' | 'MISTAKES_ONLY'>('ALL');
   const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion | null>(null);
   const [questionNumber, setQuestionNumber] = useState(1);
   const [history, setHistory] = useState<AnswerRecord[]>([]);
   const [isExplorerOpen, setIsExplorerOpen] = useState(false);
-  const [explorerInitialTab, setExplorerInitialTab] = useState<'VOCAB' | 'KANJI'>('VOCAB');
+  const [explorerInitialTab, setExplorerInitialTab] = useState<'VOCAB' | 'KANJI' | 'MISTAKES'>('VOCAB');
   const [explorerInitialKanji, setExplorerInitialKanji] = useState<string | null>(null);
 
   const usedWordIdsRef = useRef<Set<string>>(new Set());
+  const mistakeQueueRef = useRef<VocabWord[]>([]);
+
+  // Words answered wrong (persisted) and the last few asked words (review cooldown)
+  const [mistakes, setMistakes] = useState<MistakeStore>(() => loadMistakes());
+  const recentKeysRef = useRef<string[]>([]);
+
+  useEffect(() => {
+    saveMistakes(mistakes);
+  }, [mistakes]);
+
+  const buildReviewOptions = (): ReviewOptions => ({
+    scores: getReviewScores(mistakes),
+    recentKeys: new Set(recentKeysRef.current),
+  });
+
+  const rememberAsked = (word: VocabWord) => {
+    recentKeysRef.current = [...recentKeysRef.current, wordKey(word)].slice(-REVIEW_COOLDOWN);
+  };
+
+  const handleClearMistakes = () => {
+    clearMistakes();
+    setMistakes({});
+  };
+
+  const handleRemoveSingleMistake = (word: VocabWord) => {
+    setMistakes((prev) => removeSingleMistake(prev, word));
+  };
 
   const fetchDatabase = async () => {
     setLoading(true);
@@ -110,7 +154,7 @@ export function App() {
     handleUpdateSettings({ meaningLanguage });
   };
 
-  const handleOpenExplorer = (tab: 'VOCAB' | 'KANJI' = 'VOCAB') => {
+  const handleOpenExplorer = (tab: 'VOCAB' | 'KANJI' | 'MISTAKES' = 'VOCAB') => {
     setExplorerInitialTab(tab);
     setExplorerInitialKanji(null);
     setIsExplorerOpen(true);
@@ -122,12 +166,61 @@ export function App() {
     setIsExplorerOpen(true);
   };
 
-  const handleStartQuiz = () => {
+  const handleStartQuiz = (mode: 'ALL' | 'MISTAKES_ONLY' = targetMode) => {
     if (!db) return;
+    setTargetMode(mode);
     usedWordIdsRef.current = new Set();
+    recentKeysRef.current = [];
     setHistory([]);
     setQuestionNumber(1);
 
+    if (mode === 'MISTAKES_ONLY') {
+      const mistakeList = getSortedMistakeWords(mistakes, wordMap).map((m) => m.word);
+      if (mistakeList.length === 0) return;
+
+      // Filter by category if user has active category filter, otherwise include all mistake words
+      const activeCategories =
+        settings.selectedCategories &&
+        settings.selectedCategories.length > 0 &&
+        settings.selectedCategories.length < WORD_CATEGORIES.length
+          ? settings.selectedCategories
+          : null;
+      const candidateList = activeCategories
+        ? mistakeList.filter((w) => activeCategories.includes(w.category))
+        : mistakeList;
+      const finalWords = candidateList.length > 0 ? candidateList : mistakeList;
+
+      // Equal weight for every mistake word -> uniform shuffle, each asked once, no repeats
+      const shuffled = [...finalWords];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      mistakeQueueRef.current = shuffled;
+
+      const firstTarget = shuffled[0];
+      const firstQ = generateQuizQuestion(
+        db,
+        settings.customWeights,
+        firstTarget.level,
+        settings.quizMode,
+        usedWordIdsRef.current,
+        settings.categoryFilter,
+        settings.selectedCategories,
+        confusableIndex,
+        null,
+        firstTarget
+      );
+      firstQ.targetMode = 'MISTAKES_ONLY';
+      firstQ.totalQuestions = shuffled.length;
+      usedWordIdsRef.current.add(firstTarget.id);
+      setCurrentQuestion(firstQ);
+      setScreen('QUIZ');
+      return;
+    }
+
+    // Normal Quiz mode
+    mistakeQueueRef.current = [];
     const firstQ = generateQuizQuestion(
       db,
       settings.customWeights,
@@ -136,11 +229,18 @@ export function App() {
       usedWordIdsRef.current,
       settings.categoryFilter,
       settings.selectedCategories,
-      confusableIndex
+      confusableIndex,
+      buildReviewOptions()
     );
+    firstQ.targetMode = 'ALL';
     usedWordIdsRef.current.add(firstQ.targetWord.id);
+    rememberAsked(firstQ.targetWord);
     setCurrentQuestion(firstQ);
     setScreen('QUIZ');
+  };
+
+  const handleStartMistakesQuiz = () => {
+    handleStartQuiz('MISTAKES_ONLY');
   };
 
   const handleSubmitAnswer = (selectedOptionIndex: number, timeSpentMs: number) => {
@@ -153,11 +253,42 @@ export function App() {
       timeSpentMs,
     };
     setHistory((prev) => [...prev, record]);
+    setMistakes((prev) => recordAnswer(prev, currentQuestion.targetWord, isCorrect));
   };
 
   const handleNextQuestion = () => {
     if (!db) return;
 
+    if (targetMode === 'MISTAKES_ONLY') {
+      const queue = mistakeQueueRef.current;
+      // All mistake words completed -> automatically end session
+      if (questionNumber >= queue.length) {
+        setScreen('SUMMARY');
+        return;
+      }
+
+      const nextTarget = queue[questionNumber];
+      const nextQ = generateQuizQuestion(
+        db,
+        settings.customWeights,
+        nextTarget.level,
+        settings.quizMode,
+        usedWordIdsRef.current,
+        settings.categoryFilter,
+        settings.selectedCategories,
+        confusableIndex,
+        null,
+        nextTarget
+      );
+      nextQ.targetMode = 'MISTAKES_ONLY';
+      nextQ.totalQuestions = queue.length;
+      usedWordIdsRef.current.add(nextTarget.id);
+      setCurrentQuestion(nextQ);
+      setQuestionNumber((prev) => prev + 1);
+      return;
+    }
+
+    // Normal Quiz mode session limit check
     if (settings.sessionLength > 0 && questionNumber >= settings.sessionLength) {
       setScreen('SUMMARY');
       return;
@@ -171,9 +302,12 @@ export function App() {
       usedWordIdsRef.current,
       settings.categoryFilter,
       settings.selectedCategories,
-      confusableIndex
+      confusableIndex,
+      buildReviewOptions()
     );
+    nextQ.targetMode = 'ALL';
     usedWordIdsRef.current.add(nextQ.targetWord.id);
+    rememberAsked(nextQ.targetWord);
     setCurrentQuestion(nextQ);
     setQuestionNumber((prev) => prev + 1);
   };
@@ -243,6 +377,10 @@ export function App() {
           onUpdateSettings={handleUpdateSettings}
           onStartQuiz={handleStartQuiz}
           onOpenExplorer={handleOpenExplorer}
+          reviewCount={Object.keys(mistakes).length}
+          onClearMistakes={handleClearMistakes}
+          targetMode={targetMode}
+          onSelectTargetMode={setTargetMode}
         />
       )}
 
@@ -275,9 +413,11 @@ export function App() {
           history={history}
           kanjiDb={kanjiDb}
           onChangeLanguage={handleChangeLanguage}
-          onPlayAgain={handleStartQuiz}
+          onPlayAgain={() => handleStartQuiz(targetMode)}
           onBackToSetup={handleBackToSetup}
           onOpenKanji={handleOpenKanjiNode}
+          reviewCount={Object.keys(mistakes).length}
+          targetMode={targetMode}
         />
       )}
 
@@ -313,6 +453,10 @@ export function App() {
         kanjiDb={kanjiDb}
         wordMap={wordMap}
         confusableIndex={confusableIndex}
+        mistakes={mistakes}
+        onRemoveMistake={handleRemoveSingleMistake}
+        onClearMistakes={handleClearMistakes}
+        onStartMistakesQuiz={handleStartMistakesQuiz}
         initialLevel={settings.selectedLevel}
         initialTab={explorerInitialTab}
         initialKanji={explorerInitialKanji}

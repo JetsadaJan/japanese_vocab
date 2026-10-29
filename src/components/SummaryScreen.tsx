@@ -33,6 +33,8 @@ interface SummaryScreenProps {
   onPlayAgain: () => void;
   onBackToSetup: () => void;
   onOpenKanji?: (kanjiChar: string) => void;
+  reviewCount?: number;
+  targetMode?: 'ALL' | 'MISTAKES_ONLY';
 }
 
 export const SummaryScreen: React.FC<SummaryScreenProps> = ({
@@ -43,6 +45,8 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({
   onPlayAgain,
   onBackToSetup,
   onOpenKanji,
+  reviewCount = 0,
+  targetMode = 'ALL',
 }) => {
   const [filter, setFilter] = useState<'ALL' | 'WRONG' | 'CORRECT'>('ALL');
 
@@ -105,7 +109,9 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({
 
         <div className="space-y-1">
           <div className="text-xs font-bold uppercase tracking-[0.04em] text-[#D4AF37]">
-            สรุปผลการทดสอบระดับ {settings.selectedLevel}
+            {targetMode === 'MISTAKES_ONLY'
+              ? 'สรุปผล: โหมดเล่นเฉพาะคำที่ตอบผิด'
+              : `สรุปผลการทดสอบระดับ ${settings.selectedLevel}`}
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold text-[#F3F4F6]">
             {accuracy}% ความแม่นยำ
@@ -154,14 +160,32 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-          <button
-            type="button"
-            onClick={onPlayAgain}
-            className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#D4AF37] via-[#F3DA78] to-[#C59B27] hover:brightness-110 text-slate-950 font-bold text-sm shadow-lg shadow-[#D4AF37]/15 transition-all inline-flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <RotateCcw className="w-4 h-4" />
-            เล่นอีกรอบด้วยตั้งค่าเดิม
-          </button>
+          {targetMode === 'MISTAKES_ONLY' ? (
+            <button
+              type="button"
+              onClick={onPlayAgain}
+              disabled={reviewCount === 0}
+              className={`w-full sm:w-auto px-6 py-3.5 rounded-2xl font-bold text-sm shadow-lg transition-all inline-flex items-center justify-center gap-2 cursor-pointer ${
+                reviewCount === 0
+                  ? 'bg-[#1F2229] text-[#6B7280] border border-[#2A2D36] cursor-not-allowed'
+                  : 'bg-gradient-to-r from-rose-500 via-rose-600 to-rose-700 hover:brightness-110 text-white shadow-rose-900/20'
+              }`}
+            >
+              <RotateCcw className="w-4 h-4" />
+              {reviewCount === 0
+                ? 'เคลียร์คำผิดครบทั้งหมดแล้ว 🎉'
+                : `เล่นคำผิดที่เหลืออีกรอบ (${reviewCount} คำ)`}
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={onPlayAgain}
+              className="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#D4AF37] via-[#F3DA78] to-[#C59B27] hover:brightness-110 text-slate-950 font-bold text-sm shadow-lg shadow-[#D4AF37]/15 transition-all inline-flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <RotateCcw className="w-4 h-4" />
+              เล่นอีกรอบด้วยตั้งค่าเดิม
+            </button>
+          )}
 
           <button
             type="button"

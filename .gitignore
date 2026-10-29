@@ -40,3 +40,7 @@ pnpm-debug.log*
 # Large raw external frequency dictionaries (268MB - not used by runtime app)
 jiten/
 jittten/
+
+# Local staging, databases, and backup files
+backend_data/
+public/data/backups/

@@ -48,9 +48,12 @@ export type KanjiDatabase = Record<string, KanjiNode>;
 
 export type LevelWeights = Record<JLPTLevel, number>;
 
+export type QuizTargetMode = 'ALL' | 'MISTAKES_ONLY';
+
 export interface QuizSettings {
   selectedLevel: JLPTLevel;
   quizMode: QuizMode;
+  quizTargetMode?: QuizTargetMode;
   meaningLanguage: MeaningLanguage;
   showHiragana: boolean;
   showRomaji: boolean;
@@ -68,6 +71,12 @@ export interface QuizQuestion {
   targetWord: VocabWord;
   options: VocabWord[];
   correctIndex: number;
+  /** True when this question re-asks a word the learner previously answered wrong. */
+  isReview?: boolean;
+  /** Quiz target mode (e.g. MISTAKES_ONLY) */
+  targetMode?: QuizTargetMode;
+  /** Total questions in the session (for bounded sessions like mistakes only). */
+  totalQuestions?: number;
 }
 
 export interface AnswerRecord {

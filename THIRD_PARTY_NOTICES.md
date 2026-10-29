@@ -14,17 +14,17 @@ None of the original authors endorse this project.
 
 ---
 
-## JMdict (via jmdict-simplified)
+## JMdict & JMnedict (via jmdict-simplified / jmnedict-simplified)
 
 This project uses the [JMdict](https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project)
-dictionary files. These files are the property of the
-[Electronic Dictionary Research and Development Group](https://www.edrdg.org/),
+and [JMnedict](https://www.edrdg.org/wiki/index.php/JMnedict_Project) dictionary and name files.
+These files are the property of the [Electronic Dictionary Research and Development Group](https://www.edrdg.org/),
 and are used in conformance with the Group's [licence](https://www.edrdg.org/edrdg/licence.html).
 
 - Copyright: James William Breen and The Electronic Dictionary Research and Development Group
 - License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
-- JSON conversion: [scriptin/jmdict-simplified](https://github.com/scriptin/jmdict-simplified)
-  (derived files distributed under CC BY-SA 4.0); release used: `jmdict-eng-common-3.6.2+20261026175559`
+- JSON conversions: [scriptin/jmdict-simplified](https://github.com/scriptin/jmdict-simplified) and [scriptin/jmnedict-simplified](https://github.com/scriptin/jmnedict-simplified)
+  (distributed under CC BY-SA 4.0)
 
 ## KANJIDIC (via kanji-data)
 
@@ -106,3 +106,28 @@ The jlpt-word-list data originates from
 [jamsinclair/open-anki-jlpt-decks](https://github.com/jamsinclair/open-anki-jlpt-decks),
 which are based on the JLPT lists by Jonathan Waller at
 [tanos.co.uk](http://www.tanos.co.uk/jlpt/) (CC BY).
+
+## Corpus of Everyday Japanese Conversation (CEJC)
+
+Candidate vocabulary and spoken Japanese frequency statistics are derived from the
+[Corpus of Everyday Japanese Conversation (CEJC)](https://github.com/n-manas/Corpus-of-Everyday-Japanese-Conversation---Yomichan-Frequency-Dictionary)
+Yomichan frequency dictionary package prepared by n-manas, based on corpora developed by the
+National Institute for Japanese Language and Linguistics (NINJAL).
+
+- Source: [n-manas/Corpus-of-Everyday-Japanese-Conversation---Yomichan-Frequency-Dictionary](https://github.com/n-manas/Corpus-of-Everyday-Japanese-Conversation---Yomichan-Frequency-Dictionary)
+- Base Corpus: NINJAL Corpus of Everyday Japanese Conversation (CEJC)
+- License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
+
+## Wiktionary Frequency Lists (Japanese)
+
+Frequency candidate filtering utilizes Japanese frequency lists derived from Wikipedia dumps
+and frequency appendices hosted on Wiktionary.
+
+- Source: [Wiktionary:Frequency lists/Japanese](https://en.wiktionary.org/wiki/Wiktionary:Frequency_lists#Japanese)
+- Content: Wikimedia Projects / Wiktionary contributors
+- License: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) and [GFDL](https://www.gnu.org/copyleft/fdl.html)
+
+## Kanji Data (davidluzgouveia/kanji-data)
+
+Kanji reference metadata, grade classifications, stroke counts, JLPT mappings, and WaniKani radical data are provided by [davidluzgouveia/kanji-data](https://github.com/davidluzgouveia/kanji-data), stored in `backend_data/reference/kanji-data/` under the MIT License.
+

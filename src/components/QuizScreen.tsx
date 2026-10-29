@@ -340,22 +340,40 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
       {/* Question Header Info & Progress Bar */}
       <div className="space-y-1.5 px-1">
         <div className="flex items-center justify-between text-xs text-[#9CA3AF]">
-          <span className="font-semibold text-[#F3F4F6]">
-            ข้อที่ {questionNumber}
-            {settings.sessionLength > 0 && ` / ${settings.sessionLength}`}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="font-semibold text-[#F3F4F6]">
+              ข้อที่ {questionNumber}
+              {currentQuestion.totalQuestions
+                ? ` / ${currentQuestion.totalQuestions}`
+                : settings.sessionLength > 0
+                ? ` / ${settings.sessionLength}`
+                : ''}
+            </span>
+            {currentQuestion.targetMode === 'MISTAKES_ONLY' && (
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full border border-rose-500/50 bg-rose-950/40 text-rose-300">
+                เฉพาะคำที่ตอบผิด
+              </span>
+            )}
+          </div>
           <span>
             {currentQuestion.direction === 'EN_TO_JA'
               ? `${langDisplayLabel} ➔ ญี่ปุ่น`
               : `ญี่ปุ่น ➔ ${langDisplayLabel}`}
           </span>
         </div>
-        {settings.sessionLength > 0 && (
+        {(Boolean(currentQuestion.totalQuestions) || settings.sessionLength > 0) && (
           <div className="w-full bg-[#1F2229] h-1.5 rounded-full overflow-hidden border border-[#2A2D36]/40">
             <div
-              className="bg-gradient-to-r from-[#D4AF37] to-[#F3DA78] h-full transition-all duration-300"
+              className={`h-full transition-all duration-300 ${
+                currentQuestion.targetMode === 'MISTAKES_ONLY'
+                  ? 'bg-gradient-to-r from-rose-500 to-rose-400'
+                  : 'bg-gradient-to-r from-[#D4AF37] to-[#F3DA78]'
+              }`}
               style={{
-                width: `${Math.min(100, (questionNumber / settings.sessionLength) * 100)}%`,
+                width: `${Math.min(
+                  100,
+                  (questionNumber / (currentQuestion.totalQuestions || settings.sessionLength)) * 100
+                )}%`,
               }}
             />
           </div>
@@ -377,6 +395,15 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
             >
               {wordCategoryMeta.labelTh}
             </span>
+            {currentQuestion.targetMode === 'MISTAKES_ONLY' ? (
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full border border-rose-500/50 bg-rose-950/40 text-rose-300">
+                คำที่ตอบผิด
+              </span>
+            ) : currentQuestion.isReview ? (
+              <span className="text-xs font-bold px-2.5 py-1 rounded-full border border-[#B91C1C]/50 bg-[#2A1215] text-[#FCA5A5]">
+                ทบทวน
+              </span>
+            ) : null}
           </div>
 
           <div className="flex items-center gap-2">

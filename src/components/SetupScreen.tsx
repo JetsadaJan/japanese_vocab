@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import {
+  AlertTriangle,
   BookOpen,
   Check,
   CheckCircle2,
@@ -42,8 +43,12 @@ interface SetupScreenProps {
   kanjiDb: KanjiDatabase;
   dataSource: 'local' | 'github';
   onUpdateSettings: (partial: Partial<QuizSettings>) => void;
-  onStartQuiz: () => void;
-  onOpenExplorer: (tab?: 'VOCAB' | 'KANJI') => void;
+  onStartQuiz: (mode?: 'ALL' | 'MISTAKES_ONLY') => void;
+  onOpenExplorer: (tab?: 'VOCAB' | 'KANJI' | 'MISTAKES') => void;
+  reviewCount: number;
+  onClearMistakes: () => void;
+  targetMode: 'ALL' | 'MISTAKES_ONLY';
+  onSelectTargetMode: (mode: 'ALL' | 'MISTAKES_ONLY') => void;
 }
 
 const LANGUAGE_OPTIONS: {
@@ -62,6 +67,10 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
   onUpdateSettings,
   onStartQuiz,
   onOpenExplorer,
+  reviewCount,
+  onClearMistakes,
+  targetMode,
+  onSelectTargetMode,
 }) => {
   const totalWordsCount = JLPT_LEVELS.reduce(
     (sum, lvl) => sum + (db[lvl]?.length || 0),
@@ -227,22 +236,143 @@ export const SetupScreen: React.FC<SetupScreenProps> = ({
             <Layers className="w-4 h-4 text-[#D4AF37]" />
             คลังคันจิ ({totalKanjiCount.toLocaleString()})
           </button>
+
+          <button
+            type="button"
+            onClick={() => onOpenExplorer('MISTAKES')}
+            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl border text-xs sm:text-sm font-bold transition-all cursor-pointer shadow-sm ${
+              reviewCount > 0
+                ? 'border-rose-500/40 bg-rose-950/40 hover:bg-rose-950/70 text-rose-300'
+                : 'border-[#2A2D36] bg-[#1F2229] hover:bg-[#2A2D36] text-[#9CA3AF]'
+            }`}
+          >
+            <AlertTriangle className={`w-4 h-4 ${reviewCount > 0 ? 'text-rose-400' : 'text-[#6B7280]'}`} />
+            คลังคำที่ตอบผิด ({reviewCount.toLocaleString()})
+          </button>
         </div>
+      </div>
+
+      {/* Mode Selector: Normal vs Mistakes Only */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <button
+          type="button"
+          onClick={() => onSelectTargetMode('ALL')}
+          className={`p-3.5 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-3 ${
+            targetMode === 'ALL'
+              ? 'bg-[#1F2229] border-[#D4AF37] ring-1 ring-[#D4AF37]/50 shadow-lg'
+              : 'bg-[#16181D] border-[#2A2D36] text-[#9CA3AF] hover:border-[#D4AF37]/30 hover:bg-[#1F2229]/60'
+          }`}
+        >
+          <div className="flex items-center gap-2.5">
+            <div
+              className={`p-2 rounded-xl border ${
+                targetMode === 'ALL'
+                  ? 'bg-[#2E1F05] border-[#D97706]/40 text-[#D4AF37]'
+                  : 'bg-[#0E0F12] border-[#2A2D36] text-[#6B7280]'
+              }`}
+            >
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-sm font-bold text-[#F3F4F6]">คลังคำศัพท์ปกติ</div>
+              <div className="text-xs text-[#9CA3AF]">
+                สุ่มตามระดับ JLPT N5–N1 ({activeQuizWordsCount.toLocaleString()} คำ)
+              </div>
+            </div>
+          </div>
+          {targetMode === 'ALL' && <Check className="w-4 h-4 text-[#D4AF37] stroke-[3]" />}
+        </button>
+
+        <button
+          type="button"
+          disabled={reviewCount === 0}
+          onClick={() => onSelectTargetMode('MISTAKES_ONLY')}
+          className={`p-3.5 rounded-2xl border text-left transition-all flex items-center justify-between gap-3 ${
+            reviewCount === 0
+              ? 'opacity-40 cursor-not-allowed bg-[#16181D] border-[#2A2D36]'
+              : targetMode === 'MISTAKES_ONLY'
+              ? 'bg-rose-950/40 border-rose-500 ring-1 ring-rose-500/50 shadow-lg cursor-pointer'
+              : 'bg-[#16181D] border-[#2A2D36] text-[#9CA3AF] hover:border-rose-500/30 hover:bg-[#1F2229]/60 cursor-pointer'
+          }`}
+        >
+          <div className="flex items-center gap-2.5">
+            <div
+              className={`p-2 rounded-xl border ${
+                targetMode === 'MISTAKES_ONLY'
+                  ? 'bg-rose-900/50 border-rose-700/50 text-rose-400'
+                  : 'bg-[#0E0F12] border-[#2A2D36] text-[#6B7280]'
+              }`}
+            >
+              <AlertTriangle className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="text-sm font-bold text-[#F3F4F6]">เล่นเฉพาะคำที่ตอบผิด</div>
+              <div className="text-xs text-[#9CA3AF]">
+                {reviewCount > 0
+                  ? `${reviewCount.toLocaleString()} คำ • บังคับจบเมื่อครบ`
+                  : 'ไม่มีคำที่ตอบผิดสะสม'}
+              </div>
+            </div>
+          </div>
+          {targetMode === 'MISTAKES_ONLY' && (
+            <Check className="w-4 h-4 text-rose-400 stroke-[3]" />
+          )}
+        </button>
       </div>
 
       {/* Start Quiz CTA Button (Quick Access at Top) */}
       <div>
         <button
           type="button"
-          onClick={onStartQuiz}
-          disabled={activeQuizWordsCount === 0}
-          className="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#D4AF37] via-[#F3DA78] to-[#C59B27] hover:from-[#E5C158] hover:via-[#FDE047] hover:to-[#D4AF37] text-[#0E0F12] font-black text-base sm:text-lg shadow-xl shadow-[#D4AF37]/20 hover:shadow-[#D4AF37]/35 transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed group active:scale-[0.99]"
+          onClick={() => onStartQuiz(targetMode)}
+          disabled={
+            targetMode === 'MISTAKES_ONLY'
+              ? reviewCount === 0
+              : activeQuizWordsCount === 0
+          }
+          className={`w-full py-4 px-6 rounded-2xl font-black text-base sm:text-lg shadow-xl transition-all flex items-center justify-center gap-2.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed group active:scale-[0.99] ${
+            targetMode === 'MISTAKES_ONLY'
+              ? 'bg-gradient-to-r from-rose-500 via-rose-600 to-rose-700 hover:brightness-110 text-white shadow-rose-900/30'
+              : 'bg-gradient-to-r from-[#D4AF37] via-[#F3DA78] to-[#C59B27] hover:from-[#E5C158] hover:via-[#FDE047] hover:to-[#D4AF37] text-[#0E0F12] shadow-[#D4AF37]/20 hover:shadow-[#D4AF37]/35'
+          }`}
         >
-          <Play className="w-5 h-5 fill-[#0E0F12] group-hover:scale-110 transition-transform" />
+          <Play
+            className={`w-5 h-5 group-hover:scale-110 transition-transform ${
+              targetMode === 'MISTAKES_ONLY' ? 'fill-white' : 'fill-[#0E0F12]'
+            }`}
+          />
           <span>
-            เริ่มทายคำศัพท์ ({activeQuizWordsCount.toLocaleString()} คำ)
+            {targetMode === 'MISTAKES_ONLY'
+              ? `เริ่มเล่นเฉพาะคำที่ตอบผิด (${reviewCount.toLocaleString()} คำ)`
+              : `เริ่มทายคำศัพท์ (${activeQuizWordsCount.toLocaleString()} คำ)`}
           </span>
         </button>
+
+        {reviewCount > 0 && (
+          <div className="mt-2.5 flex items-center justify-between gap-2 px-1 text-xs text-[#9CA3AF]">
+            <button
+              type="button"
+              onClick={() => onOpenExplorer('MISTAKES')}
+              className="inline-flex items-center gap-1.5 hover:underline cursor-pointer text-[#9CA3AF] hover:text-rose-300"
+            >
+              <AlertTriangle className="w-3.5 h-3.5 text-rose-400" />
+              <span>
+                คำที่ตอบผิดสะสม: <strong className="font-semibold text-[#FCA5A5]">{reviewCount.toLocaleString()}</strong> คำ (คลิกเพื่อดูรายการ)
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (window.confirm('ล้างรายการคำที่ตอบผิดทั้งหมดใช่ไหม?')) {
+                  onClearMistakes();
+                }
+              }}
+              className="text-[#9CA3AF] hover:text-[#F3F4F6] underline cursor-pointer"
+            >
+              ล้าง
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Select JLPT Level */}

@@ -1,3 +1,7 @@
+// WARNING: DO NOT RUN THIS SCRIPT IN NORMAL USE.
+// This script downloads raw English JLPT lists and will OVERWRITE curated Thai translations in public/data/!
+// It is preserved only as an archive reference.
+
 import fs from 'node:fs/promises';
 import path from 'node:path';
 

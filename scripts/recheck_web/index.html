@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="th" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Human Recheck - ระบบตรวจทานและบรรจุคลังคำศัพท์ภาษาญี่ปุ่น</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    if (window.tailwind) {
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              brand: { 50: '#EEF2FF', 500: '#6366F1', 600: '#4F46E5', 700: '#4338CA' },
+              gold: { 400: '#FBBF24', 500: '#F59E0B', 600: '#D97706' }
+            }
+          }
+        }
+      };
+    }
+  </script>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="bg-[#0B0E14] text-slate-100 min-h-screen flex flex-col selection:bg-indigo-600 selection:text-white">
+
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <header class="bg-[#10141D]/90 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-40 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3 shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-amber-500 flex items-center justify-center font-bold text-lg text-white shadow-lg shadow-indigo-500/20 font-japanese">
+          検
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-bold text-base md:text-lg leading-tight tracking-tight text-white flex items-center gap-2">
+              Human Recheck System
+              <span class="text-[11px] px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 font-semibold border border-indigo-500/20">Staging v2</span>
+            </h1>
+          </div>
+          <p class="text-xs text-slate-400 hidden sm:block">ตรวจสอบความถูกต้องและเชื่อมโยงคลังคันจิก่อนส่งออกคลังหลัก</p>
+        </div>
+      </div>
+
+      <!-- Quick Search Bar (Shortcut: /) -->
+      <div class="flex-1 max-w-md relative hidden md:block">
+        <div class="relative">
+          <input 
+            type="text" 
+            id="wordSearchInput" 
+            placeholder="ค้นหาคันจิ, คำอ่าน, ความหมาย, Romaji หรือ #Rank... (กด /)"
+            class="w-full bg-[#181E2B] border border-slate-700/80 focus:border-indigo-500 rounded-xl px-3.5 py-1.5 pl-9 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500/40 transition-all shadow-inner"
+            autocomplete="off"
+          >
+          <span class="absolute left-3 top-2 text-slate-500 text-xs pointer-events-none">🔍</span>
+          <span class="absolute right-3 top-2 text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded border border-slate-700 pointer-events-none">/</span>
+        </div>
+        <!-- Search Results Dropdown -->
+        <div id="searchResultsDropdown" class="hidden absolute top-full left-0 right-0 mt-1.5 bg-[#121622] border border-slate-700/90 rounded-2xl shadow-2xl max-h-80 overflow-y-auto z-50 divide-y divide-slate-800/80 text-xs">
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center gap-1 bg-[#141924] p-1 rounded-xl border border-slate-800/90 text-xs">
+        <button id="tabQueueBtn" onclick="switchTab('queue')" class="px-3 py-1.5 rounded-lg font-medium transition-all bg-indigo-600 text-white shadow-sm flex items-center gap-1.5">
+          <span>📋 คิวตรวจ</span>
+          <span id="queueBadge" class="text-[11px] px-1.5 py-0.2 rounded-full bg-black/40 font-mono font-semibold">1004</span>
+        </button>
+        <button id="tabApprovedBtn" onclick="switchTab('approved')" class="px-3 py-1.5 rounded-lg font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5">
+          <span>✅ ผ่านแล้ว</span>
+          <span id="approvedBadge" class="text-[11px] px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-400 font-mono font-semibold">0</span>
+        </button>
+        <button id="tabRejectedBtn" onclick="switchTab('rejected')" class="px-3 py-1.5 rounded-lg font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5">
+          <span>❌ ปฏิเสธ</span>
+          <span id="rejectedBadge" class="text-[11px] px-1.5 py-0.2 rounded-full bg-rose-500/20 text-rose-400 font-mono font-semibold">0</span>
+        </button>
+        <button id="tabExportedBtn" onclick="switchTab('exported')" class="px-3 py-1.5 rounded-lg font-medium transition-all text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-1.5">
+          <span>📦 ส่งออกแล้ว</span>
+          <span id="exportedBadge" class="text-[11px] px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-300 font-mono font-semibold">0</span>
+        </button>
+      </nav>
+
+      <!-- Action Controls -->
+      <div class="flex items-center gap-2 shrink-0">
+        <!-- Undo Button -->
+        <button 
+          id="undoBtn" 
+          onclick="undoLastAction()" 
+          title="ย้อนกลับการกระทำล่าสุด (กด Z หรือ ลูกศรขึ้น)" 
+          class="px-2.5 py-1.5 bg-[#181E2B] hover:bg-slate-700/60 border border-slate-700/80 rounded-xl text-xs text-slate-300 hover:text-white transition-all flex items-center gap-1.5"
+        >
+          <span>↩</span>
+          <span class="hidden sm:inline">Undo</span>
+          <span id="undoCountBadge" class="text-[10px] px-1.5 py-0.2 rounded-full bg-slate-800 text-slate-400 font-mono">0</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ================= SUB HEADER / FILTER BAR ================= -->
+  <div class="bg-[#0E121B] border-b border-slate-800/60 py-2.5 px-4 text-xs">
+    <div class="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Level Filter -->
+      <div class="flex items-center gap-2">
+        <span class="text-slate-400">ระดับ JLPT:</span>
+        <select 
+          id="levelFilter" 
+          onchange="onFilterChange()"
+          class="bg-[#181E2B] border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+        >
+          <!-- SSR_LEVEL_OPTIONS -->
+          <option value="">ทั้งหมด (1004 คำ)</option>
+          <option value="N5">N5 (124 คำ)</option>
+          <option value="N4">N4 (842 คำ)</option>
+          <option value="N3">N3 (17 คำ)</option>
+          <option value="N1">N1 (21 คำ)</option>
+        </select>
+      </div>
+
+      <!-- Quick Shortcuts Guide -->
+      <div class="flex items-center gap-3 text-slate-400 text-[11px]">
+        <span class="flex items-center gap-1"><kbd class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded border border-slate-700">➔</kbd> อนุมัติ</span>
+        <span class="flex items-center gap-1"><kbd class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded border border-slate-700">⬅</kbd> ปฏิเสธ</span>
+        <span class="flex items-center gap-1"><kbd class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded border border-slate-700">⬇ / S</kbd> ข้ามไปก่อน</span>
+        <span class="flex items-center gap-1"><kbd class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded border border-slate-700">1-5</kbd> ปรับระดับ N1-N5</span>
+        <span class="flex items-center gap-1"><kbd class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded border border-slate-700">/</kbd> ค้นหา</span>
+        <span class="flex items-center gap-1"><kbd class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded border border-slate-700">Z / ⬆</kbd> ย้อนกลับ</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= MAIN CONTENT WORKSPACE ================= -->
+  <main class="flex-1 max-w-5xl w-full mx-auto p-4 md:p-6 flex flex-col justify-start">
+
+    <!-- 1. QUEUE VIEW (Flashcard Review) -->
+    <section id="queueView" class="space-y-4">
+      
+      <!-- Card Container (Server-Side Pre-rendered Card or Client Hydrated) -->
+      <div id="cardContainer">
+        <!-- SSR_CARD_PLACEHOLDER -->
+      </div>
+
+      <!-- Empty State Notice (hidden by default) -->
+      <div id="emptyQueueNotice" class="hidden text-center py-16 bg-[#121622] rounded-3xl border border-slate-800/80 p-8 space-y-4">
+        <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-3xl font-bold">
+          🎉
+        </div>
+        <h3 class="text-xl font-bold text-white">ตรวจสอบครบทุกคำในคิวแล้ว!</h3>
+        <p class="text-slate-400 text-sm max-w-md mx-auto">
+          คำศัพท์ทั้งหมดที่ผ่านการอนุมัติพร้อมที่จะทำการ Pre-Export Sanity Gate และส่งออกเข้าสู่คลังหลัก <code class="text-indigo-300 bg-slate-800 px-1.5 py-0.5 rounded">public/data/n*.csv</code>
+        </p>
+        <div class="pt-2">
+          <button onclick="switchTab('approved')" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-medium text-sm transition-all shadow-lg shadow-emerald-600/20">
+            ดูรายการที่ผ่านแล้ว และส่งออก (Export) ➔
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 2. APPROVED VIEW -->
+    <section id="approvedView" class="hidden space-y-4">
+      <div class="bg-[#121622] border border-slate-800 rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-bold text-emerald-400 flex items-center gap-2">
+            ✅ รายการคำศัพท์ที่ผ่านการตรวจ (Approved)
+            <span id="approvedCountHeader" class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 font-mono">0 คำ</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">
+            พร้อมส่งออกเข้าคลังหลัก ระบบมี <strong>Sanity Gate ตรวจสอบความถูกต้อง</strong> และ <strong>Auto-Backup สำรองไฟล์เดิม</strong> อัตโนมัติ
+          </p>
+        </div>
+        <button 
+          id="exportBtn" 
+          onclick="exportApprovedToApp()"
+          class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-semibold text-sm transition-all shadow-lg shadow-emerald-600/20 flex items-center gap-2"
+        >
+          <span>📦 ส่งออกเข้าคลังหลัก (Export to App)</span>
+        </button>
+      </div>
+
+      <!-- Approved Table -->
+      <div class="bg-[#121622] border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#161C2A] text-slate-400 border-b border-slate-800">
+              <tr>
+                <th class="p-3 w-16">#Rank</th>
+                <th class="p-3 w-20">ระดับ</th>
+                <th class="p-3">คำศัพท์ / คำอ่าน</th>
+                <th class="p-3">ความหมายภาษาไทย</th>
+                <th class="p-3">ความหมายภาษาอังกฤษ</th>
+                <th class="p-3 w-28 text-center">จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="approvedTableBody" class="divide-y divide-slate-800/70 text-slate-200">
+              <tr><td colspan="6" class="p-8 text-center text-slate-500">ยังไม่มีรายการที่ผ่านการอนุมัติ</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. REJECTED VIEW -->
+    <section id="rejectedView" class="hidden space-y-4">
+      <div class="bg-[#121622] border border-slate-800 rounded-2xl p-5">
+        <h2 class="text-lg font-bold text-rose-400 flex items-center gap-2">
+          ❌ รายการคำศัพท์ที่ปฏิเสธ (Rejected)
+          <span id="rejectedCountHeader" class="text-xs px-2 py-0.5 rounded-full bg-rose-500/20 font-mono">0 คำ</span>
+        </h2>
+        <p class="text-xs text-slate-400 mt-1">
+          คำศัพท์ที่ไม่ผ่านเกณฑ์หรือซ้ำซ้อน คุณสามารถกด "นำกลับมาตรวจใหม่" เพื่อย้ายกลับเข้าสู่คิวได้ตลอดเวลา
+        </p>
+      </div>
+
+      <!-- Rejected Table -->
+      <div class="bg-[#121622] border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#161C2A] text-slate-400 border-b border-slate-800">
+              <tr>
+                <th class="p-3 w-16">#Rank</th>
+                <th class="p-3 w-20">ระดับ</th>
+                <th class="p-3">คำศัพท์ / คำอ่าน</th>
+                <th class="p-3">เหตุผลที่ปฏิเสธ</th>
+                <th class="p-3 w-32 text-center">จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="rejectedTableBody" class="divide-y divide-slate-800/70 text-slate-200">
+              <tr><td colspan="5" class="p-8 text-center text-slate-500">ไม่มีรายการที่ถูกปฏิเสธ</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. EXPORTED VIEW -->
+    <section id="exportedView" class="hidden space-y-4">
+      <div class="bg-[#121622] border border-slate-800 rounded-2xl p-5 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-bold text-sky-400 flex items-center gap-2">
+            📦 รายการคำศัพท์ที่ส่งออกเข้าคลังหลักแล้ว (Exported)
+            <span id="exportedCountHeader" class="text-xs px-2 py-0.5 rounded-full bg-sky-500/20 font-mono">0 คำ</span>
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">
+            คำศัพท์เหล่านี้ถูกบรรจุลงใน <code class="text-indigo-300">public/data/n{1..5}.csv</code> และพร้อมใช้งานในเว็บหลักแล้ว
+          </p>
+        </div>
+        <button 
+          id="rollbackBtn" 
+          onclick="rollbackLatestExport()"
+          class="px-4 py-2 bg-rose-600/20 hover:bg-rose-600 text-rose-300 hover:text-white border border-rose-500/30 rounded-xl font-medium text-xs transition-all flex items-center gap-1.5"
+        >
+          <span>🔄 Rollback การส่งออกล่าสุด</span>
+        </button>
+      </div>
+
+      <!-- Exported Table -->
+      <div class="bg-[#121622] border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#161C2A] text-slate-400 border-b border-slate-800">
+              <tr>
+                <th class="p-3 w-16">#Rank</th>
+                <th class="p-3 w-20">ระดับ</th>
+                <th class="p-3">คำศัพท์ / คำอ่าน</th>
+                <th class="p-3">ความหมายภาษาไทย</th>
+                <th class="p-3">เวลาที่ส่งออก</th>
+              </tr>
+            </thead>
+            <tbody id="exportedTableBody" class="divide-y divide-slate-800/70 text-slate-200">
+              <tr><td colspan="5" class="p-8 text-center text-slate-500">ยังไม่มีรายการที่ส่งออก</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= KANJI INSPECTOR MODAL WINDOW ================= -->
+  <div id="kanjiModalBackdrop" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-[#111520] border border-amber-500/40 rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl modal-enter overflow-hidden">
+      
+      <!-- Modal Header -->
+      <div class="p-5 border-b border-slate-800 flex items-center justify-between bg-[#151B29]">
+        <div class="flex items-center gap-3">
+          <button 
+            id="modalHistoryBackBtn" 
+            onclick="modalGoBack()" 
+            class="hidden p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 text-xs transition-colors"
+            title="ย้อนกลับไปคันจิก่อนหน้า"
+          >
+            ◀ ย้อนกลับ
+          </button>
+          <div class="flex items-center gap-2">
+            <span class="text-amber-400 font-bold text-sm tracking-wide">KANJI EXPLORER</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 font-semibold border border-amber-500/20">หน้าต่างเจาะลึกคันจิ</span>
+          </div>
+        </div>
+        <button 
+          onclick="closeKanjiModal()" 
+          class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 flex items-center justify-center text-sm font-bold transition-all"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- Modal Body (Dynamic) -->
+      <div id="kanjiModalBody" class="p-6 overflow-y-auto space-y-6">
+        <!-- Rendered by openKanjiModal() -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 border-t border-slate-800 bg-[#151B29] flex justify-between items-center text-xs text-slate-400">
+        <span>กด <kbd class="bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700 text-slate-300">Esc</kbd> เพื่อปิดหน้าต่าง</span>
+        <button onclick="closeKanjiModal()" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl font-medium transition-colors">
+          ปิดหน้าต่าง
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Server-Side Hydration Data Injection -->
+  <script>
+    window.__INITIAL_DATA__ = /* SSR_INJECTED_DATA */ null;
+  </script>
+
+  <!-- Client Application Script -->
+  <script src="/app.js"></script>
+
+</body>
+</html>
