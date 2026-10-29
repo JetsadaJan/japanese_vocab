@@ -6,128 +6,134 @@
 [![Tauri](https://img.shields.io/badge/Desktop-Tauri%20v2-blueviolet.svg)]()
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-JLPT Kotoba Master is a comprehensive, offline-first Japanese language learning application covering JLPT levels N5 through N1. It features Thai translations, furigana readings, romaji, related kanji cross-references, confusable word distinctions, 100 semantic category groups, and an interactive quiz system.
+JLPT Kotoba Master is an offline-first Japanese language learning application covering Japanese Language Proficiency Test (JLPT) levels N5 through N1. It features complete Thai translations, furigana readings, romaji, related kanji cross-references, confusable word distinctions, 100 semantic category groups, and an interactive quiz system.
 
-The application operates 100% offline on all supported platforms with no external API dependencies required after initial installation or page load.
+> **Project Notice:** This is an independent open-source side project created as a lightweight, zero-latency study companion for Japanese language learners. It is designed to run entirely offline across desktop and mobile devices without requiring user accounts, external APIs, or constant internet access.
 
 ---
 
-## Downloads (GitHub Releases)
+## Recommended Downloads (Release v1.0.0)
 
-Compiled desktop binaries and application bundles are available on the [GitHub Releases v1.0.0](https://github.com/JetsadaJan/japanese_vocab/releases/tag/v1.0.0) page:
+All compiled standalone installers are available on the [GitHub Releases v1.0.0](https://github.com/JetsadaJan/japanese_vocab/releases/tag/v1.0.0) page:
 
-| Platform | Format | Direct Download Link | Notes |
+| Operating System | Recommended File | File Size | Description |
 | :--- | :--- | :--- | :--- |
-| Windows | `.exe` Setup Installer | [JLPT.Kotoba.Master_1.0.0_x64-setup.exe](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.0/JLPT.Kotoba.Master_1.0.0_x64-setup.exe) (~3.1 MB) | Standard Windows NSIS installer (64-bit). Download and run to install. |
-| Windows | `.msi` Package | [JLPT.Kotoba.Master_1.0.0_x64_en-US.msi](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.0/JLPT.Kotoba.Master_1.0.0_x64_en-US.msi) (~4.0 MB) | Windows Installer package (64-bit). |
-| macOS | `.dmg` Installer | [JLPT_Kotoba_Master_1.0.0_aarch64.dmg](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.0/JLPT_Kotoba_Master_1.0.0_aarch64.dmg) (~5.8 MB) | Apple Silicon (M1/M2/M3/M4). Drag-and-drop installer to Applications. |
-| macOS | `.zip` (Standalone .app) | [JLPT_Kotoba_Master_1.0.0_macOS.zip](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.0/JLPT_Kotoba_Master_1.0.0_macOS.zip) (~4.8 MB) | Extract and run `JLPT Kotoba Master.app` directly. |
-| iOS | Progressive Web App | Installed via Safari (see instructions below) | Runs as a fullscreen standalone offline application on iPhone and iPad. |
-| Android | Progressive Web App | Installed via Chrome (see instructions below) | Installs as a standalone WebAPK with full offline persistence. |
+| Windows (10/11, 64-bit) | [JLPT.Kotoba.Master_1.0.0_x64-setup.exe](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.0/JLPT.Kotoba.Master_1.0.0_x64-setup.exe) | 3.06 MB | Standard Windows NSIS setup wizard. Includes full desktop integration and shortcuts. |
+| macOS (Apple Silicon M1-M4) | [JLPT_Kotoba_Master_1.0.0_aarch64.dmg](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.0/JLPT_Kotoba_Master_1.0.0_aarch64.dmg) | 5.80 MB | Apple disk image installer. Drag-and-drop installation to Applications. |
+| iOS (iPhone / iPad) | Progressive Web App (PWA) | No download | Install directly to home screen via Safari (zero App Store download needed). |
+| Android (Phone / Tablet) | Progressive Web App (PWA) | No download | Install directly as a native WebAPK via Google Chrome. |
 
 ---
 
-## Platform Installation Guides
+## Installation and Setup Guides
 
-### macOS (Apple Silicon / Intel)
+### 1. Windows Installation Guide
 
-#### Method 1: Using the `.dmg` Installer
-1. Download [JLPT_Kotoba_Master_1.0.0_aarch64.dmg](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.0/JLPT_Kotoba_Master_1.0.0_aarch64.dmg).
-2. Double-click the downloaded `.dmg` file to mount it.
-3. Drag the **JLPT Kotoba Master** icon into the **Applications** folder.
-4. Launch the application from Launchpad or `/Applications`.
+**Recommended File:** `JLPT.Kotoba.Master_1.0.0_x64-setup.exe`
 
-> **macOS Gatekeeper Note:**
-> If macOS displays a security prompt stating the developer cannot be verified upon first launch:
-> - Right-click (or Control-click) `JLPT Kotoba Master.app` in `/Applications` and select **Open**, then confirm by clicking **Open**.
-> - Alternatively, run the following command in Terminal:
->   ```bash
->   xattr -cr "/Applications/JLPT Kotoba Master.app"
->   ```
+#### File Details
+The `.exe` file is a self-contained NSIS installer compiled with Tauri v2. It includes the precompiled application binary, local database files, and system integration logic. It uses Microsoft Edge WebView2 (which is pre-installed on Windows 10 and Windows 11) for high-performance, low-memory rendering.
 
----
-
-### iOS (iPhone and iPad)
-
-The application implements a Progressive Web App (PWA) architecture. All vocabulary, kanji, and sound assets are cached locally via a Service Worker:
-
-1. Open the web application URL in **Safari** on your iOS device.
-2. Tap the **Share** button (the square icon with an upward arrow at the bottom toolbar).
-3. Scroll down the share sheet and select **Add to Home Screen**.
-4. Confirm the application title and tap **Add** in the top right corner.
-5. The **JLPT Kotoba Master** icon will appear on your home screen.
-6. When opened from the home screen, the application launches in standalone fullscreen mode without browser navigation bars and functions 100% offline, including in Airplane Mode.
+#### Step-by-Step Instructions
+1. Download `JLPT.Kotoba.Master_1.0.0_x64-setup.exe` from the release link above.
+2. Double-click the downloaded executable to start the setup wizard.
+3. *Windows SmartScreen Notice:* If Windows SmartScreen displays a blue dialog saying "Windows protected your PC" (common for newly released open-source software without an expensive commercial code-signing certificate):
+   - Click **More info**.
+   - Click **Run anyway**.
+4. Choose the installation directory (default: `%LOCALAPPDATA%\Programs\JLPT Kotoba Master`) and click **Install**.
+5. Once installation completes, click **Finish**.
+6. The setup automatically creates a shortcut on your Desktop and in the Start Menu. You can launch **JLPT Kotoba Master** at any time completely offline.
 
 ---
 
-### Android (Smartphones and Tablets)
+### 2. macOS Installation Guide
 
-1. Open the web application URL in **Google Chrome** on your Android device.
-2. Tap the menu button (three vertical dots) in the top-right corner.
-3. Select **Install app** or **Add to Home screen** (or tap the installation banner at the bottom of the screen).
+**Recommended File:** `JLPT_Kotoba_Master_1.0.0_aarch64.dmg`
+
+#### File Details
+The `.dmg` file is an Apple disk image tailored for Apple Silicon architectures (M1, M2, M3, M4). It packages `JLPT Kotoba Master.app` compiled with native ARM64 instructions, ensuring instant launch times and minimal power consumption.
+
+#### Step-by-Step Instructions
+1. Download `JLPT_Kotoba_Master_1.0.0_aarch64.dmg` from the release link above.
+2. Double-click the `.dmg` file in your Downloads folder to mount the disk image.
+3. In the mounted window, drag the **JLPT Kotoba Master** application icon and drop it into the **Applications** folder shortcut.
+4. Eject the disk image and open **Applications** (or use Spotlight / Launchpad) to launch the app.
+
+#### macOS Gatekeeper First-Launch Note
+Because this is an independent open-source side project without an Apple Developer subscription certificate, macOS Gatekeeper may prompt: *"JLPT Kotoba Master cannot be opened because the developer cannot be verified."*
+To open the application:
+- **Option A (GUI):** In Finder, navigate to `/Applications`, right-click (or Control-click) `JLPT Kotoba Master.app`, select **Open**, and then click **Open** on the confirmation dialog. This only needs to be performed once.
+- **Option B (Terminal):** Open Terminal and execute:
+  ```bash
+  xattr -cr "/Applications/JLPT Kotoba Master.app"
+  ```
+
+---
+
+### 3. iOS Installation Guide (iPhone & iPad)
+
+**Platform:** Progressive Web App (PWA) via Safari
+
+#### How It Works
+The web version of JLPT Kotoba Master features a Service Worker that precaches all 10,753 vocabulary entries, kanji definitions, audio synthesis routines, and semantic maps into your device storage.
+
+#### Step-by-Step Instructions
+1. Launch **Safari** on your iPhone or iPad and navigate to the application URL.
+2. Tap the **Share** button located in the toolbar (the square icon with an arrow pointing upward).
+3. Scroll down the action list and select **Add to Home Screen**.
+4. Review the application title and tap **Add** in the top-right corner.
+5. The **JLPT Kotoba Master** icon will be placed on your home screen alongside native apps.
+6. When launched from the home screen, the application runs in standalone mode (without Safari address bars or tabs) and operates 100% offline, including under Airplane Mode.
+
+---
+
+### 4. Android Installation Guide
+
+**Platform:** Progressive Web App (PWA / WebAPK) via Google Chrome
+
+#### How It Works
+Modern Android devices convert the Progressive Web App into an installed WebAPK that registers in the system app drawer, supports native multitasking, and caches all application data locally.
+
+#### Step-by-Step Instructions
+1. Open **Google Chrome** on your Android device and visit the application URL.
+2. Tap the three-dot menu icon in the upper-right corner.
+3. Select **Install app** or **Add to Home screen** (or tap the installation banner if prompted at the bottom).
 4. Tap **Install** to confirm.
-5. Android will generate a WebAPK and place the app icon in your app drawer and home screen. The application runs offline with local storage persistence.
-
----
-
-### Windows and Linux
-
-#### Method 1: Using the Native Windows Installer (`.exe` / `.msi`) - Recommended for Windows
-1. Download [JLPT.Kotoba.Master_1.0.0_x64-setup.exe](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.0/JLPT.Kotoba.Master_1.0.0_x64-setup.exe) (or the `.msi` package).
-2. Double-click the downloaded file to run the setup wizard.
-3. Follow the installation prompts. The setup will create desktop and start menu shortcuts.
-4. Launch **JLPT Kotoba Master** directly from your desktop or Start Menu.
-
-#### Method 2: Desktop Web App (PWA)
-1. Open the application URL in **Google Chrome** or **Microsoft Edge**.
-2. Click the install icon located on the right side of the URL address bar (or go to **Menu > Apps > Install JLPT Kotoba Master**).
-3. Confirm installation. The application will launch in its own standalone desktop window and register a shortcut in the Start Menu and Desktop.
-
-#### Method 3: Compiling from Source via Tauri
-To compile a native Windows installer from source:
-1. Install [Node.js](https://nodejs.org/) and the [Rust toolchain](https://www.rust-lang.org/) on your Windows environment.
-2. Clone the repository and run:
-   ```powershell
-   git clone https://github.com/JetsadaJan/japanese_vocab.git
-   cd japanese_vocab
-   npm install
-   npm run tauri build
-   ```
-3. Compiled installers (`.msi` and `.exe` via NSIS) will be generated in `src-tauri/target/release/bundle/`.
+5. The application will be installed into your app drawer and home screen. All features function completely offline without internet connectivity.
 
 ---
 
 ## Dataset Overview
 
-| Category | Count | Description |
+| Category | Record Count | Details |
 | :--- | :--- | :--- |
-| JLPT N5 Vocabulary | 664 terms | Beginner-level core vocabulary with Thai definitions and furigana. |
-| JLPT N4 Vocabulary | 634 terms | Elementary vocabulary and common daily verbs. |
-| JLPT N3 Vocabulary | 1,818 terms | Intermediate expressions, compound verbs, and contextual nuance. |
-| JLPT N2 Vocabulary | 1,833 terms | Upper-intermediate business, academic, and daily communication words. |
-| JLPT N1 Vocabulary | 5,804 terms | Advanced vocabulary, formal prose, news media, and specialized terms. |
-| Jōyō Kanji | 2,136 characters | Regular-use kanji with Thai meanings, stroke counts, on/kun readings, and JLPT levels. |
-| Semantic Groups | 100 categories | 2,900+ curated terms grouped into situational and thematic contexts. |
+| JLPT N5 Vocabulary | 664 terms | Basic foundational words, daily greetings, and essential expressions with Thai definitions. |
+| JLPT N4 Vocabulary | 634 terms | Elementary daily vocabulary, basic compound verbs, and conversational essentials. |
+| JLPT N3 Vocabulary | 1,818 terms | Intermediate vocabulary, everyday expressions, and nuanced contextual usages. |
+| JLPT N2 Vocabulary | 1,833 terms | Upper-intermediate business, news, and specialized workplace communication terms. |
+| JLPT N1 Vocabulary | 5,804 terms | Advanced academic vocabulary, formal literary terms, and complex idioms. |
+| Jōyō Kanji | 2,136 characters | Complete regular-use kanji list with Thai meanings, stroke counts, on/kun readings, and JLPT levels. |
+| Semantic Groups | 100 categories | 2,900+ curated terms structured into situational and thematic learning modules. |
 
 ---
 
 ## Offline Architecture
 
-The application is engineered to operate without an active internet connection:
-- **Relative Asset Resolution**: All data bundles (`n5.json` through `n1.json`, `kanji.json`, and `semantic_groups.json`) are resolved relative to the application bundle root using Vite base configurations.
-- **Service Worker Precaching**: Using `vite-plugin-pwa` and Workbox, all application logic, styling, fonts, and large datasets (up to 6 MB single files) are cached on first load.
-- **Zero External API Calls**: The application contains no runtime calls to external CDNs, tracking services, or remote APIs.
+The application is structured to ensure resilience in offline environments:
+- **Relative Asset Resolution:** All vocabulary and kanji JSON bundles are fetched via relative base resolution (`import.meta.env.BASE_URL`), allowing the application to run smoothly under local filesystem schemas (`tauri://localhost`, `file://`) and web subpaths.
+- **Service Worker Precaching:** Configured via `vite-plugin-pwa` with custom Workbox thresholds (up to 6 MB single-asset caching), ensuring the 2.8 MB Joyo Kanji database and all JLPT tiers are preloaded upon initial access.
+- **No Remote Telemetry or External CDNs:** Fonts, styles, and scripts are self-contained within the client bundle.
 
 ---
 
-## Local Development
+## Local Development and Building
 
 ### Prerequisites
 - Node.js 18 or higher ([nodejs.org](https://nodejs.org/))
 - npm 9 or higher
-- Rust toolchain (required only for building desktop binaries via Tauri)
+- Rust toolchain (required only for building native desktop binaries via Tauri)
 
-### Commands
+### Development Commands
 
 ```bash
 # Clone the repository
@@ -140,45 +146,48 @@ npm install
 # Start Vite development server (http://localhost:5173/)
 npm run dev
 
-# Run TypeScript check and production web build
+# Compile TypeScript and build production web assets
 npm run build
 
 # Preview production build locally
 npm run preview
 ```
 
-### Desktop Development (Tauri v2)
+### Building Desktop Installers (Tauri v2)
 
 ```bash
-# Run Tauri in development mode with hot reload
+# Run desktop application in development mode
 npm run tauri dev
 
-# Build production desktop bundle for the host platform
+# Build production installers for the current host OS
 npm run tauri build
 ```
 
+- On Windows, this creates `.exe` (NSIS) and `.msi` installers in `src-tauri/target/release/bundle/`.
+- On macOS, this creates `.dmg` and `.app` bundles in `src-tauri/target/release/bundle/`.
+
 ---
 
-## Human Recheck Studio
+## Internal Review Tool (Human Recheck Studio)
 
-The repository includes a dedicated local web interface for reviewing, correcting, and curating Thai translations, kanji readings, and semantic groupings:
+The repository provides a dedicated local review environment for verifying and refining Thai translations, kanji readings, and semantic groupings:
 
 ```bash
 npm run recheck
 ```
 
-- Launches the review server at `http://localhost:5174/`.
-- Review state, audit logs, and backups are isolated in the local `backend_data/` directory (ignored by git) to prevent test data from contaminating production releases.
+- Accessible locally at `http://localhost:5174/`.
+- All working backups, revision histories, and human recheck states are kept in `backend_data/` (excluded from git tracking) to ensure that production builds remain lightweight.
 
 ---
 
-## Attribution and Licenses
+## Data Attribution and Licensing
 
-- **Source Code**: [MIT License](LICENSE) (`src/`, `scripts/`, and build configuration files).
-- **Data Sets**: [Creative Commons Attribution-ShareAlike 4.0 International](public/data/LICENSE) (`public/data/`).
-  - **JLPT Word List**: Derived from [elzup/jlpt-word-list](https://github.com/elzup/jlpt-word-list) (MIT), based on lists compiled by Jonathan Waller ([tanos.co.uk](http://www.tanos.co.uk/jlpt/)).
-  - **JMdict & KANJIDIC**: Electronic Dictionary Research and Development Group ([EDRDG](https://www.edrdg.org/)) in conformance with the [EDRDG Licence](https://www.edrdg.org/edrdg/licence.html).
-  - **Jiten**: Word and kanji frequency rankings from [Jiten](https://jiten.moe/frequency-dictionaries) (CC BY-SA 4.0).
-- Thai translations, cross-references, confusable word pairs, and semantic categorizations were developed and curated within this project.
+- **Application Source Code:** [MIT License](LICENSE) (`src/`, `scripts/`, build configurations).
+- **Data Sets:** [Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)](public/data/LICENSE) (`public/data/`).
+  - **JLPT Word List:** Based on [elzup/jlpt-word-list](https://github.com/elzup/jlpt-word-list) (MIT) and Jonathan Waller's JLPT lists ([tanos.co.uk](http://www.tanos.co.uk/jlpt/)).
+  - **JMdict & KANJIDIC:** Electronic Dictionary Research and Development Group ([EDRDG](https://www.edrdg.org/)) under the [EDRDG Licence](https://www.edrdg.org/edrdg/licence.html).
+  - **Jiten:** Frequency rankings from [Jiten](https://jiten.moe/frequency-dictionaries) (CC BY-SA 4.0).
+- Thai translations, contextual clarifications, kanji notes, and semantic categorizations were authored and curated within this project.
 
-For third-party legal notices, see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Detailed notices and full legal texts are provided in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
