@@ -1,6 +1,6 @@
 # JLPT Kotoba Master
 
-[![Release](https://img.shields.io/badge/Release-v1.0.0-blue.svg)](https://github.com/JetsadaJan/japanese_vocab/releases/tag/v1.0.0)
+[![Release](https://img.shields.io/badge/Release-v1.0.1-blue.svg)](https://github.com/JetsadaJan/japanese_vocab/releases/tag/v1.0.1)
 [![Offline](https://img.shields.io/badge/Offline-100%25-brightgreen.svg)]()
 [![PWA](https://img.shields.io/badge/PWA-Ready-orange.svg)]()
 [![Tauri](https://img.shields.io/badge/Desktop-Tauri%20v2-blueviolet.svg)]()
@@ -12,14 +12,14 @@ JLPT Kotoba Master is an offline-first Japanese language learning and quiz appli
 
 ---
 
-## Recommended Downloads (Release v1.0.0)
+## Recommended Downloads (Release v1.0.1)
 
-Compiled desktop installers are published on the [GitHub Releases v1.0.0](https://github.com/JetsadaJan/japanese_vocab/releases/tag/v1.0.0) page:
+Compiled desktop installers are published on the [GitHub Releases v1.0.1](https://github.com/JetsadaJan/japanese_vocab/releases/tag/v1.0.1) page:
 
 | Operating System | Recommended Package | Size | Description |
 | :--- | :--- | :--- | :--- |
-| Windows (10/11, 64-bit) | [JLPT.Kotoba.Master_1.0.0_x64-setup.exe](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.0/JLPT.Kotoba.Master_1.0.0_x64-setup.exe) | 3.06 MB | Standalone NSIS installer. Automatically sets up desktop and Start Menu shortcuts. |
-| macOS (Apple Silicon M1-M4) | [JLPT_Kotoba_Master_1.0.0_aarch64.dmg](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.0/JLPT_Kotoba_Master_1.0.0_aarch64.dmg) | 5.80 MB | Standard Apple disk image (`.dmg`). Drag-and-drop installation into `/Applications`. |
+| Windows (10/11, 64-bit) | [JLPT.Kotoba.Master_1.0.1_x64-setup.exe](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.1/JLPT.Kotoba.Master_1.0.1_x64-setup.exe) | ~3.1 MB | Standalone NSIS installer. Automatically sets up desktop and Start Menu shortcuts. |
+| macOS (Apple Silicon M1-M4) | [JLPT_Kotoba_Master_1.0.1_aarch64.dmg](https://github.com/JetsadaJan/japanese_vocab/releases/download/v1.0.1/JLPT_Kotoba_Master_1.0.1_aarch64.dmg) | ~5.8 MB | Standard Apple disk image (`.dmg`). Drag-and-drop installation into `/Applications`. |
 | iOS (iPhone / iPad) | Progressive Web App (PWA) | No download | Install directly to home screen via Safari (fullscreen offline application). |
 | Android (Phone / Tablet) | Progressive Web App (PWA) | No download | Install directly as a native WebAPK via Google Chrome. |
 

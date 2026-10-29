@@ -13,6 +13,7 @@ import {
   Flame,
   Globe,
   HelpCircle,
+  SkipForward,
   Sparkles,
   Volume2,
   XCircle,
@@ -40,6 +41,7 @@ import {
   getPrimaryGroupIdForWord,
 } from '../utils/confusableWords';
 import { JapaneseText } from './JapaneseText';
+import { KanjiQuestionCard } from './KanjiQuestionCard';
 import {
   HoverInspectItem,
   QuizHoverInspector,
@@ -81,6 +83,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const [peekReadingThisQuestion, setPeekReadingThisQuestion] = useState(false);
   const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
+  const [prevQuestionId, setPrevQuestionId] = useState(currentQuestion.id);
 
   // Track which option cards have their "แสดงเพิ่มเติม" drawer expanded after answering
   const [expandedOptionIds, setExpandedOptionIds] = useState<Set<string>>(new Set());
@@ -88,8 +91,19 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
   // Hover inspector stack (translucent blurred overlay keeping the quiz visible behind)
   const [hoverHistory, setHoverHistory] = useState<HoverInspectItem[]>([]);
 
+  // Synchronously reset state during render if currentQuestion changes, preventing any flash of previous answer state
+  if (prevQuestionId !== currentQuestion.id) {
+    setPrevQuestionId(currentQuestion.id);
+    setSelectedIdx(null);
+    setPeekReadingThisQuestion(false);
+    setExpandedOptionIds(new Set());
+    setHoverHistory([]);
+    setQuestionStartTime(Date.now());
+  }
+
   const isAnswered = selectedIdx !== null;
-  const isCorrect = isAnswered && selectedIdx === currentQuestion.correctIndex;
+  const isSkipped = selectedIdx === -1;
+  const isCorrect = isAnswered && !isSkipped && selectedIdx === currentQuestion.correctIndex;
   const effectiveShowHiragana =
     settings.showHiragana || peekReadingThisQuestion || isAnswered;
   const effectiveShowRomaji =
@@ -109,6 +123,18 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
     const elapsed = Math.max(200, Date.now() - questionStartTime);
     setSelectedIdx(index);
     onSubmitAnswer(index, elapsed);
+  };
+
+  const handleSkip = () => {
+    if (isAnswered) return;
+    const elapsed = Math.max(200, Date.now() - questionStartTime);
+    setSelectedIdx(-1);
+    onSubmitAnswer(-1, elapsed);
+  };
+
+  const handleProceedNext = () => {
+    setSelectedIdx(null);
+    onNextQuestion();
   };
 
   const toggleExpandOption = (wordId: string) => {
@@ -166,10 +192,14 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
             handleSelectOption(idx);
           }
         }
+        if (e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          handleSkip();
+        }
       } else {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          onNextQuestion();
+          handleProceedNext();
         }
       }
 
@@ -386,18 +416,19 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
           <div className="inline-flex flex-wrap items-center gap-2">
             <span
-              className={`text-xs font-bold px-3 py-1 rounded-full border ${wordLevelMeta.badgeClass}`}
+              className={`text-xs font-bold px-3 py-1 rounded-full border ${
+                currentQuestion.type === 'KANJI'
+                  ? 'border-[#D97706]/60 bg-[#2E1F05] text-[#FBBF24]'
+                  : wordCategoryMeta.badgeClass
+              }`}
             >
-              {currentQuestion.targetWord.level}
-            </span>
-            <span
-              className={`text-xs font-bold px-3 py-1 rounded-full border ${wordCategoryMeta.badgeClass}`}
-            >
-              {wordCategoryMeta.labelTh}
+              {currentQuestion.type === 'KANJI'
+                ? `คันจิ (${currentQuestion.targetKanji?.strokes || ''} ขีด)`
+                : wordCategoryMeta.labelTh}
             </span>
             {currentQuestion.targetMode === 'MISTAKES_ONLY' ? (
               <span className="text-xs font-bold px-2.5 py-1 rounded-full border border-rose-500/50 bg-rose-950/40 text-rose-300">
-                คำที่ตอบผิด
+                {currentQuestion.type === 'KANJI' ? 'คันจิที่ตอบผิด' : 'คำที่ตอบผิด'}
               </span>
             ) : currentQuestion.isReview ? (
               <span className="text-xs font-bold px-2.5 py-1 rounded-full border border-[#B91C1C]/50 bg-[#2A1215] text-[#FCA5A5]">
@@ -407,6 +438,18 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
           </div>
 
           <div className="flex items-center gap-2">
+            {!isAnswered && (
+              <button
+                type="button"
+                onClick={handleSkip}
+                title="ข้ามข้อนี้ (นับเป็นตอบผิด) (K)"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-[#1F2229] hover:bg-rose-950/40 hover:border-rose-500/50 border border-[#2A2D36] text-xs text-rose-300 font-medium transition-all cursor-pointer"
+              >
+                <SkipForward className="w-3.5 h-3.5" />
+                <span>ข้าม (K)</span>
+              </button>
+            )}
+
             {(!settings.showHiragana || !settings.showRomaji) && !isAnswered && (
               <button
                 type="button"
@@ -439,7 +482,14 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
         </div>
 
         {/* Prompt Content */}
-        {currentQuestion.direction === 'EN_TO_JA' ? (
+        {currentQuestion.type === 'KANJI' && currentQuestion.targetKanji ? (
+          <KanjiQuestionCard
+            kanji={currentQuestion.targetKanji}
+            showKanaReading={effectiveShowHiragana}
+            showRomajiReading={effectiveShowRomaji}
+            isAnswered={isAnswered}
+          />
+        ) : currentQuestion.direction === 'EN_TO_JA' ? (
           <div className="py-4 sm:py-6 space-y-2">
             {settings.meaningLanguage === 'BOTH' ? (
               <div className="space-y-1.5 max-w-2xl mx-auto">
@@ -817,13 +867,17 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
       {isAnswered && (
         <div
           className={`rounded-2xl border p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
-            isCorrect
+            isSkipped
+              ? 'bg-[#2A1805] border-amber-500/50'
+              : isCorrect
               ? 'bg-[#062E22] border-[#10B981]/50'
               : 'bg-[#330D17] border-[#F43F5E]/50'
           }`}
         >
           <div className="flex items-start sm:items-center gap-3">
-            {isCorrect ? (
+            {isSkipped ? (
+              <SkipForward className="w-6 h-6 text-amber-400 shrink-0 mt-0.5 sm:mt-0" />
+            ) : isCorrect ? (
               <CheckCircle2 className="w-6 h-6 text-[#10B981] shrink-0 mt-0.5 sm:mt-0" />
             ) : (
               <XCircle className="w-6 h-6 text-[#F43F5E] shrink-0 mt-0.5 sm:mt-0" />
@@ -831,31 +885,64 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
 
             <div className="space-y-1">
               <div className="text-sm sm:text-base font-bold text-[#F3F4F6]">
-                {isCorrect ? 'ถูกต้อง!' : 'เฉลยคำที่ถูก:'}
+                {isSkipped
+                  ? 'ข้ามข้อนี้ (บันทึกเข้าคลังคำที่ตอบผิดแล้ว):'
+                  : isCorrect
+                  ? 'ถูกต้อง!'
+                  : 'เฉลยคำที่ถูก:'}
               </div>
               <div className="text-xs sm:text-sm text-[#F3F4F6] font-jp">
-                <span className="font-bold text-[#F3F4F6]">
-                  {currentQuestion.targetWord.expression}
-                </span>
-                {currentQuestion.targetWord.reading !==
-                  currentQuestion.targetWord.expression && (
-                  <span className="text-[#FB6542] font-medium">
-                    {' '}
-                    【{currentQuestion.targetWord.reading}】
-                  </span>
+                {currentQuestion.type === 'KANJI' && currentQuestion.targetKanji ? (
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-bold text-xl text-[#F3F4F6]">
+                      {currentQuestion.targetKanji.character}
+                    </span>
+                    {currentQuestion.targetKanji.onyomi.length > 0 && (
+                      <span className="text-amber-300 font-medium">
+                        On: {currentQuestion.targetKanji.onyomi.join(', ')}
+                      </span>
+                    )}
+                    {currentQuestion.targetKanji.kunyomi.length > 0 && (
+                      <span className="text-sky-300 font-medium">
+                        Kun: {currentQuestion.targetKanji.kunyomi.join(', ')}
+                      </span>
+                    )}
+                    <span className="text-[#6B7280]">—</span>
+                    <span className="font-sans font-medium text-[#F3F4F6]">
+                      {currentQuestion.targetKanji.meaningTh || currentQuestion.targetKanji.meaningEn}
+                    </span>
+                    {currentQuestion.targetKanji.meaningEn && (
+                      <span className="font-sans text-[#FBBF24]">
+                        ({currentQuestion.targetKanji.meaningEn})
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  <>
+                    <span className="font-bold text-[#F3F4F6]">
+                      {currentQuestion.targetWord.expression}
+                    </span>
+                    {currentQuestion.targetWord.reading !==
+                      currentQuestion.targetWord.expression && (
+                      <span className="text-[#FB6542] font-medium">
+                        {' '}
+                        【{currentQuestion.targetWord.reading}】
+                      </span>
+                    )}
+                    {currentQuestion.targetWord.romaji && (
+                      <span className="text-[#FBBF24] font-mono font-semibold ml-1">
+                        [{currentQuestion.targetWord.romaji}]
+                      </span>
+                    )}{' '}
+                    —{' '}
+                    <span className="font-sans font-medium text-[#F3F4F6]">
+                      {currentQuestion.targetWord.meaningTh}
+                    </span>{' '}
+                    <span className="font-sans text-[#FBBF24]">
+                      ({currentQuestion.targetWord.meaning})
+                    </span>
+                  </>
                 )}
-                {currentQuestion.targetWord.romaji && (
-                  <span className="text-[#FBBF24] font-mono font-semibold ml-1">
-                    [{currentQuestion.targetWord.romaji}]
-                  </span>
-                )}{' '}
-                —{' '}
-                <span className="font-sans font-medium text-[#F3F4F6]">
-                  {currentQuestion.targetWord.meaningTh}
-                </span>{' '}
-                <span className="font-sans text-[#FBBF24]">
-                  ({currentQuestion.targetWord.meaning})
-                </span>
               </div>
             </div>
           </div>
@@ -874,7 +961,7 @@ export const QuizScreen: React.FC<QuizScreenProps> = ({
 
             <button
               type="button"
-              onClick={onNextQuestion}
+              onClick={handleProceedNext}
               className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#F3DA78] to-[#C59B27] hover:brightness-110 text-slate-950 font-bold text-sm shadow-lg shadow-[#D4AF37]/15 transition-all inline-flex items-center justify-center gap-2 cursor-pointer"
             >
               <span>{isLastQuestion ? 'ดูสรุป' : 'ข้อต่อไป (Enter)'}</span>

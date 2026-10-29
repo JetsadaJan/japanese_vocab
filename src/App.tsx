@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Loader2, RefreshCw } from 'lucide-react';
+import { ExternalLink, Github, Loader2, RefreshCw } from 'lucide-react';
 import {
+  ActiveGameMode,
   AnswerRecord,
   KanjiDatabase,
+  KanjiNode,
   MeaningLanguage,
   QuizQuestion,
   QuizSettings,
@@ -16,7 +18,11 @@ import {
   loadAllVocabData,
 } from './utils/vocabData';
 import { ConfusableIndex } from './utils/confusableWords';
-import type { ReviewOptions } from './utils/quizEngine';
+import {
+  KanjiReviewOptions,
+  ReviewOptions,
+  generateKanjiQuizQuestion,
+} from './utils/quizEngine';
 import {
   MistakeStore,
   clearMistakes,
@@ -28,6 +34,16 @@ import {
   saveMistakes,
   wordKey,
 } from './utils/mistakeTracker';
+import {
+  KanjiMistakeStore,
+  clearKanjiMistakes,
+  getKanjiReviewScores,
+  getSortedMistakeKanji,
+  loadKanjiMistakes,
+  recordKanjiAnswer,
+  removeSingleKanjiMistake,
+  saveKanjiMistakes,
+} from './utils/kanjiMistakeTracker';
 import { SetupScreen } from './components/SetupScreen';
 import { QuizScreen } from './components/QuizScreen';
 import { SummaryScreen } from './components/SummaryScreen';
@@ -77,11 +93,14 @@ export function App() {
 
   const [screen, setScreen] = useState<ScreenState>('SETUP');
   const [targetMode, setTargetMode] = useState<'ALL' | 'MISTAKES_ONLY'>('ALL');
+  const [activeGameMode, setActiveGameMode] = useState<ActiveGameMode>('VOCAB_ALL');
   const [currentQuestion, setCurrentQuestion] = useState<QuizQuestion | null>(null);
   const [questionNumber, setQuestionNumber] = useState(1);
   const [history, setHistory] = useState<AnswerRecord[]>([]);
   const [isExplorerOpen, setIsExplorerOpen] = useState(false);
-  const [explorerInitialTab, setExplorerInitialTab] = useState<'VOCAB' | 'KANJI' | 'MISTAKES'>('VOCAB');
+  const [explorerInitialTab, setExplorerInitialTab] = useState<
+    'VOCAB' | 'KANJI' | 'MISTAKES' | 'KANJI_MISTAKES'
+  >('VOCAB');
   const [explorerInitialKanji, setExplorerInitialKanji] = useState<string | null>(null);
 
   const usedWordIdsRef = useRef<Set<string>>(new Set());
@@ -91,9 +110,21 @@ export function App() {
   const [mistakes, setMistakes] = useState<MistakeStore>(() => loadMistakes());
   const recentKeysRef = useRef<string[]>([]);
 
+  // Kanji answered wrong (persisted) and recent kanji chars (review cooldown)
+  const [kanjiMistakes, setKanjiMistakes] = useState<KanjiMistakeStore>(() =>
+    loadKanjiMistakes()
+  );
+  const usedKanjiCharsRef = useRef<Set<string>>(new Set());
+  const recentKanjiCharsRef = useRef<string[]>([]);
+  const kanjiMistakeQueueRef = useRef<KanjiNode[]>([]);
+
   useEffect(() => {
     saveMistakes(mistakes);
   }, [mistakes]);
+
+  useEffect(() => {
+    saveKanjiMistakes(kanjiMistakes);
+  }, [kanjiMistakes]);
 
   const buildReviewOptions = (): ReviewOptions => ({
     scores: getReviewScores(mistakes),
@@ -104,9 +135,26 @@ export function App() {
     recentKeysRef.current = [...recentKeysRef.current, wordKey(word)].slice(-REVIEW_COOLDOWN);
   };
 
+  const buildKanjiReviewOptions = (): KanjiReviewOptions => ({
+    scores: getKanjiReviewScores(kanjiMistakes),
+    recentChars: new Set(recentKanjiCharsRef.current),
+  });
+
+  const rememberAskedKanji = (kanjiChar: string) => {
+    recentKanjiCharsRef.current = [
+      ...recentKanjiCharsRef.current,
+      kanjiChar,
+    ].slice(-REVIEW_COOLDOWN);
+  };
+
   const handleClearMistakes = () => {
     clearMistakes();
     setMistakes({});
+  };
+
+  const handleClearKanjiMistakes = () => {
+    clearKanjiMistakes();
+    setKanjiMistakes({});
   };
 
   const handleRemoveSingleMistake = (word: VocabWord) => {
@@ -154,7 +202,9 @@ export function App() {
     handleUpdateSettings({ meaningLanguage });
   };
 
-  const handleOpenExplorer = (tab: 'VOCAB' | 'KANJI' | 'MISTAKES' = 'VOCAB') => {
+  const handleOpenExplorer = (
+    tab: 'VOCAB' | 'KANJI' | 'MISTAKES' | 'KANJI_MISTAKES' = 'VOCAB'
+  ) => {
     setExplorerInitialTab(tab);
     setExplorerInitialKanji(null);
     setIsExplorerOpen(true);
@@ -166,15 +216,69 @@ export function App() {
     setIsExplorerOpen(true);
   };
 
-  const handleStartQuiz = (mode: 'ALL' | 'MISTAKES_ONLY' = targetMode) => {
+  const handleStartQuiz = (
+    mode: 'ALL' | 'MISTAKES_ONLY' = targetMode,
+    gameMode: ActiveGameMode = activeGameMode
+  ) => {
     if (!db) return;
     setTargetMode(mode);
+    setActiveGameMode(gameMode);
     usedWordIdsRef.current = new Set();
+    usedKanjiCharsRef.current = new Set();
     recentKeysRef.current = [];
+    recentKanjiCharsRef.current = [];
     setHistory([]);
     setQuestionNumber(1);
 
-    if (mode === 'MISTAKES_ONLY') {
+    // --- KANJI MISTAKES ONLY ---
+    if (gameMode === 'KANJI_MISTAKES') {
+      const kanjiList = getSortedMistakeKanji(kanjiMistakes, kanjiDb).map((m) => m.kanji);
+      if (kanjiList.length === 0) return;
+
+      const shuffled = [...kanjiList];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      kanjiMistakeQueueRef.current = shuffled;
+
+      const firstTarget = shuffled[0];
+      const firstQ = generateKanjiQuizQuestion(
+        kanjiDb,
+        settings.customWeights,
+        firstTarget.level,
+        usedKanjiCharsRef.current,
+        null,
+        firstTarget
+      );
+      firstQ.targetMode = 'MISTAKES_ONLY';
+      firstQ.totalQuestions = shuffled.length;
+      usedKanjiCharsRef.current.add(firstTarget.character);
+      setCurrentQuestion(firstQ);
+      setScreen('QUIZ');
+      return;
+    }
+
+    // --- KANJI ALL (NORMAL) ---
+    if (gameMode === 'KANJI_ALL') {
+      kanjiMistakeQueueRef.current = [];
+      const firstQ = generateKanjiQuizQuestion(
+        kanjiDb,
+        settings.customWeights,
+        settings.selectedLevel,
+        usedKanjiCharsRef.current,
+        buildKanjiReviewOptions()
+      );
+      firstQ.targetMode = 'ALL';
+      usedKanjiCharsRef.current.add(firstQ.targetKanji!.character);
+      rememberAskedKanji(firstQ.targetKanji!.character);
+      setCurrentQuestion(firstQ);
+      setScreen('QUIZ');
+      return;
+    }
+
+    // --- VOCAB MISTAKES ONLY ---
+    if (gameMode === 'VOCAB_MISTAKES' || mode === 'MISTAKES_ONLY') {
       const mistakeList = getSortedMistakeWords(mistakes, wordMap).map((m) => m.word);
       if (mistakeList.length === 0) return;
 
@@ -219,7 +323,7 @@ export function App() {
       return;
     }
 
-    // Normal Quiz mode
+    // --- VOCAB ALL (NORMAL) ---
     mistakeQueueRef.current = [];
     const firstQ = generateQuizQuestion(
       db,
@@ -240,7 +344,7 @@ export function App() {
   };
 
   const handleStartMistakesQuiz = () => {
-    handleStartQuiz('MISTAKES_ONLY');
+    handleStartQuiz('MISTAKES_ONLY', activeGameMode.startsWith('KANJI') ? 'KANJI_MISTAKES' : 'VOCAB_MISTAKES');
   };
 
   const handleSubmitAnswer = (selectedOptionIndex: number, timeSpentMs: number) => {
@@ -253,13 +357,65 @@ export function App() {
       timeSpentMs,
     };
     setHistory((prev) => [...prev, record]);
-    setMistakes((prev) => recordAnswer(prev, currentQuestion.targetWord, isCorrect));
+    if (currentQuestion.type === 'KANJI' && currentQuestion.targetKanji) {
+      setKanjiMistakes((prev) =>
+        recordKanjiAnswer(prev, currentQuestion.targetKanji!.character, isCorrect)
+      );
+    } else {
+      setMistakes((prev) => recordAnswer(prev, currentQuestion.targetWord, isCorrect));
+    }
   };
 
   const handleNextQuestion = () => {
     if (!db) return;
 
-    if (targetMode === 'MISTAKES_ONLY') {
+    // --- KANJI NEXT QUESTION ---
+    if (currentQuestion?.type === 'KANJI') {
+      if (activeGameMode === 'KANJI_MISTAKES') {
+        const queue = kanjiMistakeQueueRef.current;
+        if (questionNumber >= queue.length) {
+          setScreen('SUMMARY');
+          return;
+        }
+        const nextTarget = queue[questionNumber];
+        const nextQ = generateKanjiQuizQuestion(
+          kanjiDb,
+          settings.customWeights,
+          nextTarget.level,
+          usedKanjiCharsRef.current,
+          null,
+          nextTarget
+        );
+        nextQ.targetMode = 'MISTAKES_ONLY';
+        nextQ.totalQuestions = queue.length;
+        usedKanjiCharsRef.current.add(nextTarget.character);
+        setCurrentQuestion(nextQ);
+        setQuestionNumber((prev) => prev + 1);
+        return;
+      }
+
+      if (settings.sessionLength > 0 && questionNumber >= settings.sessionLength) {
+        setScreen('SUMMARY');
+        return;
+      }
+
+      const nextQ = generateKanjiQuizQuestion(
+        kanjiDb,
+        settings.customWeights,
+        settings.selectedLevel,
+        usedKanjiCharsRef.current,
+        buildKanjiReviewOptions()
+      );
+      nextQ.targetMode = 'ALL';
+      usedKanjiCharsRef.current.add(nextQ.targetKanji!.character);
+      rememberAskedKanji(nextQ.targetKanji!.character);
+      setCurrentQuestion(nextQ);
+      setQuestionNumber((prev) => prev + 1);
+      return;
+    }
+
+    // --- VOCAB NEXT QUESTION ---
+    if (targetMode === 'MISTAKES_ONLY' || activeGameMode === 'VOCAB_MISTAKES') {
       const queue = mistakeQueueRef.current;
       // All mistake words completed -> automatically end session
       if (questionNumber >= queue.length) {
@@ -379,13 +535,18 @@ export function App() {
           onOpenExplorer={handleOpenExplorer}
           reviewCount={Object.keys(mistakes).length}
           onClearMistakes={handleClearMistakes}
+          kanjiReviewCount={Object.keys(kanjiMistakes).length}
+          onClearKanjiMistakes={handleClearKanjiMistakes}
           targetMode={targetMode}
           onSelectTargetMode={setTargetMode}
+          activeGameMode={activeGameMode}
+          onSelectGameMode={setActiveGameMode}
         />
       )}
 
       {screen === 'QUIZ' && currentQuestion && confusableIndex && (
         <QuizScreen
+          key={currentQuestion.id}
           settings={settings}
           currentQuestion={currentQuestion}
           questionNumber={questionNumber}
@@ -413,16 +574,32 @@ export function App() {
           history={history}
           kanjiDb={kanjiDb}
           onChangeLanguage={handleChangeLanguage}
-          onPlayAgain={() => handleStartQuiz(targetMode)}
+          onPlayAgain={() => handleStartQuiz(targetMode, activeGameMode)}
           onBackToSetup={handleBackToSetup}
           onOpenKanji={handleOpenKanjiNode}
-          reviewCount={Object.keys(mistakes).length}
+          reviewCount={
+            activeGameMode.startsWith('KANJI')
+              ? Object.keys(kanjiMistakes).length
+              : Object.keys(mistakes).length
+          }
           targetMode={targetMode}
         />
       )}
 
       {/* Data source attribution (required by the EDRDG licence and CC BY-SA 4.0) */}
       <footer className="w-full max-w-4xl mx-auto px-6 pt-4 pb-8 text-center text-[11px] leading-relaxed text-[#6B7280]">
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <a
+            href="https://github.com/JetsadaJan/japanese_vocab"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#16181D] border border-[#2A2D36] text-xs font-medium text-[#D1D5DB] hover:text-[#D4AF37] hover:border-[#D4AF37]/50 shadow-sm transition-all"
+          >
+            <Github className="w-3.5 h-3.5 text-[#D4AF37]" />
+            <span>JLPT Kotoba Master on GitHub</span>
+            <ExternalLink className="w-3 h-3 text-[#9CA3AF]" />
+          </a>
+        </div>
         <p>
           This site uses the{' '}
           <a href="https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project" target="_blank" rel="noreferrer" className="underline hover:text-[#D4AF37]">JMdict</a>{' '}
@@ -457,6 +634,14 @@ export function App() {
         onRemoveMistake={handleRemoveSingleMistake}
         onClearMistakes={handleClearMistakes}
         onStartMistakesQuiz={handleStartMistakesQuiz}
+        kanjiMistakes={kanjiMistakes}
+        onRemoveKanjiMistake={(char) =>
+          setKanjiMistakes((prev) => removeSingleKanjiMistake(prev, char))
+        }
+        onClearKanjiMistakes={handleClearKanjiMistakes}
+        onStartKanjiMistakesQuiz={() =>
+          handleStartQuiz('MISTAKES_ONLY', 'KANJI_MISTAKES')
+        }
         initialLevel={settings.selectedLevel}
         initialTab={explorerInitialTab}
         initialKanji={explorerInitialKanji}

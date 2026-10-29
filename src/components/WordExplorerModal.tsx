@@ -53,6 +53,10 @@ import {
   MistakeStore,
   getSortedMistakeWords,
 } from '../utils/mistakeTracker';
+import {
+  KanjiMistakeStore,
+  getSortedMistakeKanji,
+} from '../utils/kanjiMistakeTracker';
 
 interface WordExplorerModalProps {
   isOpen: boolean;
@@ -65,14 +69,18 @@ interface WordExplorerModalProps {
   onRemoveMistake?: (word: VocabWord) => void;
   onClearMistakes?: () => void;
   onStartMistakesQuiz?: () => void;
+  kanjiMistakes?: KanjiMistakeStore;
+  onRemoveKanjiMistake?: (kanjiChar: string) => void;
+  onClearKanjiMistakes?: () => void;
+  onStartKanjiMistakesQuiz?: () => void;
   initialLevel?: JLPTLevel;
-  initialTab?: 'VOCAB' | 'KANJI' | 'MISTAKES';
+  initialTab?: 'VOCAB' | 'KANJI' | 'MISTAKES' | 'KANJI_MISTAKES';
   initialKanji?: string | null;
   meaningLanguage: MeaningLanguage;
   onChangeLanguage: (lang: MeaningLanguage) => void;
 }
 
-type ExplorerTab = 'VOCAB' | 'KANJI' | 'MISTAKES';
+type ExplorerTab = 'VOCAB' | 'KANJI' | 'MISTAKES' | 'KANJI_MISTAKES';
 
 type GraphHistoryItem =
   | { type: 'KANJI'; char: string }
@@ -93,6 +101,10 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
   onRemoveMistake,
   onClearMistakes,
   onStartMistakesQuiz,
+  kanjiMistakes,
+  onRemoveKanjiMistake,
+  onClearKanjiMistakes,
+  onStartKanjiMistakesQuiz,
   initialLevel = 'N5',
   initialTab = 'VOCAB',
   initialKanji = null,
@@ -308,15 +320,51 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
     return copy;
   }, [baseFilteredMistakes, shuffleSeed]);
 
+  // Raw sorted mistake kanji from store
+  const rawKanjiMistakeList = useMemo(() => {
+    return getSortedMistakeKanji(kanjiMistakes || {}, kanjiDb);
+  }, [kanjiMistakes, kanjiDb]);
+
+  const baseFilteredKanjiMistakes = useMemo(() => {
+    let pool =
+      activeLevel === 'ALL'
+        ? rawKanjiMistakeList
+        : rawKanjiMistakeList.filter((m) => m.kanji.level === activeLevel);
+
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return pool;
+
+    return pool.filter(
+      (m) =>
+        m.kanji.character.includes(q) ||
+        m.kanji.meaningTh.toLowerCase().includes(q) ||
+        m.kanji.meaningEn.toLowerCase().includes(q)
+    );
+  }, [rawKanjiMistakeList, activeLevel, searchQuery]);
+
+  const allMatchingKanjiMistakes = useMemo(() => {
+    if (shuffleSeed === 0) return baseFilteredKanjiMistakes;
+    const copy = [...baseFilteredKanjiMistakes];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }, [baseFilteredKanjiMistakes, shuffleSeed]);
+
   const itemsPerPage =
-    activeTab === 'MISTAKES' ? ITEMS_PER_PAGE_MISTAKES : ITEMS_PER_PAGE;
+    activeTab === 'MISTAKES' || activeTab === 'KANJI_MISTAKES'
+      ? ITEMS_PER_PAGE_MISTAKES
+      : ITEMS_PER_PAGE;
 
   const totalMatching =
     activeTab === 'VOCAB'
       ? allMatchingWords.length
       : activeTab === 'KANJI'
       ? allMatchingKanji.length
-      : allMatchingMistakes.length;
+      : activeTab === 'MISTAKES'
+      ? allMatchingMistakes.length
+      : allMatchingKanjiMistakes.length;
   const totalPages = Math.max(1, Math.ceil(totalMatching / itemsPerPage));
   const safePage = Math.min(currentPage, totalPages);
 
@@ -334,6 +382,11 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
     const startIdx = (safePage - 1) * itemsPerPage;
     return allMatchingMistakes.slice(startIdx, startIdx + itemsPerPage);
   }, [allMatchingMistakes, safePage, itemsPerPage]);
+
+  const paginatedKanjiMistakes = useMemo(() => {
+    const startIdx = (safePage - 1) * itemsPerPage;
+    return allMatchingKanjiMistakes.slice(startIdx, startIdx + itemsPerPage);
+  }, [allMatchingKanjiMistakes, safePage, itemsPerPage]);
 
   const startItemNumber =
     totalMatching === 0 ? 0 : (safePage - 1) * itemsPerPage + 1;
@@ -881,13 +934,15 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-base sm:text-lg font-bold text-[#F3F4F6]">
                   {activeTab === 'MISTAKES'
-                    ? 'คลังคำที่เคยตอบผิด (เรียงตามความบ่อย)'
+                    ? 'คลังคำศัพท์ที่เคยตอบผิด (เรียงตามความบ่อย)'
+                    : activeTab === 'KANJI_MISTAKES'
+                    ? 'คลังคันจิที่เคยตอบผิด (เรียงตามความบ่อย)'
                     : 'คลังคำศัพท์ ⇄ คันจิ (N5–N1)'}
                 </h2>
               </div>
-              {activeTab === 'MISTAKES' ? (
+              {activeTab === 'MISTAKES' || activeTab === 'KANJI_MISTAKES' ? (
                 <p className="text-xs text-[#9CA3AF]">
-                  คำที่ตอบผิดบ่อยจะแสดงอยู่ด้านบนสุด คลิกที่คันจิหรือศัพท์เพื่อเปิดดูรายละเอียดได้
+                  รายการที่ตอบผิดบ่อยจะแสดงอยู่ด้านบนสุด คลิกเพื่อเปิดดูรายละเอียดได้
                 </p>
               ) : (
                 <a
@@ -903,7 +958,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
             </div>
           </div>
 
-          {/* Primary Tab Switcher: คลังคำศัพท์ vs คลังคันจิ vs คำที่ตอบผิด */}
+          {/* Primary Tab Switcher: คลังคำศัพท์ vs คลังคันจิ vs คำที่ตอบผิด vs คันจิที่ตอบผิด */}
           <div className="flex items-center gap-2">
             <div className="inline-flex items-center rounded-2xl bg-[#0E0F12] p-1 border border-[#2A2D36]">
               <button
@@ -952,6 +1007,22 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
               >
                 <AlertTriangle className="w-3.5 h-3.5 text-rose-300" />
                 <span>คำที่ตอบผิด ({rawMistakeList.length.toLocaleString()})</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  clearGraphHistory();
+                  setActiveTab('KANJI_MISTAKES');
+                }}
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                  activeTab === 'KANJI_MISTAKES' && !currentGraphItem
+                    ? 'bg-rose-500 text-white shadow-sm'
+                    : 'text-[#9CA3AF] hover:text-[#F3F4F6]'
+                }`}
+              >
+                <AlertTriangle className="w-3.5 h-3.5 text-rose-300" />
+                <span>คันจิที่ตอบผิด ({rawKanjiMistakeList.length.toLocaleString()})</span>
               </button>
             </div>
 
@@ -1871,8 +1942,25 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                     )}
                   </div>
                 ) : (
-                  <div className="text-xs text-[#9CA3AF]">
-                    กดปุ่ม "แสดงเพิ่มเติม" ที่มุมขวาล่างของการ์ดคันจิเพื่อดูและกดลิงก์ไปยังคำศัพท์ที่ใช้คันจิตัวนั้น
+                  <div className="flex items-center justify-between gap-2 text-xs text-[#9CA3AF] flex-1">
+                    <span>
+                      {activeTab === 'KANJI_MISTAKES'
+                        ? 'คันจิที่ตอบผิดสะสม เรียงตามความถี่ที่ตอบผิด'
+                        : 'กดปุ่ม "แสดงเพิ่มเติม" ที่มุมขวาล่างของการ์ดคันจิเพื่อดูและกดลิงก์ไปยังคำศัพท์ที่ใช้คันจิตัวนั้น'}
+                    </span>
+                    {activeTab === 'KANJI_MISTAKES' && rawKanjiMistakeList.length > 0 && onClearKanjiMistakes && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (window.confirm('ต้องการล้างประวัติคันจิที่ตอบผิดทั้งหมดหรือไม่?')) {
+                            onClearKanjiMistakes();
+                          }
+                        }}
+                        className="px-2 py-1 rounded-lg text-[11px] font-bold text-rose-400 hover:text-rose-300 hover:bg-rose-950/40 border border-rose-900/40 cursor-pointer ml-auto"
+                      >
+                        ล้างคันจิผิดทั้งหมด
+                      </button>
+                    )}
                   </div>
                 )}
 
@@ -1941,6 +2029,22 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                 </div>
               )}
 
+              {activeTab === 'KANJI_MISTAKES' && rawKanjiMistakeList.length > 0 && onStartKanjiMistakesQuiz && (
+                <div className="col-span-full pb-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      onStartKanjiMistakesQuiz();
+                    }}
+                    className="w-full py-3 px-5 rounded-2xl bg-gradient-to-r from-rose-500 via-rose-600 to-rose-700 hover:brightness-110 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Play className="w-4 h-4 fill-white" />
+                    <span>เริ่มเล่นเฉพาะคันจิที่ตอบผิด ({rawKanjiMistakeList.length.toLocaleString()} ตัว) • บังคับจบเมื่อครบ</span>
+                  </button>
+                </div>
+              )}
+
               {activeTab === 'VOCAB'
                 ? paginatedWords.map((word, idx) =>
                     renderVocabCard(word, startItemNumber + idx)
@@ -1949,7 +2053,7 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                 ? paginatedMistakes.map(({ word }, idx) =>
                     renderVocabCard(word, startItemNumber + idx)
                   )
-                : paginatedKanji.map((kNode, idx) => {
+                : (activeTab === 'KANJI' ? paginatedKanji : paginatedKanjiMistakes.map((m) => m.kanji)).map((kNode, idx) => {
                     const meta = LEVEL_METADATA[kNode.level];
                     const itemNumber = startItemNumber + idx;
                     const relatedWords = kNode.relatedWordIds
@@ -2050,7 +2154,19 @@ export const WordExplorerModal: React.FC<WordExplorerModalProps> = ({
                         </div>
 
                         {/* Bottom Row: Clean Bottom-Right "แสดงเพิ่มเติม" Button ONLY */}
-                        <div className="pt-2 border-t border-[#2A2D36] flex items-center justify-end gap-2">
+                        <div className="pt-2 border-t border-[#2A2D36] flex items-center justify-between gap-2">
+                          <div>
+                            {activeTab === 'KANJI_MISTAKES' && onRemoveKanjiMistake && (
+                              <button
+                                type="button"
+                                onClick={() => onRemoveKanjiMistake(kNode.character)}
+                                title="ลบคันจิตัวนี้ออกจากประวัติคันจิที่ตอบผิด"
+                                className="px-2 py-1 rounded-xl text-xs text-rose-400 hover:text-rose-300 hover:bg-rose-950/40 border border-rose-900/40 transition-all cursor-pointer"
+                              >
+                                ลบออก
+                              </button>
+                            )}
+                          </div>
                           <button
                             type="button"
                             disabled={!canExpandKanji}

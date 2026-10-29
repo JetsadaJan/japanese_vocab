@@ -1,5 +1,7 @@
 import {
   JLPTLevel,
+  KanjiDatabase,
+  KanjiNode,
   LevelWeights,
   QuestionDirection,
   QuizMode,
@@ -391,5 +393,208 @@ export function generateQuizQuestion(
     options: allOptions,
     correctIndex,
     isReview: Boolean(reviewTarget),
+  };
+}
+
+export function areKanjiTooSimilar(kA: KanjiNode, kB: KanjiNode): boolean {
+  if (kA.character === kB.character) return true;
+  const enA = (kA.meaningEn || '').toLowerCase().trim();
+  const enB = (kB.meaningEn || '').toLowerCase().trim();
+  if (enA && enB && enA === enB) return true;
+
+  const thA = (kA.meaningTh || '').trim();
+  const thB = (kB.meaningTh || '').trim();
+  if (thA && thB && thA === thB) return true;
+
+  if (thA && thB) {
+    const thTokensA = extractThaiMeaningTokens(thA);
+    const thTokensB = extractThaiMeaningTokens(thB);
+    for (const tA of thTokensA) {
+      if (thTokensB.has(tA)) return true;
+      if (tA.length >= 3) {
+        for (const tB of thTokensB) {
+          if (tB.length >= 3 && (tA.includes(tB) || tB.includes(tA))) {
+            return true;
+          }
+        }
+      }
+    }
+  }
+
+  if (enA && enB) {
+    const enTokensA = extractEnglishMeaningTokens(enA);
+    const enTokensB = extractEnglishMeaningTokens(enB);
+    for (const eA of enTokensA) {
+      if (enTokensB.has(eA)) return true;
+    }
+  }
+
+  return false;
+}
+
+export interface KanjiReviewOptions {
+  scores: Record<string, number>;
+  recentChars: Set<string>;
+}
+
+export function generateKanjiQuizQuestion(
+  kanjiDb: KanjiDatabase,
+  weights: LevelWeights,
+  selectedLevel: JLPTLevel,
+  usedChars: Set<string>,
+  review?: KanjiReviewOptions | null,
+  forcedTargetKanji?: KanjiNode | null
+): QuizQuestion {
+  // 1. Group all available kanji by level
+  const kanjiByLevel: Record<JLPTLevel, KanjiNode[]> = {
+    N5: [],
+    N4: [],
+    N3: [],
+    N2: [],
+    N1: [],
+  };
+  for (const node of Object.values(kanjiDb)) {
+    if (kanjiByLevel[node.level]) {
+      kanjiByLevel[node.level].push(node);
+    }
+  }
+
+  // 2. Determine target kanji (Review candidate vs Weighted random)
+  let targetKanji: KanjiNode | null = forcedTargetKanji || null;
+  let isReview = false;
+
+  if (!targetKanji && review && Object.keys(review.scores).length > 0) {
+    const enabledLevels = JLPT_LEVELS.filter((lvl) => (weights[lvl] || 0) > 0);
+    const levelsToSearch = enabledLevels.length > 0 ? enabledLevels : [selectedLevel];
+    const candidates: { kanji: KanjiNode; rating: number }[] = [];
+    for (const lvl of levelsToSearch) {
+      for (const k of kanjiByLevel[lvl] || []) {
+        const rating = review.scores[k.character];
+        if (!rating || review.recentChars.has(k.character)) continue;
+        candidates.push({ kanji: k, rating });
+      }
+    }
+    if (candidates.length > 0) {
+      candidates.sort((a, b) => b.rating - a.rating);
+      const maxRating = candidates[0].rating;
+      const reviewChance = Math.min(1.0, maxRating * 0.25);
+      if (Math.random() < reviewChance) {
+        const topTier = candidates.filter((c) => c.rating === maxRating);
+        targetKanji = topTier[Math.floor(Math.random() * topTier.length)].kanji;
+        isReview = true;
+      }
+    }
+  }
+
+  if (!targetKanji) {
+    const activeLevels = JLPT_LEVELS.filter(
+      (lvl) => (weights[lvl] || 0) > 0 && kanjiByLevel[lvl].length > 0
+    );
+    let chosenLevel = selectedLevel;
+    if (activeLevels.length > 0) {
+      const totalWeight = activeLevels.reduce((sum, lvl) => sum + (weights[lvl] || 0), 0);
+      let rand = Math.random() * totalWeight;
+      for (const lvl of activeLevels) {
+        rand -= weights[lvl] || 0;
+        if (rand <= 0) {
+          chosenLevel = lvl;
+          break;
+        }
+      }
+    }
+
+    const pool =
+      kanjiByLevel[chosenLevel].length > 0
+        ? kanjiByLevel[chosenLevel]
+        : kanjiByLevel[selectedLevel];
+    const available = pool.filter((k) => !usedChars.has(k.character));
+    const targetPool = available.length > 0 ? available : pool;
+    targetKanji = targetPool[Math.floor(Math.random() * targetPool.length)];
+  }
+
+  // 3. Select 3 distractor kanji
+  const distractors: KanjiNode[] = [];
+  const sameLevelCandidates = (kanjiByLevel[targetKanji.level] || []).filter(
+    (k) => k.character !== targetKanji!.character
+  );
+  const shuffledCandidates = [...sameLevelCandidates].sort(() => Math.random() - 0.5);
+
+  for (const candidate of shuffledCandidates) {
+    if (distractors.length >= 3) break;
+    const tooSimilar =
+      areKanjiTooSimilar(targetKanji, candidate) ||
+      distractors.some((d) => areKanjiTooSimilar(d, candidate));
+    if (!tooSimilar) {
+      distractors.push(candidate);
+    }
+  }
+
+  if (distractors.length < 3) {
+    const allKanji = Object.values(kanjiDb)
+      .filter(
+        (k) =>
+          k.character !== targetKanji!.character &&
+          !distractors.some((d) => d.character === k.character)
+      )
+      .sort(() => Math.random() - 0.5);
+
+    for (const candidate of allKanji) {
+      if (distractors.length >= 3) break;
+      const tooSimilar =
+        areKanjiTooSimilar(targetKanji, candidate) ||
+        distractors.some((d) => areKanjiTooSimilar(d, candidate));
+      if (!tooSimilar) {
+        distractors.push(candidate);
+      }
+    }
+  }
+
+  // 4. Assemble 4 options and shuffle
+  const kanjiOptions = [targetKanji, ...distractors];
+  for (let i = kanjiOptions.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [kanjiOptions[i], kanjiOptions[j]] = [kanjiOptions[j], kanjiOptions[i]];
+  }
+  const correctIndex = kanjiOptions.findIndex((k) => k.character === targetKanji!.character);
+
+  // Synthesize VocabWord adapter so QuizScreen doesn't crash on any vocab-specific field
+  const synthTargetWord: VocabWord = {
+    id: `kanji-${targetKanji.character}`,
+    expression: targetKanji.character,
+    reading: targetKanji.onyomi[0] || targetKanji.kunyomi[0] || targetKanji.character,
+    romaji: targetKanji.onyomiRomaji[0] || targetKanji.kunyomiRomaji[0] || '',
+    meaning: targetKanji.meaningEn,
+    meaningTh: targetKanji.meaningTh,
+    tags: '',
+    level: targetKanji.level,
+    category: 'NOUN',
+    kanjiChars: [targetKanji.character],
+    extraNote: targetKanji.extraNote,
+  };
+
+  const synthVocabOptions: VocabWord[] = kanjiOptions.map((k) => ({
+    id: `kanji-${k.character}`,
+    expression: k.character,
+    reading: k.onyomi[0] || k.kunyomi[0] || k.character,
+    romaji: k.onyomiRomaji[0] || k.kunyomiRomaji[0] || '',
+    meaning: k.meaningEn,
+    meaningTh: k.meaningTh,
+    tags: '',
+    level: k.level,
+    category: 'NOUN',
+    kanjiChars: [k.character],
+    extraNote: k.extraNote,
+  }));
+
+  return {
+    id: `kanji-q-${targetKanji.character}-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+    type: 'KANJI',
+    direction: 'JA_TO_EN',
+    targetWord: synthTargetWord,
+    targetKanji,
+    options: synthVocabOptions,
+    kanjiOptions,
+    correctIndex,
+    isReview,
   };
 }
